@@ -100,7 +100,7 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
       _broadcastToGlobalListeners(message);
       _broadcastToPerMeetingListeners(message);
     }, onError: (dynamic error) {
-      debugPrint('Jitsi Meet broadcast error: $error');
+      debugPrint('CUSTOM_JITSI: Jitsi Meet broadcast error: $error');
       _listeners.forEach((listener) {
         if (listener.onError != null) listener.onError!(error);
       });

@@ -44,10 +44,4 @@ class JitsiMeetingOptions {
         'userDisplayName: $userDisplayName, userEmail: $userEmail, '
         'iosAppBarRGBAColor :$iosAppBarRGBAColor, featureFlags: $featureFlags }';
   }
-
-/* Not used yet, needs more research
-  Bundle colorScheme;
-  String userAvatarURL;
-*/
-
 }

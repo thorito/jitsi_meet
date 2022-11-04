@@ -121,14 +121,12 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
 
   /// Adds a JitsiMeetingListener that will broadcast conference events
   addListener(JitsiMeetingListener jitsiMeetingListener) {
-    debugPrint("Adding listeners");
     _addGenericListeners(jitsiMeetingListener);
   }
 
   /// Remove JitsiListener
   /// Remove all list of listeners bassed on event name
   removeListener(JitsiMeetingListener jitsiMeetingListener) {
-    debugPrint("Removing listeners");
     List<String> listeners = [];
     if (jitsiMeetingListener.onConferenceJoined != null) {
       listeners.add("videoConferenceJoined");

@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:jitsi_meet_platform_interface/jitsi_meet_platform_interface.dart';
 
 import 'room_name_constraint.dart';
 import 'room_name_constraint_type.dart';
-
-import 'package:jitsi_meet_platform_interface/jitsi_meet_platform_interface.dart';
 
 export 'package:jitsi_meet_platform_interface/jitsi_meet_platform_interface.dart'
     show
@@ -14,6 +13,7 @@ export 'package:jitsi_meet_platform_interface/jitsi_meet_platform_interface.dart
         JitsiMeetingListener,
         JitsiGenericListener,
         FeatureFlagHelper,
+        FeatureFlagVideoResolution,
         FeatureFlagEnum;
 
 class JitsiMeet {

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:jitsi_meet/feature_flag/feature_flag.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 
 void main() => runApp(MyApp());
@@ -21,8 +20,8 @@ class Meeting extends StatefulWidget {
 
 class _MeetingState extends State<Meeting> {
   final serverText = TextEditingController();
-  final roomText = TextEditingController(text: "omni1234");
-  final subjectText = TextEditingController(text: "My Plugin Test Meeting");
+  final roomText = TextEditingController(text: "omni1234ASMD");
+  final subjectText = TextEditingController(text: "Omni Meeting");
   final nameText = TextEditingController(text: "Omni User");
   final emailText = TextEditingController(text: "fake@email.com");
   final iosAppBarRGBAColor =
@@ -234,20 +233,48 @@ class _MeetingState extends State<Meeting> {
     // If feature flag are not provided, default values will be used
     // Full list of feature flags (and defaults) available in the README
     Map<FeatureFlagEnum, dynamic> featureFlags = {
-      FeatureFlagEnum.WELCOME_PAGE_ENABLED: false,
-      FeatureFlagEnum.RESOLUTION: FeatureFlagVideoResolution.HD_RESOLUTION,
+      FeatureFlagEnum.ADD_PEOPLE_ENABLED: false,
+      FeatureFlagEnum.ANDROID_SCREENSHARING_ENABLED: false,
+      FeatureFlagEnum.AUDIO_FOCUS_DISABLED: false,
+      FeatureFlagEnum.AUDIO_MUTE_BUTTON_ENABLED: true,
+      FeatureFlagEnum.AUDIO_ONLY_BUTTON_ENABLED: true,
+      FeatureFlagEnum.CALENDAR_ENABLED: false,
       FeatureFlagEnum.CAR_MODE_ENABLED: false,
+      FeatureFlagEnum.CLOSE_CAPTIONS_ENABLED: true,
+      FeatureFlagEnum.CONFERENCE_TIMER_ENABLED: false,
+      FeatureFlagEnum.CHAT_ENABLED: false,
+      FeatureFlagEnum.FILMSTRIP_ENABLED: true,
+      FeatureFlagEnum.FULLSCREEN_ENABLED: true,
+      FeatureFlagEnum.HELP_BUTTON_ENABLED: false,
+      FeatureFlagEnum.INVITE_ENABLED: false,
+      FeatureFlagEnum.IOS_RECORDING_ENABLED: false,
+      FeatureFlagEnum.IOS_SCREENSHARING_ENABLED: false,
+      FeatureFlagEnum.SPEAKERSTATS_ENABLED: false,
+      FeatureFlagEnum.KICK_OUT_ENABLED: false,
+      FeatureFlagEnum.LIVE_STREAMING_ENABLED: false,
+      FeatureFlagEnum.LOBBY_MODE_ENABLED: false,
+      FeatureFlagEnum.MEETING_NAME_ENABLED: false,
+      FeatureFlagEnum.MEETING_PASSWORD_ENABLED: false,
+      FeatureFlagEnum.NOTIFICATIONS_ENABLED: false,
+      FeatureFlagEnum.OVERFLOW_MENU_ENABLED: true,
+      FeatureFlagEnum.PIP_ENABLED: false,
+      FeatureFlagEnum.PREJOIN_PAGE_ENABLED: false,
+      FeatureFlagEnum.RAISE_HAND_ENABLED: false,
+      FeatureFlagEnum.REACTIONS_ENABLED: true,
+      FeatureFlagEnum.RECORDING_ENABLED: false,
+      FeatureFlagEnum.REPLACE_PARTICIPANT: false,
+      FeatureFlagEnum.RESOLUTION: FeatureFlagVideoResolution.HD_RESOLUTION,
       FeatureFlagEnum.SECURITY_OPTIONS_ENABLED: false,
+      FeatureFlagEnum.SERVER_URL_CHANGE_ENABLED: false,
+      FeatureFlagEnum.TILE_VIEW_ENABLED: true,
+      FeatureFlagEnum.TOOLBOX_ALWAYS_VISIBLE: true,
+      FeatureFlagEnum.TOOLBOX_ENABLED: true,
+      FeatureFlagEnum.VIDEO_MUTE_BUTTON_ENABLED: true,
+      FeatureFlagEnum.VIDEO_SHARE_BUTTON_ENABLED: false,
+      FeatureFlagEnum.WELCOME_PAGE_ENABLED: false,
     };
-    if (!kIsWeb) {
-      // Here is an example, disabling features for each platform
-      if (Platform.isAndroid) {
-        // Disable ConnectionService usage on Android to avoid issues (see README)
-        featureFlags[FeatureFlagEnum.CALL_INTEGRATION_ENABLED] = false;
-      } else if (Platform.isIOS) {
-        // Disable PIP on iOS as it looks weird
-        featureFlags[FeatureFlagEnum.PIP_ENABLED] = false;
-      }
+    if (!kIsWeb && Platform.isAndroid) {
+      featureFlags[FeatureFlagEnum.CALL_INTEGRATION_ENABLED] = false;
     }
     // Define meetings options here
     var options = JitsiMeetingOptions(room: roomText.text)
@@ -269,7 +296,7 @@ class _MeetingState extends State<Meeting> {
         "userInfo": {"displayName": nameText.text}
       };
 
-    debugPrint("JitsiMeetingOptions: $options");
+    debugPrint("CUSTOM_JITSI: JitsiMeetingOptions: $options");
     await JitsiMeet.joinMeeting(
       options,
       listener: JitsiMeetingListener(
