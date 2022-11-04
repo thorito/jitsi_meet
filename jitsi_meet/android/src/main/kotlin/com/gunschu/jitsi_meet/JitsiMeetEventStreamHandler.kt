@@ -16,47 +16,75 @@ class JitsiMeetEventStreamHandler private constructor(): EventChannel.StreamHand
     private var eventSink: EventChannel.EventSink? = null
 
     override fun onListen(arguments: Any?, eventSink: EventChannel.EventSink?) {
-        Log.d(JITSI_PLUGIN_TAG, "JitsiMeetEventStreamHandler.onListen")
         this.eventSink = eventSink
     }
 
     override fun onCancel(arguments: Any?) {
-        Log.d(JITSI_PLUGIN_TAG, "JitsiMeetEventStreamHandler.onCancel")
         eventSink = null
     }
 
     fun onConferenceWillJoin(data: MutableMap<String, Any>?) {
-        Log.d(JITSI_PLUGIN_TAG, "JitsiMeetEventStreamHandler.onConferenceWillJoin")
-        data?.put("event", "onConferenceWillJoin")
-        eventSink?.success(data)
+        eventSink?.success(mapOf("event" to "conferenceWillJoin", "data" to data))
     }
 
     fun onConferenceJoined(data: MutableMap<String, Any>?) {
-        Log.d(JITSI_PLUGIN_TAG, "JitsiMeetEventStreamHandler.onConferenceJoined")
-        data?.put("event", "onConferenceJoined")
-        eventSink?.success(data)
+        eventSink?.success(mapOf("event" to "conferenceJoined", "data" to data))
     }
 
     fun onConferenceTerminated(data: MutableMap<String, Any>?) {
-        Log.d(JITSI_PLUGIN_TAG, "JitsiMeetEventStreamHandler.onConferenceTerminated")
-        data?.put("event", "onConferenceTerminated")
-        eventSink?.success(data)
+        eventSink?.success(mapOf("event" to "conferenceTerminated", "data" to data))
+    }
+
+    fun onAudioMutedChanged(data: MutableMap<String, Any>?) {
+        eventSink?.success(mapOf("event" to "audioMutedChanged", "data" to data))
+    }
+
+    fun onParticipantJoined(data: MutableMap<String, Any>?) {
+        eventSink?.success(mapOf("event" to "participantJoined", "data" to data))
+    }
+
+    fun onParticipantLeft(data: MutableMap<String, Any>?) {
+        eventSink?.success(mapOf("event" to "participantLeft", "data" to data))
+    }
+
+    fun onEndpointTextMessageReceived(data: MutableMap<String, Any>?) {
+        eventSink?.success(mapOf("event" to "endpointTextMessageReceived", "data" to data))
+    }
+
+    fun onScreenShareToggled(data: MutableMap<String, Any>?) {
+        eventSink?.success(mapOf("event" to "screenShareToggled", "data" to data))
+    }
+
+    fun onParticipantsInfoRetrieved(data: MutableMap<String, Any>?) {
+        eventSink?.success(mapOf("event" to "participantInfoRetrieved", "data" to data))
+    }
+
+    fun onChatMessageReceived(data: MutableMap<String, Any>?) {
+        eventSink?.success(mapOf("event" to "chatMessageReceived", "data" to data))
+    }
+
+    fun onChatToggled(data: MutableMap<String, Any>?) {
+        eventSink?.success(mapOf("event" to "chatToggled", "data" to data))
+    }
+
+    fun onVideoMutedChanged(data: MutableMap<String, Any>?) {
+        eventSink?.success(mapOf("event" to "videoMutedChanged", "data" to data))
+    }
+
+    fun onOpened() {
+        eventSink?.success(mapOf("event" to "opened"))
+    }
+
+    fun onClosed() {
+        eventSink?.success(mapOf("event" to "closed"))
     }
 
     fun onPictureInPictureWillEnter() {
-        Log.d(JITSI_PLUGIN_TAG, "JitsiMeetEventStreamHandler.onPictureInPictureWillEnter")
-        var data : HashMap<String, String>
-                = HashMap<String, String> ()
-        data?.put("event", "onPictureInPictureWillEnter")
-        eventSink?.success(data)
+        eventSink?.success(mapOf("event" to "onPictureInPictureWillEnter"))
     }
 
     fun onPictureInPictureTerminated() {
-        Log.d(JITSI_PLUGIN_TAG, "JitsiMeetEventStreamHandler.onPictureInPictureTerminated")
-        var data : HashMap<String, String>
-                = HashMap<String, String> ()
-        data?.put("event", "onPictureInPictureTerminated")
-        eventSink?.success(data)
+        eventSink?.success(mapOf("event" to "onPictureInPictureTerminated"))
     }
 
 }

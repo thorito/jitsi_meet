@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:jitsi_meet/feature_flag/feature_flag.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 
 void main() => runApp(MyApp());
@@ -21,9 +21,9 @@ class Meeting extends StatefulWidget {
 
 class _MeetingState extends State<Meeting> {
   final serverText = TextEditingController();
-  final roomText = TextEditingController(text: "plugintestroom");
+  final roomText = TextEditingController(text: "omni1234");
   final subjectText = TextEditingController(text: "My Plugin Test Meeting");
-  final nameText = TextEditingController(text: "Plugin Test User");
+  final nameText = TextEditingController(text: "Omni User");
   final emailText = TextEditingController(text: "fake@email.com");
   final iosAppBarRGBAColor =
       TextEditingController(text: "#0080FF80"); //transparent blue
@@ -233,8 +233,11 @@ class _MeetingState extends State<Meeting> {
     // Enable or disable any feature flag here
     // If feature flag are not provided, default values will be used
     // Full list of feature flags (and defaults) available in the README
-    Map<FeatureFlagEnum, bool> featureFlags = {
+    Map<FeatureFlagEnum, dynamic> featureFlags = {
       FeatureFlagEnum.WELCOME_PAGE_ENABLED: false,
+      FeatureFlagEnum.RESOLUTION: FeatureFlagVideoResolution.HD_RESOLUTION,
+      FeatureFlagEnum.CAR_MODE_ENABLED: false,
+      FeatureFlagEnum.SECURITY_OPTIONS_ENABLED: false,
     };
     if (!kIsWeb) {
       // Here is an example, disabling features for each platform
@@ -276,8 +279,12 @@ class _MeetingState extends State<Meeting> {
           onConferenceJoined: (message) {
             debugPrint("${options.room} joined with message: $message");
           },
-          onConferenceTerminated: (message) {
-            debugPrint("${options.room} terminated with message: $message");
+          onConferenceTerminated: (message, error) {
+            debugPrint(
+                "${options.room} terminated with message: $message, error: $error");
+          },
+          onParticipantLeft: (participandId) {
+            debugPrint("${options.room} onParticipantLeft: $participandId");
           },
           genericListeners: [
             JitsiGenericListener(
@@ -297,8 +304,11 @@ class _MeetingState extends State<Meeting> {
     debugPrint("_onConferenceJoined broadcasted with message: $message");
   }
 
-  void _onConferenceTerminated(message) {
+  void _onConferenceTerminated(message, error) {
     debugPrint("_onConferenceTerminated broadcasted with message: $message");
+    if (error != null) {
+      debugPrint("_onConferenceTerminated error: $error");
+    }
   }
 
   _onError(error) {

@@ -139,15 +139,25 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
 
         // Add feature flags into options, reading given Map
         if (call.argument<HashMap<String, Any>?>("featureFlags") != null) {
-            val featureFlags = call.argument<HashMap<String, Any>>("featureFlags")
-            featureFlags!!.forEach { (key, value) ->
-                if (value is Boolean) {
-                    val boolVal = value.toString().toBoolean()
-                    optionsBuilder.setFeatureFlag(key, boolVal)
-                } else {
-                    val intVal = value.toString().toInt()
-                    optionsBuilder.setFeatureFlag(key, intVal)
+            val featureFlags = call.argument<HashMap<String, Any?>>("featureFlags")
+            featureFlags?.forEach { (key, value) ->
+                when (value) {
+                    is Boolean -> optionsBuilder.setFeatureFlag(key, value)
+                    is Int -> optionsBuilder.setFeatureFlag(key, value)
+                    else -> optionsBuilder.setFeatureFlag(key, value.toString())
                 }
+            }
+        }
+
+        val configOverrides = call.argument<HashMap<String, Any?>>("configOverrides")
+        configOverrides?.forEach { (key, value) ->
+            // Can only be bool, int, array of strings or string according to
+            // the overloads of setConfigOverride.
+            when (value) {
+                is Boolean -> optionsBuilder.setConfigOverride(key, value)
+                is Int -> optionsBuilder.setConfigOverride(key, value)
+                is Array<*> -> optionsBuilder.setConfigOverride(key, value as Array<out String>)
+                else -> optionsBuilder.setConfigOverride(key, value.toString())
             }
         }
 
@@ -182,6 +192,8 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
     override fun onDetachedFromActivityForConfigChanges() {
         onDetachedFromActivity()
     }
-
-
+   /* override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        methodChannel.setMethodCallHandler(null)
+        eventChannel.setStreamHandler(null)
+    }*/
 }

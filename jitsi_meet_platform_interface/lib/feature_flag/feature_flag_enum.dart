@@ -23,7 +23,7 @@ enum FeatureFlagEnum {
   /// Default: enabled (true) on Android, auto-detected on iOS.
   CALENDAR_ENABLED,
 
-  /// Flag indicating if call integration (CallKit on iOS, 
+  /// Flag indicating if call integration (CallKit on iOS,
   /// ConnectionService on Android)
   /// should be enabled.
   /// Default: enabled (true).
@@ -93,7 +93,7 @@ enum FeatureFlagEnum {
   /// Default: enabled (true).
   MEETING_NAME_ENABLED,
 
-  /// Flag indicating if the meeting password button should be enabled. Note 
+  /// Flag indicating if the meeting password button should be enabled. Note
   /// that this flag just decides on the buttton, if a meeting has a password
   /// set, the password ddialog will still show up.
   /// Default: enabled (true).
@@ -134,6 +134,7 @@ enum FeatureFlagEnum {
   /// Flag indicating the local and (maximum) remote video resolution.
   /// Overrides the server configuration.
   /// Default: (unset).
+  /// LD_RESOLUTION: 180p, MD_RESOLUTION: 360p, SD_RESOLUTION: 480p, HD_RESOLUTION: 720p
   RESOLUTION,
 
   /// Flag indicating if the security options button should be enabled.

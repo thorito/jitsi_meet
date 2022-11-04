@@ -4,11 +4,12 @@
         <activity
             android:name=".JitsiMeetPluginActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
-            android:launchMode="singleTask"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:windowSoftInputMode="adjustResize">
+            android:theme="@style/MeetingTheme"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false"
+            android:autoRemoveFromRecents="true">
         </activity>
     </application>
 </manifest>

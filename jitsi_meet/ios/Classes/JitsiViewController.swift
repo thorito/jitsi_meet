@@ -105,26 +105,26 @@ class JitsiViewController: UIViewController {
 }
 
 extension JitsiViewController: JitsiMeetViewDelegate {
-    
+
+    func ready(toClose data: [AnyHashable : Any]) {
+        DispatchQueue.main.async {
+            self.pipViewCoordinator?.hide { _ in
+                self.cleanUp()
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+
     func conferenceWillJoin(_ data: [AnyHashable : Any]!) {
-        //        print("CONFERENCE WILL JOIN")
-        var mutatedData = data
-        mutatedData?.updateValue("onConferenceWillJoin", forKey: "event")
-        self.eventSink?(mutatedData)
+        self.eventSink(["event": "conferenceWillJoin", "data": data])
     }
     
     func conferenceJoined(_ data: [AnyHashable : Any]!) {
-        //        print("CONFERENCE JOINED")
-        var mutatedData = data
-        mutatedData?.updateValue("onConferenceJoined", forKey: "event")
-        self.eventSink?(mutatedData)
+        self.eventSink(["event": "conferenceJoined", "data": data])
     }
     
     func conferenceTerminated(_ data: [AnyHashable : Any]!) {
-        //        print("CONFERENCE TERMINATED")
-        var mutatedData = data
-        mutatedData?.updateValue("onConferenceTerminated", forKey: "event")
-        self.eventSink?(mutatedData)
+        self.eventSink(["event": "conferenceTerminated", "data": data])
         
         DispatchQueue.main.async {
             self.pipViewCoordinator?.hide() { _ in
@@ -151,5 +151,50 @@ extension JitsiViewController: JitsiMeetViewDelegate {
         mutatedData = ["event":"onPictureInPictureTerminated"]
         self.eventSink?(mutatedData)
     }
+
+    func participantJoined(_ data: [AnyHashable : Any]) {
+        self.eventSink(["event": "participantJoined", "data": data])
+    }
+
+    func participantLeft(_ data: [AnyHashable : Any]) {
+        self.eventSink(["event": "participantLeft", "data": data])
+    }
+
+    func audioMutedChanged(_ data: [AnyHashable : Any]) {
+        self.eventSink(["event": "audioMutedChanged", "data": data])
+    }
+
+    func endpointTextMessageReceived(_ data: [AnyHashable : Any]) {
+        self.eventSink(["event": "endpointTextMessageReceived", "data": data])
+    }
+
+    func screenShareToggled(_ data: [AnyHashable : Any]) {
+        self.eventSink(["event": "screenShareToggled", "data": data])
+    }
+
+    func chatMessageReceived(_ data: [AnyHashable : Any]) {
+        self.eventSink(["event": "chatMessageReceived", "data": data])
+    }
+
+    func chatToggled(_ data: [AnyHashable : Any]) {
+        self.eventSink(["event": "chatToggled", "data": data])
+    }
+
+    func videoMutedChanged(_ data: [AnyHashable : Any]) {
+        self.eventSink(["event": "videoMutedChanged", "data": data])
+    }
 }
 
+class AbsorbPointersView: UIView {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+}

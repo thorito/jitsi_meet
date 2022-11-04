@@ -58,15 +58,19 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
       api?.on("videoConferenceJoined", allowInterop((dynamic _message) {
         // Mapping object according with jitsi external api source code
         Map<String, dynamic> message = {
+          "id": _message.id,
           "displayName": _message.displayName,
-          "roomName": _message.roomName
+          "roomName": _message.roomName,
+          "avatarURL": _message.avatarURL,
+          "breakoutRoom": _message.breakoutRoom,
         };
-        listener.onConferenceJoined?.call(message);
+
+        listener.onConferenceJoined?.call(message.toString());
       }));
       api?.on("videoConferenceLeft", allowInterop((dynamic _message) {
-        // Mapping object according with jitsi external api source code
+        final data = _message['data'];
         Map<String, dynamic> message = {"roomName": _message.roomName};
-        listener.onConferenceTerminated?.call(message);
+        listener.onConferenceTerminated?.call(data["url"], data["error"]);
       }));
       api?.on("feedbackSubmitted", allowInterop((dynamic message) {
         debugPrint("feedbackSubmitted message: $message");

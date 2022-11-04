@@ -1,5 +1,6 @@
 package com.gunschu.jitsi_meet
 
+import android.app.Activity
 import android.app.KeyguardManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -26,6 +27,9 @@ class JitsiMeetPluginActivity : JitsiMeetActivity() {
             var intent = Intent(context, JitsiMeetPluginActivity::class.java).apply {
                 action = "org.jitsi.meet.CONFERENCE"
                 putExtra("JitsiMeetConferenceOptions", options)
+            }
+            if (context !is Activity) {
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
             context?.startActivity(intent)
         }

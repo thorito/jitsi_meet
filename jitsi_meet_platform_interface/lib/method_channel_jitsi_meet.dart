@@ -1,13 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-import 'jitsi_meet_options.dart';
 import 'jitsi_meet_platform_interface.dart';
-import 'jitsi_meet_response.dart';
-import 'jitsi_meeting_listener.dart';
 
 const MethodChannel _channel = MethodChannel('jitsi_meet');
 
@@ -53,12 +49,17 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
 
     return await _channel
         .invokeMethod<String>('joinMeeting', _options)
-        .then((message) =>
-            JitsiMeetingResponse(isSuccess: true, message: message))
+        .then((message) => JitsiMeetingResponse(
+              isSuccess: true,
+              message: message,
+            ))
         .catchError(
       (error) {
         return JitsiMeetingResponse(
-            isSuccess: true, message: error.toString(), error: error);
+          isSuccess: true,
+          message: error.toString(),
+          error: error,
+        );
       },
     );
   }
@@ -95,7 +96,7 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
 
   @override
   void initialize() {
-    _eventChannel.receiveBroadcastStream().listen((dynamic message) {
+    _eventChannel.receiveBroadcastStream().listen((message) {
       _broadcastToGlobalListeners(message);
       _broadcastToPerMeetingListeners(message);
     }, onError: (dynamic error) {
@@ -112,18 +113,61 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
   /// Sends a broadcast to global listeners added using addListener
   void _broadcastToGlobalListeners(message) {
     _listeners.forEach((listener) {
-      switch (message['event']) {
+      final data = message['data'];
+      final event = message['event'];
+      switch (event) {
+        case "opened":
+          listener.onOpened?.call();
+          break;
         case "onConferenceWillJoin":
-          if (listener.onConferenceWillJoin != null)
-            listener.onConferenceWillJoin!(message);
+          listener.onConferenceWillJoin?.call(message["url"]);
           break;
         case "onConferenceJoined":
-          if (listener.onConferenceJoined != null)
-            listener.onConferenceJoined!(message);
+          listener.onConferenceJoined?.call(message["url"]);
           break;
         case "onConferenceTerminated":
-          if (listener.onConferenceTerminated != null)
-            listener.onConferenceTerminated!(message);
+          listener.onConferenceTerminated
+              ?.call(message["url"], message["error"]);
+          break;
+        case "audioMutedChanged":
+          listener.onAudioMutedChanged?.call(parseBool(message["muted"]));
+          break;
+        case "videoMutedChanged":
+          listener.onVideoMutedChanged?.call(parseBool(message["muted"]));
+          break;
+        case "screenShareToggled":
+          listener.onScreenShareToggled
+              ?.call(data["participantId"], parseBool(data["sharing"]));
+          break;
+        case "participantJoined":
+          listener.onParticipantJoined?.call(
+            data["email"],
+            data["name"],
+            data["role"],
+            data["participantId"],
+          );
+          break;
+        case "participantLeft":
+          listener.onParticipantLeft?.call(data["participantId"]);
+          break;
+        case "participantsInfoRetrieved":
+          listener.onParticipantsInfoRetrieved?.call(
+            data["participantsInfo"],
+            data["requestId"],
+          );
+          break;
+        case "chatMessageReceived":
+          listener.onChatMessageReceived?.call(
+            data["senderId"],
+            data["message"],
+            parseBool(data["isPrivate"]),
+          );
+          break;
+        case "chatToggled":
+          listener.onChatToggled?.call(parseBool(data["isOpen"]));
+          break;
+        case "closed":
+          listener.onClosed?.call();
           break;
       }
     });
@@ -132,25 +176,35 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
   /// Sends a broadcast to per meeting listeners added during joinMeeting
   void _broadcastToPerMeetingListeners(message) {
     String? url = message['url'];
-    final listener = _perMeetingListeners[url];
-    if (listener != null) {
-      switch (message['event']) {
-        case "onConferenceWillJoin":
-          if (listener.onConferenceWillJoin != null)
-            listener.onConferenceWillJoin!(message);
-          break;
-        case "onConferenceJoined":
-          if (listener.onConferenceJoined != null)
-            listener.onConferenceJoined!(message);
-          break;
-        case "onConferenceTerminated":
-          if (listener.onConferenceTerminated != null)
-            listener.onConferenceTerminated!(message);
 
-          // Remove the listener from the map of _perMeetingListeners on terminate
-          _perMeetingListeners.remove(listener);
-          break;
+    if (url != null) {
+      final listener = _perMeetingListeners[url];
+      if (listener != null) {
+        switch (message['event']) {
+          case "onConferenceWillJoin":
+            listener.onConferenceWillJoin?.call(url);
+            break;
+          case "onConferenceJoined":
+            listener.onConferenceJoined?.call(url);
+            break;
+          case "onConferenceTerminated":
+            listener.onConferenceTerminated?.call(url, message["error"]);
+            _perMeetingListeners.remove(listener);
+            break;
+        }
       }
     }
   }
+}
+
+// Required because Android SDK returns boolean values as Strings
+// and iOS SDK returns boolean values as Booleans.
+// (Making this an extension does not work, because of dynamic.)
+bool parseBool(dynamic value) {
+  if (value is bool) return value;
+  if (value is String) return value == 'true';
+  // Check whether value is not 0, because true values can be any value
+  // above 0 when coming from Jitsi.
+  if (value is num) return value != 0;
+  throw ArgumentError('Unsupported type: $value');
 }
