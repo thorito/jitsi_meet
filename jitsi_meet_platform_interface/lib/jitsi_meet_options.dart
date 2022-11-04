@@ -22,12 +22,12 @@ class JitsiMeetingOptions {
 
   Map<String, dynamic>? webOptions; // options for web
 
-  Map<FeatureFlagEnum, bool> featureFlags = HashMap();
+  Map<FeatureFlagEnum, dynamic> featureFlags = HashMap();
 
   /// Get feature flags Map with keys as String instead of Enum
   /// Useful as an argument sent to the Kotlin/Swift code
-  Map<String?, bool> getFeatureFlags() {
-    Map<String?, bool> featureFlagsWithStrings = HashMap();
+  Map<String?, dynamic> getFeatureFlags() {
+    Map<String?, dynamic> featureFlagsWithStrings = HashMap();
 
     featureFlags.forEach((key, value) {
       featureFlagsWithStrings[FeatureFlagHelper.featureFlags[key]] = value;
