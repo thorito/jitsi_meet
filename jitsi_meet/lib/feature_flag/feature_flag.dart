@@ -38,6 +38,7 @@ class FeatureFlag {
   int? _resolution;
   bool? securityOptionsEnabled;
   bool? serverURLChangeEnabled;
+  bool? settingsEnabled;
   bool? tileViewEnabled;
   bool? toolboxAlwaysVisible;
   bool? toolboxEnabled;
@@ -221,6 +222,10 @@ class FeatureFlag {
       featureFlags[FeatureFlagHelper
               .featureFlags[FeatureFlagEnum.SERVER_URL_CHANGE_ENABLED]] =
           serverURLChangeEnabled;
+
+    if (settingsEnabled != null)
+      featureFlags[FeatureFlagHelper
+          .featureFlags[FeatureFlagEnum.SETTINGS_ENABLED]] = settingsEnabled;
 
     if (tileViewEnabled != null)
       featureFlags[FeatureFlagHelper

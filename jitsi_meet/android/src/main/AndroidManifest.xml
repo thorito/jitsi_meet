@@ -8,7 +8,7 @@
             android:supportsPictureInPicture="true"
             android:theme="@style/MeetingTheme"
             android:windowSoftInputMode="adjustResize"
-            android:exported="false"
+            android:exported="true"
             android:autoRemoveFromRecents="true">
         </activity>
     </application>

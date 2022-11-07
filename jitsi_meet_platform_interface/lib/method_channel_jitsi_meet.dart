@@ -120,20 +120,19 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
           listener.onOpened?.call();
           break;
         case "onConferenceWillJoin":
-          listener.onConferenceWillJoin?.call(message["url"]);
+          listener.onConferenceWillJoin?.call(data["url"]);
           break;
         case "onConferenceJoined":
-          listener.onConferenceJoined?.call(message["url"]);
+          listener.onConferenceJoined?.call(data["url"]);
           break;
         case "onConferenceTerminated":
-          listener.onConferenceTerminated
-              ?.call(message["url"], message["error"]);
+          listener.onConferenceTerminated?.call(data["url"], data["error"]);
           break;
         case "audioMutedChanged":
-          listener.onAudioMutedChanged?.call(parseBool(message["muted"]));
+          listener.onAudioMutedChanged?.call(parseBool(data["muted"]));
           break;
         case "videoMutedChanged":
-          listener.onVideoMutedChanged?.call(parseBool(message["muted"]));
+          listener.onVideoMutedChanged?.call(parseBool(data["muted"]));
           break;
         case "screenShareToggled":
           listener.onScreenShareToggled
@@ -188,9 +187,11 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
             listener.onConferenceJoined?.call(url);
             break;
           case "onConferenceTerminated":
-            listener.onConferenceTerminated?.call(url, message["error"]);
+            listener.onConferenceTerminated?.call(url, message['error']);
             _perMeetingListeners.remove(listener);
             break;
+          case "onParticipantLeft":
+            listener.onParticipantLeft?.call(message['participantId']);
         }
       }
     }

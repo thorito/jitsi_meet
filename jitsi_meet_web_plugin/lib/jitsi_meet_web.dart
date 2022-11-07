@@ -56,21 +56,32 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
     // setup listeners
     if (listener != null) {
       api?.on("videoConferenceJoined", allowInterop((dynamic _message) {
-        // Mapping object according with jitsi external api source code
-        Map<String, dynamic> message = {
-          "id": _message.id,
+        Map<String, dynamic> data = {
+          'id': _message.id,
           "displayName": _message.displayName,
           "roomName": _message.roomName,
           "avatarURL": _message.avatarURL,
           "breakoutRoom": _message.breakoutRoom,
         };
 
-        listener.onConferenceJoined?.call(message.toString());
+        listener.onConferenceJoined?.call(data.toString());
       }));
       api?.on("videoConferenceLeft", allowInterop((dynamic _message) {
-        final data = _message['data'];
-        Map<String, dynamic> message = {"roomName": _message.roomName};
-        listener.onConferenceTerminated?.call(data["url"], data["error"]);
+        listener.onConferenceTerminated
+            ?.call(_message.roomName, _message?.error);
+      }));
+      api?.on("participantJoined", allowInterop((dynamic _message) {
+        // Mapping object according with jitsi external api source code
+        Map<String, dynamic> data = {
+          "name": _message.displayName,
+          "email": _message.userEmail,
+          "role": _message.role,
+          "participantId": _message.id,
+        };
+
+        debugPrint("message: $_message");
+        listener.onParticipantJoined?.call(
+            data["email"], data["name"], data["role"], data["participantId"]);
       }));
       api?.on("feedbackSubmitted", allowInterop((dynamic message) {
         debugPrint("feedbackSubmitted message: $message");
@@ -135,7 +146,7 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
     if (jitsiMeetingListener.onConferenceTerminated != null) {
       listeners.add("videoConferenceLeft");
     }
-    ;
+
     jitsiMeetingListener.genericListeners
         ?.forEach((element) => listeners.add(element.eventName));
     api?.removeEventListener(listeners);

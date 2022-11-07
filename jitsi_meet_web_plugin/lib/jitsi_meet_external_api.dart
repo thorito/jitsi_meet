@@ -7,7 +7,7 @@ import 'package:js/js.dart';
 
 /// Extended `JitsiMeetExternalAPI' JS
 ///
-/// Allows Dart code comunicate with the `JitsiMeetExternalAPI`
+/// Allows Dart code communicate with the `JitsiMeetExternalAPI`
 /// see https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe
 @JS('jitsi.JitsiMeetAPI')
 class JitsiMeetAPI {
@@ -26,6 +26,6 @@ class JitsiMeetAPI {
   /// Remove Event Listener for the `JitsiMeetExternalAPI`
   external void removeEventListener(List<String> listener);
 
-  /// remove instace
+  /// remove instance
   external void dispose();
 }

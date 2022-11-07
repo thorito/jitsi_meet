@@ -145,6 +145,10 @@ enum FeatureFlagEnum {
   /// Default: enabled (true).
   SERVER_URL_CHANGE_ENABLED,
 
+  /// Flag indicating if settings should be enabled.
+  /// Default: enabled (true).
+  SETTINGS_ENABLED,
+
   /// Flag indicating if tile view feature should be enabled.
   /// Default: enabled.
   TILE_VIEW_ENABLED,

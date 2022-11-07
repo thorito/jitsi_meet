@@ -23,6 +23,14 @@ class JitsiMeetEventStreamHandler private constructor(): EventChannel.StreamHand
         eventSink = null
     }
 
+    fun onOpened() {
+        eventSink?.success(mapOf("event" to "opened"))
+    }
+
+    fun onClosed() {
+        eventSink?.success(mapOf("event" to "closed"))
+    }
+
     fun onConferenceWillJoin(data: MutableMap<String, Any>?) {
         eventSink?.success(mapOf("event" to "conferenceWillJoin", "data" to data))
     }
@@ -71,14 +79,6 @@ class JitsiMeetEventStreamHandler private constructor(): EventChannel.StreamHand
         eventSink?.success(mapOf("event" to "videoMutedChanged", "data" to data))
     }
 
-    fun onOpened() {
-        eventSink?.success(mapOf("event" to "opened"))
-    }
-
-    fun onClosed() {
-        eventSink?.success(mapOf("event" to "closed"))
-    }
-
     fun onPictureInPictureWillEnter() {
         eventSink?.success(mapOf("event" to "onPictureInPictureWillEnter"))
     }
@@ -86,5 +86,4 @@ class JitsiMeetEventStreamHandler private constructor(): EventChannel.StreamHand
     fun onPictureInPictureTerminated() {
         eventSink?.success(mapOf("event" to "onPictureInPictureTerminated"))
     }
-
 }

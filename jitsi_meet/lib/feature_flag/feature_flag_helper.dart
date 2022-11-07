@@ -40,6 +40,7 @@ class FeatureFlagHelper {
     FeatureFlagEnum.RESOLUTION: 'resolution',
     FeatureFlagEnum.SECURITY_OPTIONS_ENABLED: 'security-options.enabled',
     FeatureFlagEnum.SERVER_URL_CHANGE_ENABLED: 'server-url-change.enabled',
+    FeatureFlagEnum.SETTINGS_ENABLED: 'settings.enabled',
     FeatureFlagEnum.TILE_VIEW_ENABLED: 'tile-view.enabled',
     FeatureFlagEnum.TOOLBOX_ALWAYS_VISIBLE: 'toolbox.alwaysVisible',
     FeatureFlagEnum.TOOLBOX_ENABLED: 'toolbox.enabled',
