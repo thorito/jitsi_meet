@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  package="com.thorito.jitsi_meet">
+    <application>
+        <activity
+            android:name=".JitsiMeetPluginActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize"
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="true"
+            android:theme="@style/MeetingTheme"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true"
+            android:autoRemoveFromRecents="true">
+        </activity>
+    </application>
+</manifest>
