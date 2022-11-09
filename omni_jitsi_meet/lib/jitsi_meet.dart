@@ -64,31 +64,7 @@ class JitsiMeet {
         .joinMeeting(options, listener: listener);
   }
 
-  /// Initializes the event channel. Call when listeners are added
-  static _initialize() {
-    if (!_hasInitialized) {
-      JitsiMeetPlatform.instance.initialize();
-      _hasInitialized = true;
-    }
-  }
-
   static closeMeeting() => JitsiMeetPlatform.instance.closeMeeting();
-
-  /// Adds a JitsiMeetingListener that will broadcast conference events
-  static addListener(JitsiMeetingListener jitsiMeetingListener) {
-    JitsiMeetPlatform.instance.addListener(jitsiMeetingListener);
-    _initialize();
-  }
-
-  /// Removes the JitsiMeetingListener specified
-  static removeListener(JitsiMeetingListener jitsiMeetingListener) {
-    JitsiMeetPlatform.instance.removeListener(jitsiMeetingListener);
-  }
-
-  /// Removes all JitsiMeetingListeners
-  static removeAllListeners() {
-    JitsiMeetPlatform.instance.removeAllListeners();
-  }
 
   /// allow execute a command over a Jitsi live session (only for web)
   static executeCommand(String command, List<String> args) {

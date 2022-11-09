@@ -17,7 +17,8 @@ class JitsiViewController: UIViewController {
     var videoMuted: Bool? = false
     var token:String? = nil
     var featureFlags: Dictionary<String, Any>? = Dictionary();
-    
+    var webOptions: Dictionary<String, Any>? = Dictionary();
+    var configOverrides: Dictionary<String, Any>? = Dictionary();
     
     var jistiMeetUserInfo = JitsiMeetUserInfo()
     

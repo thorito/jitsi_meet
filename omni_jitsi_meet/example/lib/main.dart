@@ -20,7 +20,7 @@ class Meeting extends StatefulWidget {
 
 class _MeetingState extends State<Meeting> {
   final serverText = TextEditingController();
-  final roomText = TextEditingController(text: "omni1234ASMD");
+  final roomText = TextEditingController(text: "omni_room_sample_1234");
   final subjectText = TextEditingController(text: "Subject1");
   final nameText = TextEditingController(text: "User1");
   final emailText = TextEditingController(text: "fake1@email.com");
@@ -220,10 +220,10 @@ class _MeetingState extends State<Meeting> {
       FeatureFlagEnum.AUDIO_ONLY_BUTTON_ENABLED: false,
       FeatureFlagEnum.CALENDAR_ENABLED: false,
       FeatureFlagEnum.CAR_MODE_ENABLED: false,
-      FeatureFlagEnum.CLOSE_CAPTIONS_ENABLED: true,
+      FeatureFlagEnum.CLOSE_CAPTIONS_ENABLED: false,
       FeatureFlagEnum.CONFERENCE_TIMER_ENABLED: false,
       FeatureFlagEnum.CHAT_ENABLED: false,
-      FeatureFlagEnum.FILMSTRIP_ENABLED: true,
+      FeatureFlagEnum.FILMSTRIP_ENABLED: false,
       FeatureFlagEnum.FULLSCREEN_ENABLED: true,
       FeatureFlagEnum.HELP_BUTTON_ENABLED: false,
       FeatureFlagEnum.INVITE_ENABLED: false,
@@ -240,7 +240,7 @@ class _MeetingState extends State<Meeting> {
       FeatureFlagEnum.PIP_ENABLED: false,
       FeatureFlagEnum.PREJOIN_PAGE_ENABLED: false,
       FeatureFlagEnum.RAISE_HAND_ENABLED: false,
-      FeatureFlagEnum.REACTIONS_ENABLED: true,
+      FeatureFlagEnum.REACTIONS_ENABLED: false,
       FeatureFlagEnum.RECORDING_ENABLED: false,
       FeatureFlagEnum.REPLACE_PARTICIPANT: false,
       FeatureFlagEnum.RESOLUTION: FeatureFlagVideoResolution.HD_RESOLUTION,
@@ -248,7 +248,7 @@ class _MeetingState extends State<Meeting> {
       FeatureFlagEnum.SERVER_URL_CHANGE_ENABLED: false,
       FeatureFlagEnum.SETTINGS_ENABLED: false,
       FeatureFlagEnum.TILE_VIEW_ENABLED: true,
-      FeatureFlagEnum.TOOLBOX_ALWAYS_VISIBLE: true,
+      FeatureFlagEnum.TOOLBOX_ALWAYS_VISIBLE: false,
       FeatureFlagEnum.TOOLBOX_ENABLED: true,
       FeatureFlagEnum.VIDEO_MUTE_BUTTON_ENABLED: true,
       FeatureFlagEnum.VIDEO_SHARE_BUTTON_ENABLED: false,
@@ -273,24 +273,27 @@ class _MeetingState extends State<Meeting> {
         "width": "100%",
         "height": "100%",
         "enableWelcomePage": false,
-        "disableInviteFunctions": true,
+        "enableNoAudioDetection": true,
+        "enableNoisyMicDetection": true,
+        "enableClosePage": false,
         "prejoinPageEnabled": false,
+        "hideConferenceTimer": true,
+        "disableInviteFunctions": true,
         "chromeExtensionBanner": null,
-        "interfaceConfigOverwrite": {
-          "ENABLE_WELCOME_PAGE": false,
-          "ENABLE_PREJOIN_PAGE": false,
-          "ENABLE_CLOSE_PAGE": false,
-          "ENABLE_BREAKOUT_ROOMS": false,
-          "ENABLE_RECORDING": false,
-          "SHOW_CHROME_EXTENSION_BANNER": false,
-          "CLOSE_PAGE_GUEST_HINT": false,
-          "MOBILE_APP_PROMO": false,
-          "SHOW_PROMOTIONAL_CLOSE_PAGE": false
+        "configOverwrite": {
+          "prejoinPageEnabled": false,
+          "disableDeepLinking": true,
+          "enableLobbyChat": false,
+          "enableClosePage": false,
+          "toolbarButtons": [
+            "microphone",
+            "camera",
+            "hangup",
+          ]
         },
         "userInfo": {"email": emailText.text, "displayName": nameText.text}
       };
 
-    debugPrint("CUSTOM_JITSI: JitsiMeetingOptions: $options");
     await JitsiMeet.joinMeeting(
       options,
       listener: JitsiMeetingListener(

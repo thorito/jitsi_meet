@@ -45,29 +45,6 @@ abstract class JitsiMeetPlatform extends PlatformInterface {
         'OMNI_JITSI: joinMeeting has not been implemented.');
   }
 
-  /// Adds a JitsiMeetingListener that will broadcast conference events
-  addListener(JitsiMeetingListener jitsiMeetingListener) {
-    throw UnimplementedError(
-        'OMNI_JITSI: addListener has not been implemented.');
-  }
-
-  /// remove JitsiListener
-  removeListener(JitsiMeetingListener jitsiMeetingListener) {
-    throw UnimplementedError(
-        'OMNI_JITSI: removeListener has not been implemented.');
-  }
-
-  /// Removes all JitsiMeetingListeners
-  removeAllListeners() {
-    throw UnimplementedError(
-        'OMNI_JITSI: removeAllListeners has not been implemented.');
-  }
-
-  void initialize() {
-    throw UnimplementedError(
-        'OMNI_JITSI: _initialize has not been implemented.');
-  }
-
   /// execute command interface, use only in web
   void executeCommand(String command, List<String> args) {
     throw UnimplementedError(

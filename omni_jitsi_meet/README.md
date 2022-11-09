@@ -23,7 +23,6 @@ Find more information about Jitsi Meet [here](https://github.com/jitsi/jitsi-mee
     - [JitsiMeetingResponse](#jitsimeetingresponse)
   - [Listening to Meeting Events](#listening-to-meeting-events)
     - [Per Meeting Events](#per-meeting-events)
-    - [Global Meeting Events](#global-meeting-events)
   - [Closing a Meeting Programmatically](#closing-a-meeting-programmatically)
   - [Contributing](#contributing)
 
@@ -344,55 +343,6 @@ await JitsiMeet.joinMeeting(options,
   }, onPictureInPictureTerminated: ({message}) {
 	debugPrint("${options.room} exited PIP mode with message: $message");
   }));
-```
-
-### Global Meeting Events
-To listen to global meeting events, simply add a JitsiMeetListener with  
-`JitsiMeet.addListener(myListener)`. You can remove listeners using  
-`JitsiMeet.removeListener(listener)` or `JitsiMeet.removeAllListeners()`.
-
-```dart
-@override
-void initState() {
-  super.initState();
-  JitsiMeet.addListener(JitsiMeetingListener(
-    onConferenceWillJoin: _onConferenceWillJoin,
-    onConferenceJoined: _onConferenceJoined,
-    onConferenceTerminated: _onConferenceTerminated,
-    onPictureInPictureWillEnter: _onPictureInPictureWillEnter,
-    onPictureInPictureTerminated: _onPictureInPictureTerminated,
-    onError: _onError));
-}
-
-@override
-void dispose() {
-  super.dispose();
-  JitsiMeet.removeAllListeners();
-}
-
-_onConferenceWillJoin({message}) {
-  debugPrint("_onConferenceWillJoin broadcasted");
-}
-
-_onConferenceJoined({message}) {
-  debugPrint("_onConferenceJoined broadcasted");
-}
-
-_onConferenceTerminated({message}) {
-  debugPrint("_onConferenceTerminated broadcasted");
-}
-
-_onPictureInPictureWillEnter({message}) {
-debugPrint("_onPictureInPictureWillEnter broadcasted with message: $message");
-}
-
-_onPictureInPictureTerminated({message}) {
-debugPrint("_onPictureInPictureTerminated broadcasted with message: $message");
-}
-
-_onError(error) {
-  debugPrint("_onError broadcasted");
-}
 ```
 
 ## Closing a Meeting Programmatically

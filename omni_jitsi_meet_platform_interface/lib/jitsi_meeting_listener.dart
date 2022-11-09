@@ -30,7 +30,7 @@ class JitsiMeetingListener {
   final Function(bool isMuted)? onVideoMutedChanged;
 
   // iOS: https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-ios-sdk#screensharetoggled
-  // TODO(saibotma): Add Android docs when https://github.com/jitsi/handbook/pull/300 is merged.
+  // Add Android docs when https://github.com/jitsi/handbook/pull/300 is merged.
   ///
   final Function(String participantId, bool isSharing)? onScreenShareToggled;
 
@@ -75,10 +75,10 @@ class JitsiMeetingListener {
   final Function()? onClosed;
 
   ///
-  final Function(Map<dynamic, dynamic> message)? onPictureInPictureWillEnter;
+  final Function()? onPictureInPictureWillEnter;
 
   ///
-  final Function(Map<dynamic, dynamic> message)? onPictureInPictureTerminated;
+  final Function()? onPictureInPictureTerminated;
 
   ///
   final Function(dynamic error)? onError;

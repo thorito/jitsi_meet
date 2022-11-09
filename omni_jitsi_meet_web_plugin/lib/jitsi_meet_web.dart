@@ -25,7 +25,7 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
   bool extraJSAdded = false;
 
   /// Regex to validate URL
-  RegExp cleanDomain = RegExp(r"^https?://");
+  RegExp cleanDomain = RegExp(r"^https?:\/\/");
 
   JitsiMeetPlugin._() {
     _setupScripts();
@@ -71,32 +71,36 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
             ?.call(_message.roomName, _message?.error);
       }));
       api?.on("participantJoined", allowInterop((dynamic _message) {
-        // Mapping object according with jitsi external api source code
+
         Map<String, dynamic> data = {
           "name": _message.displayName,
           "email": _message.email,
           "role": _message.role,
           "participantId": _message.id,
         };
-
-        debugPrint("message: $_message");
         listener.onParticipantJoined?.call(
             data["email"], data["name"], data["role"], data["participantId"]);
       }));
-      api?.on("feedbackSubmitted", allowInterop((dynamic message) {
-        debugPrint("feedbackSubmitted message: $message");
-        listener.onError?.call(message);
+      api?.on("participantLeft", allowInterop((dynamic _message) {
+        Map<String, dynamic> data = {
+          "participantId": _message.id,
+        };
+        listener.onParticipantLeft?.call(data["participantId"]);
+      }));
+      api?.on("feedbackSubmitted", allowInterop((dynamic _message) {
+        listener.onError?.call(_message);
+      }));
+      api?.on("audioMuteStatusChanged", allowInterop((dynamic _message) {
+        listener.onAudioMutedChanged?.call(_message.muted);
+      }));
+      api?.on("videoMuteStatusChanged", allowInterop((dynamic _message) {
+        listener.onVideoMutedChanged?.call(_message.muted);
       }));
 
       // NOTE: `onConferenceWillJoin` is not supported or nof found event in web
-
       // add geeric listener
       _addGenericListeners(listener);
-
-      // force to dispose view when close meeting
-      // this is needed to allow create another room in
-      // the same view without reload it
-      api?.on("readyToClose", allowInterop((dynamic message) {
+      api?.on("readyToClose", allowInterop((dynamic _message) {
         api?.dispose();
       }));
     }

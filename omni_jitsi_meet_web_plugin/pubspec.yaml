@@ -1,6 +1,6 @@
 name: omni_jitsi_meet_web_plugin
 description: Jitsi Meet Web Plugin
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/thorito/jitsi_meet
 
 environment:
@@ -15,7 +15,7 @@ dependencies:
   flutter_web_plugins:
     sdk: flutter
 
-  omni_jitsi_meet_platform_interface: ^1.0.0
+  omni_jitsi_meet_platform_interface: ^1.0.1
 
 dev_dependencies:
   flutter_test:

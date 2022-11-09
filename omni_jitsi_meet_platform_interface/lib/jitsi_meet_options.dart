@@ -21,7 +21,6 @@ class JitsiMeetingOptions {
   String? userAvatarURL;
 
   Map<String, dynamic>? webOptions; // options for web
-
   Map<FeatureFlagEnum, dynamic> featureFlags = HashMap();
 
   /// Get feature flags Map with keys as String instead of Enum
@@ -38,10 +37,9 @@ class JitsiMeetingOptions {
 
   @override
   String toString() {
-    return 'JitsiMeetingOptions{room: $room, serverURL: $serverURL, '
+    return 'OMNI_JITSI - JitsiMeetingOptions { room: $room, serverURL: $serverURL, '
         'subject: $subject, token: $token, audioMuted: $audioMuted, '
         'audioOnly: $audioOnly, videoMuted: $videoMuted, '
-        'userDisplayName: $userDisplayName, userEmail: $userEmail, '
-        'iosAppBarRGBAColor :$iosAppBarRGBAColor, featureFlags: $featureFlags }';
+        'userDisplayName: $userDisplayName, userEmail: $userEmail }';
   }
 }
