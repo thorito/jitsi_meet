@@ -11,8 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  omni_jitsi_meet_platform_interface: ^1.0.1
-  omni_jitsi_meet_web_plugin: ^1.0.1
+  omni_jitsi_meet_platform_interface: ^1.0.2
+  omni_jitsi_meet_web_plugin: ^1.0.2
 
 dev_dependencies:
   flutter_test:
