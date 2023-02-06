@@ -1,3 +1,6 @@
+## 1.0.3
+* Fix iOS build.
+
 ## 1.0.2
 * Add listeners.
 

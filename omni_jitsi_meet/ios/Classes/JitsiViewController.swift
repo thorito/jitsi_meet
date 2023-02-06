@@ -64,14 +64,15 @@ class JitsiViewController: UIViewController {
         jitsiMeetView.delegate = self
         self.jitsiMeetView = jitsiMeetView
         let options = JitsiMeetConferenceOptions.fromBuilder { (builder) in
-            builder.welcomePageEnabled = true
+            // builder.welcomePageEnabled
+             = true
             builder.room = self.roomName
             builder.serverURL = self.serverUrl
-            builder.subject = self.subject
+            // builder.subject = self.subject
             builder.userInfo = self.jistiMeetUserInfo
-            builder.audioOnly = self.audioOnly ?? false
+            /* builder.audioOnly = self.audioOnly ?? false
             builder.audioMuted = self.audioMuted ?? false
-            builder.videoMuted = self.videoMuted ?? false
+            builder.videoMuted = self.videoMuted ?? false */
             builder.token = self.token
             
             self.featureFlags?.forEach{ key,value in
@@ -117,15 +118,21 @@ extension JitsiViewController: JitsiMeetViewDelegate {
     }
 
     func conferenceWillJoin(_ data: [AnyHashable : Any]!) {
-        self.eventSink(["event": "conferenceWillJoin", "data": data])
+        var mutatedData = data
+        mutatedData?.updateValue("onConferenceWillJoin", forKey: "event")
+        self.eventSink?(mutatedData)
     }
     
     func conferenceJoined(_ data: [AnyHashable : Any]!) {
-        self.eventSink(["event": "conferenceJoined", "data": data])
+        var mutatedData = data
+        mutatedData?.updateValue("conferenceJoined", forKey: "event")
+        self.eventSink?(mutatedData)
     }
     
     func conferenceTerminated(_ data: [AnyHashable : Any]!) {
-        self.eventSink(["event": "conferenceTerminated", "data": data])
+        var mutatedData = data
+        mutatedData?.updateValue("conferenceTerminated", forKey: "event")
+        self.eventSink?(mutatedData)
         
         DispatchQueue.main.async {
             self.pipViewCoordinator?.hide() { _ in
@@ -154,35 +161,51 @@ extension JitsiViewController: JitsiMeetViewDelegate {
     }
 
     func participantJoined(_ data: [AnyHashable : Any]) {
-        self.eventSink(["event": "participantJoined", "data": data])
+        var mutatedData = data
+        mutatedData.updateValue("participantJoined", forKey: "event")
+        self.eventSink?(mutatedData)
     }
 
     func participantLeft(_ data: [AnyHashable : Any]) {
-        self.eventSink(["event": "participantLeft", "data": data])
+        var mutatedData = data
+        mutatedData.updateValue("participantLeft", forKey: "event")
+        self.eventSink?(mutatedData)
     }
 
     func audioMutedChanged(_ data: [AnyHashable : Any]) {
-        self.eventSink(["event": "audioMutedChanged", "data": data])
+        var mutatedData = data
+        mutatedData.updateValue("audioMutedChanged", forKey: "event")
+        self.eventSink?(mutatedData)
     }
 
     func endpointTextMessageReceived(_ data: [AnyHashable : Any]) {
-        self.eventSink(["event": "endpointTextMessageReceived", "data": data])
+        var mutatedData = data
+        mutatedData.updateValue("endpointTextMessageReceived", forKey: "event")
+        self.eventSink?(mutatedData)
     }
 
     func screenShareToggled(_ data: [AnyHashable : Any]) {
-        self.eventSink(["event": "screenShareToggled", "data": data])
+        var mutatedData = data
+        mutatedData.updateValue("screenShareToggled", forKey: "event")
+        self.eventSink?(mutatedData)
     }
 
     func chatMessageReceived(_ data: [AnyHashable : Any]) {
-        self.eventSink(["event": "chatMessageReceived", "data": data])
+        var mutatedData = data
+        mutatedData.updateValue("chatMessageReceived", forKey: "event")
+        self.eventSink?(mutatedData)
     }
 
     func chatToggled(_ data: [AnyHashable : Any]) {
-        self.eventSink(["event": "chatToggled", "data": data])
+        var mutatedData = data
+        mutatedData.updateValue("chatToggled", forKey: "event")
+        self.eventSink?(mutatedData)
     }
 
     func videoMutedChanged(_ data: [AnyHashable : Any]) {
-        self.eventSink(["event": "videoMutedChanged", "data": data])
+        var mutatedData = data
+        mutatedData.updateValue("videoMutedChanged", forKey: "event")
+        self.eventSink?(mutatedData)
     }
 }
 
