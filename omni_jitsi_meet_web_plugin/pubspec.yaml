@@ -1,6 +1,6 @@
 name: omni_jitsi_meet_web_plugin
 description: Jitsi Meet Web Plugin
-version: 1.0.3
+version: 1.0.4
 homepage: https://github.com/thorito/jitsi_meet
 
 environment:

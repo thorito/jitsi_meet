@@ -1,4 +1,4 @@
-## 1.0.3
+## 1.0.4
 * Updated Jitsi version SDK 7.0.1.
 * Fix iOS build.
 

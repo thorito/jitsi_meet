@@ -36,8 +36,6 @@ public class SwiftJitsiMeetPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
         } else if (call.method == "closeMeeting") {
             closeMeeting(call, result: result)
             return
-        } else {
-            return result.notImplemented()
         }
     }
 
@@ -48,9 +46,9 @@ public class SwiftJitsiMeetPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             let roomName = arguments["room"] as! String
             if (roomName.trimmingCharacters(in: .whitespaces).isEmpty) {
                 result(FlutterError.init(
-                        code: "400",
-                        message: "room is empty in arguments for method: joinMeeting",
-                        details: "room is empty in arguments for method: joinMeeting"
+                    code: "400",
+                    message: "room is empty in arguments for method: joinMeeting",
+                    details: "room is empty in arguments for method: joinMeeting"
                 ))
                 return
             }
@@ -117,14 +115,14 @@ public class SwiftJitsiMeetPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
     }
 
     private func closeMeeting(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        let dictClosingServerInfo : Dictionary = Dictionary<AnyHashable,Any>()
-        let serverURL : String = self.jitsiViewController?.serverUrl?.absoluteString ?? ""
-        let roomName : String = self.jitsiViewController?.roomName ?? ""
+        /* var dictClosingServerInfo : Dictionary = Dictionary<AnyHashable,Any>()
+        let serverURL : String = self.jitsiViewController?.serverURL?.absoluteString ?? ""
+        let roomName : String = self.jitsiViewController?.room ?? ""
 
         dictClosingServerInfo["url"] = "\(serverURL)/\(roomName)";
 
         self.jitsiViewController?.closeJitsiMeeting();
-        self.jitsiViewController?.conferenceTerminated(dictClosingServerInfo);
+        self.jitsiViewController?.conferenceTerminated(dictClosingServerInfo);*/
         result(nil)
     }
 
