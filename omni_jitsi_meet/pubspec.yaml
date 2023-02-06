@@ -1,6 +1,6 @@
 name: omni_jitsi_meet
 description: Jitsi Meet Plugin - A plugin for integrating open source Jitsi Meet API in flutter. Jitsi Meet is secure, fully featured and allows completely free video conferencing made with https://jitsi.org, a collection of open source projects
-version: 1.0.2
+version: 1.0.3
 homepage: https://github.com/thorito/jitsi_meet
 
 environment:
