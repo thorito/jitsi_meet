@@ -2,14 +2,14 @@ group 'com.thorito.jitsi_meet'
 version '1.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.6.10'
+    ext.kotlin_version = '1.7.21'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -21,7 +21,6 @@ rootProject.allprojects {
         maven {
             url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
         }
-        // Required, otherwise a dependency of jisti sdk will not be found.
         maven { url 'https://www.jitpack.io' }
     }
 }
@@ -52,6 +51,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Jitsi Meet from https://github.com/jitsi/jitsi-maven-repository/tree/master/releases/org/jitsi/react/jitsi-meet-sdk
-    //noinspection GradleDependency
-    implementation ('org.jitsi.react:jitsi-meet-sdk:5.0.2') { transitive = true }
+    implementation ('org.jitsi.react:jitsi-meet-sdk:7.0.1') { transitive = true }
 }

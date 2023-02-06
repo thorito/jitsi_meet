@@ -111,6 +111,10 @@ enum FeatureFlagEnum {
   /// Default: auto-detected.
   PIP_ENABLED,
 
+  /// Flag indicating if Picture-in-Picture button should be shown while screen sharing.
+  /// Default: disabled (false).
+  PIP_WHILE_SCREEN_SHARING_ENABLED,
+
   /// Flag indicating if the prejoin page should be enabled.
   /// Default: enabled (true).
   PREJOIN_PAGE_ENABLED,

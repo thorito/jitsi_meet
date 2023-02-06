@@ -3,126 +3,134 @@ import UIKit
 import JitsiMeetSDK
 
 public class SwiftJitsiMeetPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
-    var window: UIWindow?
+    var flutterViewController: UIViewController
+    var jitsiViewController: JitsiMeetWrapperViewController?
+    var eventSink: FlutterEventSink?
 
-    var uiVC : UIViewController
-
-    var eventSink : FlutterEventSink?
-
-    var jitsiViewController: JitsiViewController?
-
-    init(uiViewController: UIViewController) {
-        self.uiVC = uiViewController
+    init(flutterViewController: UIViewController) {
+        self.flutterViewController = flutterViewController
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "jitsi_meet", binaryMessenger: registrar.messenger())
-
-        let viewController: UIViewController =
-            (UIApplication.shared.delegate?.window??.rootViewController)!
-
-        let instance = SwiftJitsiMeetPlugin(uiViewController: viewController)
-
+        let flutterViewController: UIViewController = (UIApplication.shared.delegate?.window??.rootViewController)!
+        let instance = SwiftJitsiMeetPlugin(flutterViewController: flutterViewController)
         registrar.addMethodCallDelegate(instance, channel: channel)
 
-        // Set up event channel for conference events
-        let eventChannelName = "jitsi_meet_events"
-
-        let eventChannel = FlutterEventChannel(name: eventChannelName, binaryMessenger: registrar.messenger())
+        // Setup event channel for conference events
+        let eventChannel = FlutterEventChannel(name: "jitsi_meet_events", binaryMessenger: registrar.messenger())
         eventChannel.setStreamHandler(instance)
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
 
         if (call.method == "joinMeeting") {
+            joinMeeting(call, result: result)
+            return
+        } else if (call.method == "setAudioMuted") {
+            setAudioMuted(call, result: result)
+            return
+        } else if (call.method == "hangUp") {
+            hangUp(call, result: result)
+            return
+        } else if (call.method == "closeMeeting") {
+            closeMeeting(call, result: result)
+            return
+        } else {
+            return result.notImplemented()
+        }
+    }
 
-            self.jitsiViewController = JitsiViewController.init()
-            self.jitsiViewController?.eventSink = eventSink;
-            // text = call.argument("text");
+    private func joinMeeting(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let arguments = call.arguments as! [String: Any]
 
-            guard let args = call.arguments else {
+        let options = JitsiMeetConferenceOptions.fromBuilder { (builder) in
+            let roomName = arguments["room"] as! String
+            if (roomName.trimmingCharacters(in: .whitespaces).isEmpty) {
+                result(FlutterError.init(
+                        code: "400",
+                        message: "room is empty in arguments for method: joinMeeting",
+                        details: "room is empty in arguments for method: joinMeeting"
+                ))
                 return
             }
+            builder.room = roomName
 
-            if let myArgs = args as? [String: Any]
-            {
-                if let roomName = myArgs["room"] as? String {
-                    if let serverURL = myArgs["serverURL"] as? String {
-                        //                        print("serverUrl: ", serverURL);
-                        self.jitsiViewController?.serverUrl = URL(string: serverURL);
-                    }
-                    let subject = myArgs["subject"] as? String
-                    let displayName = myArgs["userDisplayName"] as? String
-                    let email = myArgs["userEmail"] as? String
-                    let token = myArgs["token"] as? String
-
-
-                    self.jitsiViewController?.roomName = roomName;
-                    self.jitsiViewController?.subject = subject;
-                    self.jitsiViewController?.jistiMeetUserInfo.displayName = displayName;
-                    self.jitsiViewController?.jistiMeetUserInfo.email = email;
-                    self.jitsiViewController?.token = token;
-
-
-                    if let avatarURL = myArgs["userAvatarURL"] as? String {
-                        self.jitsiViewController?.jistiMeetUserInfo.avatar = URL(string: avatarURL);
-                    }
-                    //                    let avatar = myArgs["userAvatarURL"] as? String,
-                    //                    let avatarURL  = URL(string: avatar)
-                    //                    jitsiViewController?.jistiMeetUserInfo.avatar = avatarURL;
-
-                    if let audioOnly = myArgs["audioOnly"] as? Int {
-                        let audioOnlyBool = audioOnly > 0 ? true : false
-                        self.jitsiViewController?.audioOnly = audioOnlyBool;
-                    }
-
-                    if let audioMuted = myArgs["audioMuted"] as? Int {
-                        let audioMutedBool = audioMuted > 0 ? true : false
-                        self.jitsiViewController?.audioMuted = audioMutedBool;
-                    }
-
-                    if let videoMuted = myArgs["videoMuted"] as? Int {
-                        let videoMutedBool = videoMuted > 0 ? true : false
-                        self.jitsiViewController?.videoMuted = videoMutedBool;
-                    }
-
-                    if let featureFlags = myArgs["featureFlags"] as? Dictionary<String, Any>
-                    {
-                        self.jitsiViewController?.featureFlags = featureFlags;
-                    }
-
-                    /* if let featureFlags = myArgs["configOverrides"] as? Dictionary<String, Any>
-                    {
-                         self.jitsiViewController?.configOverrides = configOverrides;
-                    } */
-
-                } else {
-                    result(FlutterError.init(code: "400", message: "room is null in arguments for method: (joinMeeting)", details: "room is null in arguments for method: (joinMeeting)"))
-                }
-            } else {
-                result(FlutterError.init(code: "400", message: "arguments are null for method: (joinMeeting)", details: "arguments are null for method: (joinMeeting)"))
+            // Otherwise uses default public jitsi meet URL
+            if let serverURL = arguments["serverURL"] as? String {
+                builder.serverURL = URL(string: serverURL);
             }
 
-            let navigationController = UINavigationController(rootViewController: (self.jitsiViewController)!)
-            navigationController.setNavigationBarHidden(true, animated: false)
-            navigationController.modalPresentationStyle = .fullScreen
-            navigationController.navigationBar.barTintColor = UIColor.black
-            self.uiVC.present(navigationController, animated: true)
-            result(nil)
+            if let subject = arguments["subject"] as? String {
+                builder.setSubject(subject)
+            }
 
-        }else if (call.method == "closeMeeting") {
+            if let token = arguments["token"] as? String {
+                builder.token = token;
+            }
 
+            if let isAudioMuted = arguments["audioMuted"] as? Bool {
+                builder.setAudioMuted(isAudioMuted);
+            }
 
-            var dictClosingServerInfo : Dictionary = Dictionary<AnyHashable,Any>()
-            let serverURL : String = self.jitsiViewController?.serverUrl?.absoluteString ?? ""
-            let roomName : String = self.jitsiViewController?.roomName ?? ""
+            if let isAudioOnly = arguments["audioOnly"] as? Bool {
+                builder.setAudioOnly(isAudioOnly)
+            }
 
-            dictClosingServerInfo["url"] = "\(serverURL)/\(roomName)";
+            if let isVideoMuted = arguments["videoMuted"] as? Bool {
+                builder.setVideoMuted(isVideoMuted)
+            }
 
-            self.jitsiViewController?.closeJitsiMeeting();
-            self.jitsiViewController?.conferenceTerminated(dictClosingServerInfo);
+            let displayName = arguments["userDisplayName"] as? String
+            let email = arguments["userEmail"] as? String
+            let avatarUrlString = arguments["userAvatarUrl"] as? String
+
+            if (displayName != nil || email != nil || avatarUrlString != nil) {
+                let avatarUrl = avatarUrlString != nil ? URL(string: avatarUrlString!) : nil
+                builder.userInfo = JitsiMeetUserInfo(displayName: displayName, andEmail: email, andAvatar: avatarUrl)
+            }
+
+            let featureFlags = arguments["featureFlags"] as? Dictionary<String, Any>
+            featureFlags?.forEach { key, value in
+                builder.setFeatureFlag(key, withValue: value);
+            }
+
+            let configOverrides = arguments["configOverrides"] as? Dictionary<String, Any>
+            configOverrides?.forEach { key, value in
+                builder.setConfigOverride(key, withValue: value);
+            }
         }
 
+        jitsiViewController = JitsiMeetWrapperViewController.init(options: options, eventSink: eventSink!)
+
+        // In order to make pip mode work.
+        jitsiViewController!.modalPresentationStyle = .overFullScreen
+        flutterViewController.present(jitsiViewController!, animated: true)
+        result(nil)
+    }
+
+    private func setAudioMuted(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let arguments = call.arguments as! [String: Any]
+        let isMuted = arguments["isMuted"] as? Bool ?? false
+        self.jitsiViewController?.sourceJitsiMeetView?.setAudioMuted(isMuted)
+        result(nil)
+    }
+
+    private func closeMeeting(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let dictClosingServerInfo : Dictionary = Dictionary<AnyHashable,Any>()
+        let serverURL : String = self.jitsiViewController?.serverUrl?.absoluteString ?? ""
+        let roomName : String = self.jitsiViewController?.roomName ?? ""
+
+        dictClosingServerInfo["url"] = "\(serverURL)/\(roomName)";
+
+        self.jitsiViewController?.closeJitsiMeeting();
+        self.jitsiViewController?.conferenceTerminated(dictClosingServerInfo);
+        result(nil)
+    }
+
+    private func hangUp(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        self.jitsiViewController?.sourceJitsiMeetView?.hangUp()
+        result(nil)
     }
 
     /**

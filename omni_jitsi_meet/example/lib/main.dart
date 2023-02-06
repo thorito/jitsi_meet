@@ -210,9 +210,11 @@ class _MeetingState extends State<Meeting> {
   }
 
   _joinMeeting() async {
-    String? serverUrl = serverText.text.trim().isEmpty ? null : serverText.text;
+    final String? serverUrl = serverText.text.trim().isEmpty
+        ? null
+        : serverText.text;
 
-    Map<FeatureFlagEnum, dynamic> featureFlags = {
+    final featureFlags = {
       FeatureFlagEnum.ADD_PEOPLE_ENABLED: false,
       FeatureFlagEnum.ANDROID_SCREENSHARING_ENABLED: false,
       FeatureFlagEnum.AUDIO_FOCUS_DISABLED: false,
@@ -258,17 +260,18 @@ class _MeetingState extends State<Meeting> {
       featureFlags[FeatureFlagEnum.CALL_INTEGRATION_ENABLED] = false;
     }
     // Define meetings options here
-    var options = JitsiMeetingOptions(room: roomText.text)
-      ..serverURL = serverUrl
-      ..subject = subjectText.text
-      ..userDisplayName = nameText.text
-      ..userEmail = emailText.text
-      ..iosAppBarRGBAColor = iosAppBarRGBAColor.text
-      ..audioOnly = isAudioOnly
-      ..audioMuted = isAudioMuted
-      ..videoMuted = isVideoMuted
-      ..featureFlags.addAll(featureFlags)
-      ..webOptions = {
+    final options = JitsiMeetingOptions(
+      room: roomText.text,
+      serverURL: serverUrl,
+      subject: subjectText.text,
+      userDisplayName: nameText.text,
+      userEmail: emailText.text,
+      iosAppBarRGBAColor: iosAppBarRGBAColor.text,
+      audioOnly: isAudioOnly,
+      audioMuted: isAudioMuted,
+      videoMuted: isVideoMuted,
+      featureFlags: featureFlags,
+      webOptions: {
         "roomName": roomText.text,
         "width": "100%",
         "height": "100%",
@@ -292,7 +295,7 @@ class _MeetingState extends State<Meeting> {
           ]
         },
         "userInfo": {"email": emailText.text, "displayName": nameText.text}
-      };
+      });
 
     await JitsiMeet.joinMeeting(
       options,

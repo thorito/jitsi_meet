@@ -9,10 +9,9 @@ import android.content.IntentFilter
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
-import com.thorito.jitsi_meet.JitsiMeetPlugin.Companion.JITSI_MEETING_CLOSE
-import com.thorito.jitsi_meet.JitsiMeetPlugin.Companion.JITSI_PLUGIN_TAG
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import org.jitsi.meet.sdk.BroadcastEvent
 import org.jitsi.meet.sdk.JitsiMeetActivity
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
 
@@ -20,10 +19,11 @@ import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
  * Activity extending JitsiMeetActivity in order to override the conference events
  */
 class JitsiMeetPluginActivity : JitsiMeetActivity() {
+
     companion object {
         @JvmStatic
         fun launchActivity(context: Context?,
-                           options: JitsiMeetConferenceOptions) {
+                           options: JitsiMeetConferenceOptions?) {
             var intent = Intent(context, JitsiMeetPluginActivity::class.java).apply {
                 action = "org.jitsi.meet.CONFERENCE"
                 putExtra("JitsiMeetConferenceOptions", options)
@@ -36,71 +36,54 @@ class JitsiMeetPluginActivity : JitsiMeetActivity() {
     }
 
     var onStopCalled: Boolean = false;
-
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-
-        if (isInPictureInPictureMode){
-            JitsiMeetEventStreamHandler.instance.onPictureInPictureWillEnter()
-        }
-        else {
-            JitsiMeetEventStreamHandler.instance.onPictureInPictureTerminated()
-        }
-
-        if (isInPictureInPictureMode == false && onStopCalled) {
-            // Picture-in-Picture mode has been closed, we can (should !) end the call
-            getJitsiView().leave()
+    private val eventStreamHandler = JitsiMeetEventStreamHandler.instance
+    private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            this@JitsiMeetPluginActivity.onBroadcastReceived(intent)
         }
     }
 
-    private val myReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val action = intent?.action
-            when (action) {
-                JITSI_MEETING_CLOSE -> finish()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        registerForBroadcastMessages()
+        eventStreamHandler.onOpened()
+        turnScreenOnAndKeyguardOff();
+    }
+
+    private fun registerForBroadcastMessages() {
+        val intentFilter = IntentFilter()
+        for (eventType in BroadcastEvent.Type.values()) {
+            intentFilter.addAction(eventType.action)
+        }
+        LocalBroadcastManager.getInstance(this).registerReceiver(this.broadcastReceiver, intentFilter)
+    }
+
+    private fun onBroadcastReceived(intent: Intent?) {
+        if (intent != null) {
+            val event = BroadcastEvent(intent)
+            val data = event.data
+            when (event.type!!) {
+                BroadcastEvent.Type.CONFERENCE_JOINED -> eventStreamHandler.onConferenceJoined(data)
+                BroadcastEvent.Type.CONFERENCE_TERMINATED -> eventStreamHandler.onConferenceTerminated(data)
+                BroadcastEvent.Type.CONFERENCE_WILL_JOIN -> eventStreamHandler.onConferenceWillJoin(data)
+                BroadcastEvent.Type.AUDIO_MUTED_CHANGED -> eventStreamHandler.onAudioMutedChanged(data)
+                BroadcastEvent.Type.PARTICIPANT_JOINED -> eventStreamHandler.onParticipantJoined(data)
+                BroadcastEvent.Type.PARTICIPANT_LEFT -> eventStreamHandler.onParticipantLeft(data)
+                BroadcastEvent.Type.ENDPOINT_TEXT_MESSAGE_RECEIVED -> eventStreamHandler.onEndpointTextMessageReceived(data)
+                BroadcastEvent.Type.SCREEN_SHARE_TOGGLED -> eventStreamHandler.onScreenShareToggled(data)
+                BroadcastEvent.Type.PARTICIPANTS_INFO_RETRIEVED -> eventStreamHandler.onParticipantsInfoRetrieved(data)
+                BroadcastEvent.Type.CHAT_MESSAGE_RECEIVED -> eventStreamHandler.onChatMessageReceived(data)
+                BroadcastEvent.Type.CHAT_TOGGLED -> eventStreamHandler.onChatToggled(data)
+                BroadcastEvent.Type.VIDEO_MUTED_CHANGED -> eventStreamHandler.onVideoMutedChanged(data)
+                BroadcastEvent.Type.READY_TO_CLOSE -> {}
             }
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        onStopCalled = true;
-        unregisterReceiver(myReceiver)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        onStopCalled = false
-        registerReceiver(myReceiver, IntentFilter(JITSI_MEETING_CLOSE))
-    }
-
-    override fun onConferenceWillJoin(data: HashMap<String, Any>) {
-        Log.d(JITSI_PLUGIN_TAG, String.format("JitsiMeetPluginActivity.onConferenceWillJoin: %s", data))
-        JitsiMeetEventStreamHandler.instance.onConferenceWillJoin(data)
-        super.onConferenceWillJoin(data)
-    }
-
-    override fun onConferenceJoined(data: HashMap<String, Any>) {
-        Log.d(JITSI_PLUGIN_TAG, String.format("JitsiMeetPluginActivity.onConferenceJoined: %s", data))
-        JitsiMeetEventStreamHandler.instance.onConferenceJoined(data)
-        super.onConferenceJoined(data)
-    }
-
-    override fun onConferenceTerminated(data: HashMap<String, Any>) {
-        Log.d(JITSI_PLUGIN_TAG, String.format("JitsiMeetPluginActivity.onConferenceTerminated: %s", data))
-        JitsiMeetEventStreamHandler.instance.onConferenceTerminated(data)
-        super.onConferenceTerminated(data)
-    }
-
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        turnScreenOnAndKeyguardOff();
-    }
-
     override fun onDestroy() {
         super.onDestroy()
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(this.broadcastReceiver)
+        eventStreamHandler.onClosed()
         turnScreenOffAndKeyguardOn();
     }
 

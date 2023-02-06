@@ -5,8 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'jitsi_meet_platform_interface.dart';
 
-const MethodChannel _channel = MethodChannel('jitsi_meet');
-
+const MethodChannel _methodChannel = MethodChannel('jitsi_meet');
 const EventChannel _eventChannel = const EventChannel('jitsi_meet_events');
 
 /// An implementation of [JitsiMeetPlatform] that uses method channels.
@@ -19,9 +18,8 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
     JitsiMeetingOptions options, {
     JitsiMeetingListener? listener,
   }) async {
-    // Attach a listener if it exists. The key is based on the serverURL + room
-    _listener = listener;
 
+    _listener = listener;
     if (!_eventChannelIsInitialized) {
       _initialize();
     }
@@ -29,32 +27,63 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
     Map<String, dynamic> _options = {
       'room': options.room.trim(),
       'serverURL': options.serverURL?.trim(),
-      'subject': options.subject,
+      'subject': options.subject?.trim(),
       'token': options.token,
       'audioMuted': options.audioMuted,
       'audioOnly': options.audioOnly,
       'videoMuted': options.videoMuted,
-      'featureFlags': options.getFeatureFlags(),
+      'userAvatarURL': options.userAvatarURL,
       'userDisplayName': options.userDisplayName,
       'userEmail': options.userEmail,
       'iosAppBarRGBAColor': options.iosAppBarRGBAColor,
+      'featureFlags': options.getFeatureFlags(),
     };
 
-    return await _channel
-        .invokeMethod<String>('joinMeeting', _options)
-        .then((message) => JitsiMeetingResponse(
-              isSuccess: true,
-              message: message,
-            ))
-        .catchError(
-      (error) {
+    return await _methodChannel
+      .invokeMethod<String>('joinMeeting', _options)
+      .then((message) {
+        return JitsiMeetingResponse(isSuccess: true, message: message);
+      }).catchError((error) {
         return JitsiMeetingResponse(
-          isSuccess: true,
+          isSuccess: false,
           message: error.toString(),
           error: error,
         );
-      },
-    );
+      });
+  }
+
+  @override
+  void executeCommand(String command, List<String> args) {}
+
+  @override
+  Future<JitsiMeetingResponse> setAudioMuted(bool isMuted) async {
+    Map<String, dynamic> _options = {
+      'isMuted': isMuted,
+    };
+    return await _methodChannel
+        .invokeMethod<String>('setAudioMuted', _options)
+        .then((message) {
+      return JitsiMeetingResponse(isSuccess: true, message: message);
+    }).catchError((error) {
+      return JitsiMeetingResponse(
+        isSuccess: false,
+        message: error.toString(),
+        error: error,
+      );
+    });
+  }
+
+  @override
+  Future<JitsiMeetingResponse> hangUp() async {
+    return await _methodChannel.invokeMethod<String>('hangUp').then((message) {
+      return JitsiMeetingResponse(isSuccess: true, message: message);
+    }).catchError((error) {
+      return JitsiMeetingResponse(
+        isSuccess: false,
+        message: error.toString(),
+        error: error,
+      );
+    });
   }
 
   void _initialize() {
@@ -129,13 +158,11 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
     _eventChannelIsInitialized = true;
   }
 
-  @override
+  /*@override
   closeMeeting() {
-    _channel.invokeMethod('closeMeeting');
+    _methodChannel.invokeMethod('closeMeeting');
   }
-
-  @override
-  void executeCommand(String command, List<String> args) {}
+*/
 
   @override
   Widget buildView(List<String> extraJS) => const SizedBox.shrink();

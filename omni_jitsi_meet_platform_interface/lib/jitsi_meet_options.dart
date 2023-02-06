@@ -4,31 +4,42 @@ import 'feature_flag/feature_flag_enum.dart';
 import 'feature_flag/feature_flag_helper.dart';
 
 class JitsiMeetingOptions {
+  final String room;
+  final String? serverURL;
+  final String? subject;
+  final String? token;
+  final bool? audioMuted;
+  final bool? audioOnly;
+  final bool? videoMuted;
+  final String? userAvatarURL;
+  final String? userDisplayName;
+  final String? userEmail;
+  final String? iosAppBarRGBAColor;
+  final Map<String, Object?>? webOptions; // options for web
+  final Map<FeatureFlagEnum, Object?>? featureFlags;
+
   JitsiMeetingOptions({
     required this.room,
+    this.serverURL,
+    this.subject,
+    this.token,
+    this.audioMuted,
+    this.audioOnly,
+    this.videoMuted,
+    this.userAvatarURL,
+    this.userDisplayName,
+    this.userEmail,
+    this.iosAppBarRGBAColor,
+    this.webOptions,
+    this.featureFlags,
   });
-
-  final String room;
-  String? serverURL;
-  String? subject;
-  String? token;
-  bool? audioMuted;
-  bool? audioOnly;
-  bool? videoMuted;
-  String? userDisplayName;
-  String? userEmail;
-  String? iosAppBarRGBAColor;
-  String? userAvatarURL;
-
-  Map<String, dynamic>? webOptions; // options for web
-  Map<FeatureFlagEnum, dynamic> featureFlags = HashMap();
 
   /// Get feature flags Map with keys as String instead of Enum
   /// Useful as an argument sent to the Kotlin/Swift code
   Map<String?, dynamic> getFeatureFlags() {
     Map<String?, dynamic> featureFlagsWithStrings = HashMap();
 
-    featureFlags.forEach((key, value) {
+    featureFlags?.forEach((key, value) {
       featureFlagsWithStrings[FeatureFlagHelper.featureFlags[key]] = value;
     });
 

@@ -34,7 +34,7 @@ Find more information about Jitsi Meet [here](https://github.com/jitsi/jitsi-mee
 * Note: Example compilable with XCode 12.2 & Flutter 1.22.4.
 
 #### Podfile
-Ensure in your Podfile you have an entry like below declaring platform of 11.0 or above and disable BITCODE.
+Ensure in your Podfile you have an entry like below declaring platform of 12.0 or above and disable BITCODE.
 ```
 platform :ios, '11.0'
 
@@ -64,21 +64,21 @@ Info.plist.
 ### Android
 
 #### Gradle
-Set dependencies of build tools gradle to minimum 3.6.3:
+Set dependencies of build tools gradle to minimum 7.3.1:
 ```gradle
 dependencies {
-    classpath 'com.android.tools.build:gradle:3.6.3' <!-- Upgrade this -->
+    classpath 'com.android.tools.build:gradle:7.3.1' <!-- Upgrade this -->
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 }
 ```
 
-Set distribution gradle wrapper to minimum 5.6.4.
+Set distribution gradle wrapper to minimum 7.4.
 ```gradle
 distributionBase=GRADLE_USER_HOME
 distributionPath=wrapper/dists
 zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dists
-distributionUrl=https\://services.gradle.org/distributions/gradle-5.6.4-all.zip <!-- Upgrade this -->
+distributionUrl=https\://services.gradle.org/distributions/gradle-7.4-bin.zip <!-- Upgrade this -->
 ```
 
 #### AndroidManifest.xml
@@ -347,7 +347,7 @@ await JitsiMeet.joinMeeting(options,
 
 ## Closing a Meeting Programmatically
 ```dart
-JitsiMeet.closeMeeting();
+JitsiMeet.hangUp();
 ```
 
 <a name="contributing"></a>

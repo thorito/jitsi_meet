@@ -2,7 +2,7 @@ package com.thorito.jitsi_meet
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
+import android.content.BroadcastReceiver
 import androidx.annotation.NonNull
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -13,71 +13,62 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import org.jitsi.meet.sdk.JitsiMeetConferenceOptions
-import org.jitsi.meet.sdk.JitsiMeetUserInfo
+import org.jitsi.meet.sdk.*
 import java.net.URL
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 
-/** JitsiMeetPlugin */
+/** JitsiMeetPlugin
+  example: https://github.com/jitsi/jitsi-meet-sdk-samples/blob/18c35f7625b38233579ff34f761f4c126ba7e03a/android/kotlin/JitsiSDKTest/app/src/main/kotlin/net/jitsi/sdktest/MainActivity.kt
+ */
 public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware {
-    private lateinit var channel: MethodChannel
+    private lateinit var methodChannel: MethodChannel
     private lateinit var eventChannel: EventChannel
-
+    private val eventStreamHandler = JitsiMeetEventStreamHandler.instance
     private var activity: Activity? = null
-
-    constructor(activity: Activity?) : this() {
-        this.activity = activity
-    }
-
-    companion object {
-        @JvmStatic
-        fun registerWith(registrar: Registrar) {
-            val plugin = JitsiMeetPlugin(registrar.activity())
-            val channel = MethodChannel(registrar.messenger(), JITSI_METHOD_CHANNEL)
-            channel.setMethodCallHandler(plugin)
-
-
-            val eventChannel = EventChannel(registrar.messenger(), JITSI_EVENT_CHANNEL)
-            eventChannel.setStreamHandler(JitsiMeetEventStreamHandler.instance)
-        }
-
-        const val JITSI_PLUGIN_TAG = "JITSI_MEET_PLUGIN"
-        const val JITSI_METHOD_CHANNEL = "jitsi_meet"
-        const val JITSI_EVENT_CHANNEL = "jitsi_meet_events"
-        const val JITSI_MEETING_CLOSE = "JITSI_MEETING_CLOSE"
-    }
 
     /**
      * FlutterPlugin interface implementations
      */
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, JITSI_METHOD_CHANNEL)
-        channel.setMethodCallHandler(this)
+        methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "jitsi_meet")
+        methodChannel.setMethodCallHandler(this)
 
-        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, JITSI_EVENT_CHANNEL)
+        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "jitsi_meet_events")
         eventChannel.setStreamHandler(JitsiMeetEventStreamHandler.instance)
     }
 
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-        channel.setMethodCallHandler(null)
+        methodChannel.setMethodCallHandler(null)
         eventChannel.setStreamHandler(null)
     }
 
+    override fun onDetachedFromActivity() {
+        this.activity = null
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        onAttachedToActivity(binding)
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        this.activity = binding.activity
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        onDetachedFromActivity()
+    }
 
     /**
      * MethodCallHandler interface implementations
      */
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-        Log.d(JITSI_PLUGIN_TAG, "method: ${call.method}")
-        Log.d(JITSI_PLUGIN_TAG, "arguments: ${call.arguments}")
 
         when (call.method) {
-            "joinMeeting" -> {
-                joinMeeting(call, result)
-            }
-            "closeMeeting" -> {
-                closeMeeting(call, result)
-            }
+            "joinMeeting" -> joinMeeting(call, result)
+            "setAudioMuted" -> setAudioMuted(call, result)
+            "handUp" -> hangUp(call, result)
+            "closeMeeting" -> closeMeeting(call, result)
             else -> result.notImplemented()
         }
     }
@@ -94,88 +85,86 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
             return
         }
 
-        Log.d(JITSI_PLUGIN_TAG, "Joining Room: $room")
+        val serverUrlString: String = call.argument("serverURL") ?: "https://meet.jit.si"
 
-        val userInfo = JitsiMeetUserInfo()
-        userInfo.displayName = call.argument("userDisplayName")
-        userInfo.email = call.argument("userEmail")
-        if (call.argument<String?>("userAvatarURL") != null) {
-            userInfo.avatar = URL(call.argument("userAvatarURL"))
+        val subject: String? = call.argument("subject")
+        val token: String? = call.argument("token")
+        val isAudioMuted: Boolean? = call.argument("audioMuted")
+        val isAudioOnly: Boolean? = call.argument("audioOnly")
+        val isVideoMuted: Boolean? = call.argument("videoMuted")
+
+        val displayName: String? = call.argument("userDisplayName")
+        val email: String? = call.argument("userEmail")
+        val userAvatarUrlString: String? = call.argument("userAvatarUrl")
+        val userInfo = JitsiMeetUserInfo().apply {
+            if (displayName != null) this.displayName = displayName
+            if (email != null) this.email = email
+            if (userAvatarUrlString != null) avatar = URL(userAvatarUrlString)
         }
 
-        var serverURLString = call.argument<String>("serverURL")
-        if (serverURLString == null) {
-            serverURLString = "https://meet.jit.si";
-        }
-        val serverURL = URL(serverURLString)
-        Log.d(JITSI_PLUGIN_TAG, "Server URL: $serverURL, $serverURLString")
+        val serverURL = URL(serverUrlString)
 
-        val optionsBuilder = JitsiMeetConferenceOptions.Builder()
+        val options = JitsiMeetConferenceOptions.Builder().run {
+            setRoom(room)
+            if (serverURL != null) setServerURL(serverURL)
+            if (subject != null) setSubject(subject)
+            if (token != null) setToken(token)
+            if (isAudioMuted != null) setAudioMuted(isAudioMuted)
+            if (isAudioOnly != null) setAudioOnly(isAudioOnly)
+            if (isVideoMuted != null) setVideoMuted(isVideoMuted)
+            if (displayName != null || email != null || userAvatarUrlString != null) {
+                setUserInfo(userInfo)
+            }
 
-        // Set meeting options
-        optionsBuilder
-                .setServerURL(serverURL)
-                .setRoom(room)
-                .setSubject(call.argument("subject"))
-                .setToken(call.argument("token"))
-                .setAudioMuted(call.argument("audioMuted") ?: false)
-                .setAudioOnly(call.argument("audioOnly") ?: false)
-                .setVideoMuted(call.argument("videoMuted") ?: false)
-                .setUserInfo(userInfo)
-
-        // Add feature flags into options, reading given Map
-        if (call.argument<HashMap<String, Any>?>("featureFlags") != null) {
             val featureFlags = call.argument<HashMap<String, Any?>>("featureFlags")
             featureFlags?.forEach { (key, value) ->
+                // Can only be bool, int or string according to
+                // the overloads of setFeatureFlag.
                 when (value) {
-                    is Boolean -> optionsBuilder.setFeatureFlag(key, value)
-                    is Int -> optionsBuilder.setFeatureFlag(key, value)
-                    else -> optionsBuilder.setFeatureFlag(key, value.toString())
+                    is Boolean -> setFeatureFlag(key, value)
+                    is Int -> setFeatureFlag(key, value)
+                    else -> setFeatureFlag(key, value.toString())
                 }
             }
-        }
 
-        val configOverrides = call.argument<HashMap<String, Any?>>("configOverrides")
-        configOverrides?.forEach { (key, value) ->
-            // Can only be bool, int, array of strings or string according to
-            // the overloads of setConfigOverride.
-            when (value) {
-                is Boolean -> optionsBuilder.setConfigOverride(key, value)
-                is Int -> optionsBuilder.setConfigOverride(key, value)
-                is Array<*> -> optionsBuilder.setConfigOverride(key, value as Array<out String>)
-                else -> optionsBuilder.setConfigOverride(key, value.toString())
+            val configOverrides = call.argument<HashMap<String, Any?>>("configOverrides")
+            configOverrides?.forEach { (key, value) ->
+                // Can only be bool, int, array of strings or string according to
+                // the overloads of setConfigOverride.
+                when (value) {
+                    is Boolean -> setConfigOverride(key, value)
+                    is Int -> setConfigOverride(key, value)
+                    is Array<*> -> setConfigOverride(key, value as Array<out String>)
+                    else -> setConfigOverride(key, value.toString())
+                }
             }
+
+            build()
         }
 
-        // Build with meeting options and feature flags
-        val options = optionsBuilder.build()
-
-        JitsiMeetPluginActivity.launchActivity(activity, options)
+        JitsiMeetPluginActivity.launchActivity(activity!!, options)
         result.success("Successfully joined room: $room")
     }
 
     private fun closeMeeting(call: MethodCall, result: Result) {
-        val intent = Intent(JITSI_MEETING_CLOSE)
+        val intent = Intent("JITSI_MEETING_CLOSE")
         activity?.sendBroadcast(intent)
         result.success(null)
     }
 
-    /**
-     * ActivityAware interface implementations
-     */
-    override fun onDetachedFromActivity() {
-        this.activity = null
+    private fun setAudioMuted(call: MethodCall, result: Result) {
+        val isMuted = call.argument<Boolean>("isMuted") ?: false
+
+        val muteBroadcastIntent: Intent = BroadcastIntentHelper.buildSetAudioMutedIntent(isMuted)
+        LocalBroadcastManager.getInstance(activity!!.applicationContext).sendBroadcast(muteBroadcastIntent)
+
+        result.success("Successfully set audio muted to: $isMuted")
     }
 
-    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        onAttachedToActivity(binding)
-    }
+    private fun hangUp(call: MethodCall, result: Result) {
+        val hangUpIntent: Intent = BroadcastIntentHelper.buildHangUpIntent()
+        LocalBroadcastManager.getInstance(activity!!.applicationContext).sendBroadcast(hangUpIntent)
 
-    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        this.activity = binding.activity
-    }
-
-    override fun onDetachedFromActivityForConfigChanges() {
-        onDetachedFromActivity()
+        result.success("Successfully hung up.")
     }
 }

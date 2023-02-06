@@ -160,6 +160,7 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
   /// Not used for web
   removeAllListeners() {}
 
+  /// Initialize
   void initialize() {}
 
   @override

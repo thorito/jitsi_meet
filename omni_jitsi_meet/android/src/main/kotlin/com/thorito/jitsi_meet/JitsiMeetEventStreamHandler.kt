@@ -1,14 +1,12 @@
 package com.thorito.jitsi_meet
 
-import android.util.Log
-import com.thorito.jitsi_meet.JitsiMeetPlugin.Companion.JITSI_PLUGIN_TAG
 import io.flutter.plugin.common.EventChannel
 import java.io.Serializable
 
 /**
  * StreamHandler to listen to conference events and broadcast it back to Flutter
  */
-class JitsiMeetEventStreamHandler private constructor(): EventChannel.StreamHandler, Serializable {
+class JitsiMeetEventStreamHandler private constructor(): EventChannel.StreamHandler {
     companion object {
         val instance = JitsiMeetEventStreamHandler()
     }

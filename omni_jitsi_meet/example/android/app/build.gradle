@@ -32,9 +32,6 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
-    lintOptions {
-        disable 'InvalidPackage'
-    }
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
@@ -63,10 +60,13 @@ android {
 
             // Add below 3 lines for proguard
             minifyEnabled true
-            useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    lint {
+        disable 'InvalidPackage'
+    }
+    namespace 'com.thorito.jitsi_meet_example'
 }
 
 flutter {
@@ -75,6 +75,4 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    //noinspection GradleDependency
-    implementation ('org.jitsi.react:jitsi-meet-sdk:5.0.2') { transitive = true }
 }

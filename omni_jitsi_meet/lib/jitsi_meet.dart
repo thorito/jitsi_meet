@@ -17,7 +17,6 @@ export 'package:omni_jitsi_meet_platform_interface/jitsi_meet_platform_interface
         FeatureFlagEnum;
 
 class JitsiMeet {
-  static bool _hasInitialized = false;
 
   static final Map<RoomNameConstraintType, RoomNameConstraint>
       defaultRoomNameConstraints = {

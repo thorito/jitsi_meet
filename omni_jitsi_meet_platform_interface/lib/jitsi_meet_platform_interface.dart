@@ -40,6 +40,16 @@ abstract class JitsiMeetPlatform extends PlatformInterface {
         'OMNI_JITSI: joinMeeting has not been implemented.');
   }
 
+  Future<JitsiMeetingResponse> setAudioMuted(bool isMuted) async {
+    throw UnimplementedError(
+        'OMNI_JITSI: setAudioMuted has not been implemented.');
+  }
+
+  Future<JitsiMeetingResponse> hangUp() async {
+    throw UnimplementedError(
+        'OMNI_JITSI: hangUp has not been implemented.');
+  }
+
   closeMeeting() {
     throw UnimplementedError(
         'OMNI_JITSI: joinMeeting has not been implemented.');
