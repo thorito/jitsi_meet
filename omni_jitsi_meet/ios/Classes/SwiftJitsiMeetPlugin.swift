@@ -91,10 +91,10 @@ public class SwiftJitsiMeetPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
                         self.jitsiViewController?.featureFlags = featureFlags;
                     }
 
-                    if let featureFlags = myArgs["configOverrides"] as? Dictionary<String, Any>
+                    /* if let featureFlags = myArgs["configOverrides"] as? Dictionary<String, Any>
                     {
-                        self.jitsiViewController?.configOverrides = configOverrides;
-                    }
+                         self.jitsiViewController?.configOverrides = configOverrides;
+                    } */
 
                 } else {
                     result(FlutterError.init(code: "400", message: "room is null in arguments for method: (joinMeeting)", details: "room is null in arguments for method: (joinMeeting)"))
