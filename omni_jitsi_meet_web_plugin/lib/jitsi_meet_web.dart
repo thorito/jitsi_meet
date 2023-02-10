@@ -14,9 +14,6 @@ import 'room_name_constraint_type.dart';
 
 /// JitsiMeetPlugin Web version for Jitsi Meet plugin
 class JitsiMeetPlugin extends JitsiMeetPlatform {
-  // List<JitsiMeetingListener> _listeners = <JitsiMeetingListener>[];
-  // Map<String, JitsiMeetingListener> _perMeetingListeners = {};
-
   /// `JitsiMeetExternalAPI` holder
   jitsi.JitsiMeetAPI? api;
 
@@ -55,6 +52,15 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
 
     // setup listeners
     if (listener != null) {
+      listener.onOpened?.call();
+
+      api?.on("chatUpdated", allowInterop((dynamic _message) {
+        listener.onChatToggled?.call(_message.isOpen);
+      }));
+      api?.on("incomingMessage", allowInterop((dynamic _message) {
+        listener.onChatMessageReceived
+            ?.call(_message.from, _message.message, _message.privateMessage);
+      }));
       api?.on("videoConferenceJoined", allowInterop((dynamic _message) {
         Map<String, dynamic> data = {
           'id': _message.id,
@@ -69,9 +75,9 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
       api?.on("videoConferenceLeft", allowInterop((dynamic _message) {
         listener.onConferenceTerminated
             ?.call(_message.roomName, _message?.error);
+        listener.onClosed?.call();
       }));
       api?.on("participantJoined", allowInterop((dynamic _message) {
-
         Map<String, dynamic> data = {
           "name": _message.displayName,
           "email": _message.email,

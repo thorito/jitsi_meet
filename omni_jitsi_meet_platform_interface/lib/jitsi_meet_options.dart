@@ -17,6 +17,7 @@ class JitsiMeetingOptions {
   final String? iosAppBarRGBAColor;
   final Map<String, Object?>? webOptions; // options for web
   final Map<FeatureFlagEnum, Object?>? featureFlags;
+  final Map<String, Object?>? configOverrides;
 
   JitsiMeetingOptions({
     required this.room,
@@ -32,6 +33,7 @@ class JitsiMeetingOptions {
     this.iosAppBarRGBAColor,
     this.webOptions,
     this.featureFlags,
+    this.configOverrides,
   });
 
   /// Get feature flags Map with keys as String instead of Enum

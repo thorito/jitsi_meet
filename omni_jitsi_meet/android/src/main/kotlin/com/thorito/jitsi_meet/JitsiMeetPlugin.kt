@@ -19,9 +19,10 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 
 /** JitsiMeetPlugin
-  example: https://github.com/jitsi/jitsi-meet-sdk-samples/blob/18c35f7625b38233579ff34f761f4c126ba7e03a/android/kotlin/JitsiSDKTest/app/src/main/kotlin/net/jitsi/sdktest/MainActivity.kt
+example: https://github.com/jitsi/jitsi-meet-sdk-samples/blob/18c35f7625b38233579ff34f761f4c126ba7e03a/android/kotlin/JitsiSDKTest/app/src/main/kotlin/net/jitsi/sdktest/MainActivity.kt
  */
-public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware {
+public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler,
+    ActivityAware {
     private lateinit var methodChannel: MethodChannel
     private lateinit var eventChannel: EventChannel
     private val eventStreamHandler = JitsiMeetEventStreamHandler.instance
@@ -31,10 +32,14 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
      * FlutterPlugin interface implementations
      */
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        methodChannel = MethodChannel(flutterPluginBinding.binaryMessenger, "jitsi_meet")
+        methodChannel =
+            MethodChannel(flutterPluginBinding.binaryMessenger, "jitsi_meet")
         methodChannel.setMethodCallHandler(this)
 
-        eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "jitsi_meet_events")
+        eventChannel = EventChannel(
+            flutterPluginBinding.binaryMessenger,
+            "jitsi_meet_events"
+        )
         eventChannel.setStreamHandler(JitsiMeetEventStreamHandler.instance)
     }
 
@@ -62,7 +67,10 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
     /**
      * MethodCallHandler interface implementations
      */
-    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    override fun onMethodCall(
+        @NonNull call: MethodCall,
+        @NonNull result: Result
+    ) {
 
         when (call.method) {
             "joinMeeting" -> joinMeeting(call, result)
@@ -79,13 +87,16 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
     private fun joinMeeting(call: MethodCall, result: Result) {
         val room = call.argument<String>("room")
         if (room.isNullOrBlank()) {
-            result.error("400",
-                    "room can not be null or empty",
-                    "room can not be null or empty")
+            result.error(
+                "400",
+                "room can not be null or empty",
+                "room can not be null or empty"
+            )
             return
         }
 
-        val serverUrlString: String = call.argument("serverURL") ?: "https://meet.jit.si"
+        val serverUrlString: String =
+            call.argument("serverURL") ?: "https://meet.jit.si"
 
         val subject: String? = call.argument("subject")
         val token: String? = call.argument("token")
@@ -116,7 +127,8 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
                 setUserInfo(userInfo)
             }
 
-            val featureFlags = call.argument<HashMap<String, Any?>>("featureFlags")
+            val featureFlags =
+                call.argument<HashMap<String, Any?>>("featureFlags")
             featureFlags?.forEach { (key, value) ->
                 // Can only be bool, int or string according to
                 // the overloads of setFeatureFlag.
@@ -127,14 +139,18 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
                 }
             }
 
-            val configOverrides = call.argument<HashMap<String, Any?>>("configOverrides")
+            val configOverrides =
+                call.argument<HashMap<String, Any?>>("configOverrides")
             configOverrides?.forEach { (key, value) ->
                 // Can only be bool, int, array of strings or string according to
                 // the overloads of setConfigOverride.
                 when (value) {
                     is Boolean -> setConfigOverride(key, value)
                     is Int -> setConfigOverride(key, value)
-                    is Array<*> -> setConfigOverride(key, value as Array<out String>)
+                    is Array<*> -> setConfigOverride(
+                        key,
+                        value as Array<out String>
+                    )
                     else -> setConfigOverride(key, value.toString())
                 }
             }
@@ -155,16 +171,19 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler, ActivityAware
     private fun setAudioMuted(call: MethodCall, result: Result) {
         val isMuted = call.argument<Boolean>("isMuted") ?: false
 
-        val muteBroadcastIntent: Intent = BroadcastIntentHelper.buildSetAudioMutedIntent(isMuted)
-        LocalBroadcastManager.getInstance(activity!!.applicationContext).sendBroadcast(muteBroadcastIntent)
+        val muteBroadcastIntent: Intent =
+            BroadcastIntentHelper.buildSetAudioMutedIntent(isMuted)
+        LocalBroadcastManager.getInstance(activity!!.applicationContext)
+            .sendBroadcast(muteBroadcastIntent)
 
         result.success("Successfully set audio muted to: $isMuted")
     }
 
     private fun hangUp(call: MethodCall, result: Result) {
         val hangUpIntent: Intent = BroadcastIntentHelper.buildHangUpIntent()
-        LocalBroadcastManager.getInstance(activity!!.applicationContext).sendBroadcast(hangUpIntent)
-
+        LocalBroadcastManager.getInstance(activity!!.applicationContext)
+            .sendBroadcast(hangUpIntent)
+        closeMeeting(call, result);
         result.success("Successfully hung up.")
     }
 }

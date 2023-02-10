@@ -1,43 +1,49 @@
 # omni_jitsi_meet
 
-
 Jitsi Meet Plugin for Flutter. Supports Android, iOS, and Web platforms.
 
-"Jitsi Meet is an open-source (Apache) WebRTC JavaScript application that uses Jitsi Videobridge to provide high quality, secure and scalable video conferences." 
+"Jitsi Meet is an open-source (Apache) WebRTC JavaScript application that uses Jitsi Videobridge to provide high quality, secure and scalable video
+conferences."
 
 Find more information about Jitsi Meet [here](https://github.com/jitsi/jitsi-meet)
 
 ## Table of Contents
-  - [Configuration](#configuration)
+
+- [Configuration](#configuration)
     - [IOS](#ios)
-      - [Podfile](#podfile)
-      - [Info.plist](#infoplist)
+        - [Podfile](#podfile)
+        - [Info.plist](#infoplist)
     - [Android](#android)
-      - [Gradle](#gradle)
-      - [AndroidManifest.xml](#androidmanifestxml)
-      - [Minimum SDK Version 23](#minimum-sdk-version-23)
-      - [Proguard](#proguard)
+        - [Gradle](#gradle)
+        - [AndroidManifest.xml](#androidmanifestxml)
+        - [Minimum SDK Version 23](#minimum-sdk-version-23)
+        - [Proguard](#proguard)
     - [WEB](#web)
-  - [Join A Meeting](#join-a-meeting)
+- [Join A Meeting](#join-a-meeting)
     - [JitsiMeetingOptions](#jitsimeetingoptions)
     - [FeatureFlag](#featureflag)
     - [JitsiMeetingResponse](#jitsimeetingresponse)
-  - [Listening to Meeting Events](#listening-to-meeting-events)
+- [Listening to Meeting Events](#listening-to-meeting-events)
     - [Per Meeting Events](#per-meeting-events)
-  - [Closing a Meeting Programmatically](#closing-a-meeting-programmatically)
-  - [Contributing](#contributing)
+- [Closing a Meeting Programmatically](#closing-a-meeting-programmatically)
+- [Contributing](#contributing)
 
 <a name="configuration"></a>
+
 ## Configuration
 
 <a name="ios"></a>
+
 ### IOS
+
 * Note: Example compilable with XCode 12.2 & Flutter 1.22.4.
 
 #### Podfile
-Ensure in your Podfile you have an entry like below declaring platform of 11.0 or above and disable BITCODE.
+
+Ensure in your Podfile you have an entry like below declaring platform of 12.0 or above and disable BITCODE.
+
 ```
-platform :ios, '11.0'
+platform :ios, '12.0'
 
 ...
 
@@ -51,6 +57,7 @@ end
 ```
 
 #### Info.plist
+
 Add NSCameraUsageDescription and NSMicrophoneUsageDescription to your
 Info.plist.
 
@@ -62,10 +69,13 @@ Info.plist.
 ```
 
 <a name="android"></a>
+
 ### Android
 
 #### Gradle
+
 Set dependencies of build tools gradle to minimum 7.3.1:
+
 ```gradle
 dependencies {
     classpath 'com.android.tools.build:gradle:7.3.1' <!-- Upgrade this -->
@@ -74,6 +84,7 @@ dependencies {
 ```
 
 Set distribution gradle wrapper to minimum 7.4.
+
 ```gradle
 distributionBase=GRADLE_USER_HOME
 distributionPath=wrapper/dists
@@ -83,28 +94,27 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-7.4-bin.zip <!
 ```
 
 #### AndroidManifest.xml
-Jitsi Meet's SDK AndroidManifest.xml will conflict with your project, namely 
-the application:label field. To counter that, go into 
+
+Jitsi Meet's SDK AndroidManifest.xml will conflict with your project, namely
+the application:label field. To counter that, go into
 `android/app/src/main/AndroidManifest.xml` and add the tools library
 and `tools:replace="android:label"` to the application tag.
 
 ```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="yourpackage.com"
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="yourpackage.com"
     xmlns:tools="http://schemas.android.com/tools"> <!-- Add this -->
-    <application 
-        tools:replace="android:label"  
-        android:name="your.application.name"
-        android:label="My Application"
-        android:icon="@mipmap/ic_launcher">
+    <application tools:replace="android:label" android:name="your.application.name" android:label="My Application" android:icon="@mipmap/ic_launcher">
         ...
     </application>
-...
+    ...
 </manifest>
 ```
 
 #### Minimum SDK Version 23
+
 Update your minimum sdk version to 23 in android/app/build.gradle
+
 ```groovy
 defaultConfig {
     applicationId "com.thorito.jitsi_meet_example"
@@ -117,8 +127,8 @@ defaultConfig {
 
 #### Proguard
 
-Jitsi's SDK enables proguard, but without a proguard-rules.pro file, your release 
-apk build will be missing the Flutter Wrapper as well as react-native code. 
+Jitsi's SDK enables proguard, but without a proguard-rules.pro file, your release
+apk build will be missing the Flutter Wrapper as well as react-native code.
 In your Flutter project's android/app/build.gradle file, add proguard support
 
 ```groovy
@@ -127,7 +137,7 @@ buildTypes {
         // TODO: Add your own signing config for the release build.
         // Signing with the debug keys for now, so `flutter run --release` works.
         signingConfig signingConfigs.debug
-        
+
         // Add below 2 lines for proguard
         minifyEnabled true
         proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -135,11 +145,11 @@ buildTypes {
 }
 ```
 
-Then add a file in the same directory called proguard-rules.pro. See the example 
+Then add a file in the same directory called proguard-rules.pro. See the example
 app's [proguard-rules.pro](example/android/app/proguard-rules.pro) file to know what to paste in.
 
 *Note*  
-If you do not create the proguard-rules.pro file, then your app will 
+If you do not create the proguard-rules.pro file, then your app will
 crash when you try to join a meeting or the meeting screen tries to open
 but closes immediately. You will see one of the below errors in logcat.
 
@@ -162,31 +172,38 @@ W/unknown:ViewManagerPropertyUpdater: Could not find generated setter for class 
 ```
 
 <a name="web"></a>
+
 ### WEB
 
 To implement you need to include Jitsi Js library in the index.html of web section
+
 ```javascript
 <script src="https://meet.jit.si/external_api.js" type="application/javascript"></script>
 ```
 
 Example:
+
 ```html
+
 <body>
-  <!-- This script installs service_worker.js to provide PWA functionality to
-       application. For more information, see:
-       https://developers.google.com/web/fundamentals/primers/service-workers -->
-  <script>
+<!-- This script installs service_worker.js to provide PWA functionality to
+     application. For more information, see:
+     https://developers.google.com/web/fundamentals/primers/service-workers -->
+<script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
         navigator.serviceWorker.register('/flutter_service_worker.js');
       });
     }
-  </script>
-  <script src="https://meet.jit.si/external_api.js" type="application/javascript"></script>
-  <script src="main.dart.js" type="application/javascript"></script>
+  
+
+</script>
+<script src="https://meet.jit.si/external_api.js" type="application/javascript"></script>
+<script src="main.dart.js" type="application/javascript"></script>
 </body>
 </html>
 ```
+
 *Note*
 See usage example in jitsi_meet plugin
 
@@ -196,55 +213,144 @@ See usage example in jitsi_meet plugin
 
 ```dart
 _joinMeeting() async {
-    try {
-	  FeatureFlag featureFlag = FeatureFlag();
-	  featureFlag.welcomePageEnabled = false;
-	  featureFlag.resolution = FeatureFlagVideoResolution.MD_RESOLUTION; // Limit video resolution to 360p
-	  
-      var options = JitsiMeetingOptions(room: "myroom") // room is Required, spaces will be trimmed
-        ..serverURL = "https://someHost.com"
-        ..subject = "Meeting with thorito"
-        ..userDisplayName = "My Name"
-        ..userEmail = "myemail@email.com"
-        ..userAvatarURL = "https://someimageurl.com/image.jpg" // or .png
-        ..audioOnly = true
-        ..audioMuted = true
-        ..videoMuted = true
-        ..featureFlag = featureFlag;
+  try {
+    FeatureFlag featureFlag = FeatureFlag();
+    featureFlag.resolution = FeatureFlagVideoResolution.MD_RESOLUTION; // Limit video resolution to 360p
 
-      await JitsiMeet.joinMeeting(options);
-    } catch (error) {
-      debugPrint("error: $error");
-    }
+    final options = JitsiMeetingOptions(
+        room: 'myroom',
+        // Required, spaces will be trimmed
+        serverURL: 'https://someHost.com',
+        // Ex: https://meet.jit.si'
+        subject: 'Meeting with thorito',
+        userDisplayName: 'My Name',
+        userEmail: 'myemail@email.com',
+        userAvatarURL: 'https://someimageurl.com/image.jpg',
+        // or .png
+        audioOnly: false,
+        audioMuted: false,
+        videoMuted: false,
+        featureFlags: featureFlag,
+        webOptions: {
+          'roomName': 'myroom',
+          'width': '100%',
+          'height': '100%',
+          'enableWelcomePage': false,
+          'enableNoAudioDetection': true,
+          'enableLobbyChat': false,
+          'enableNoisyMicDetection': true,
+          'enableClosePage': false,
+          'disableRemoveRaisedHandOnFocus': false,
+          'disableReactions': true,
+          'prejoinPageEnabled': false,
+          'hideDisplayName': true,
+          'hideConferenceSubject': true,
+          'hideConferenceTimer': true,
+          'hideParticipantsStats': true,
+          'hideLobbyButton': true,
+          'disableInviteFunctions': true,
+          'chromeExtensionBanner': null,
+          'readOnlyName': true,
+          'participantsPane': {
+            'hideModeratorSettingsTab': true,
+            'hideMoreActionsButton': true,
+            'hideMuteAllButton': true,
+          },
+          'hideAddRoomButton': true,
+          'breakoutRooms': {
+            'hideAddRoomButton': true,
+            'hideAutoAssignButton': true,
+            'hideJoinRoomButton': true,
+            'hideModeratorSettingsTab': true,
+            'hideMoreActionsButton': true,
+            'hideMuteAllButton': true,
+          },
+          'lang': 'en',
+          'configOverwrite': {
+            'doNotFlipLocalVideo': true,
+            'prejoinPageEnabled': false,
+            'disableDeepLinking': true,
+            'enableLobbyChat': false,
+            'enableClosePage': false,
+            'hideDisplayName': true,
+            'hideConferenceTimer': true,
+            'hideParticipantsStats': true,
+            'hideLobbyButton': true,
+            'readOnlyName': true,
+            'giphy': {
+              'enable': false,
+            },
+            'participantsPane': {
+              'hideModeratorSettingsTab': true,
+              'hideMoreActionsButton': true,
+              'hideMuteAllButton': true,
+            },
+            'hideAddRoomButton': true,
+            'breakoutRooms': {
+              'hideAddRoomButton': true,
+              'hideAutoAssignButton': true,
+              'hideJoinRoomButton': true,
+              'hideModeratorSettingsTab': true,
+              'hideMoreActionsButton': true,
+              'hideMuteAllButton': true,
+            },
+            // https://github.com/jitsi/jitsi-meet/blob/master/config.js
+            'toolbarButtons': [
+              'camera',
+              'desktop',
+              'download',
+              'filmstrip',
+              'hangup',
+              'highlight',
+              'microphone',
+              'noisesuppression',
+              'select-background',
+              'tileview',
+              'toggle-camera',
+              'whiteboard'
+            ]
+          },
+          'userInfo': {
+            'displayName': 'My Name',
+            'email': 'myemail@email.com',
+          }
+        });
+    
+  } catch (error) {
+    debugPrint("error: $error");
   }
+}
 ```
 
 <a name="jitsimeetingoptions"></a>
 
 ### JitsiMeetingOptions
 
-| Field             | Required  | Default           | Description |
- ------------------ | --------- | ----------------- | ----------- |
-| room              | Yes       | N/A               | Unique room name that will be appended to serverURL. Valid characters: alphanumeric, dashes, and underscores. |
-| subject           | No        | $room             | Meeting name displayed at the top of the meeting.  If null, defaults to room name where dashes and underscores are replaced with spaces and first characters are capitalized. |
-| userDisplayName   | No        | "Fellow Jitster"  | User's display name. |
-| userEmail         | No        | none              | User's email address. |
-| audioOnly         | No        | false             | Start meeting without video. Can be turned on in meeting. |
-| audioMuted        | No        | false             | Start meeting with audio muted. Can be turned on in meeting. |
-| videoMuted        | No        | false             | Start meeting with video muted. Can be turned on in meeting. |
-| serverURL         | No        | meet.jitsi.si     | Specify your own hosted server. Must be a valid absolute URL of the format `<scheme>://<host>[/path]`, i.e. https://someHost.com. Defaults to Jitsi Meet's servers. |
-| userAvatarURL     | N/A       | none              | User's avatar URL. |
-| token             | N/A       | none              | JWT token used for authentication. |
-| featureFlag      | No        | see below         | Object of FeatureFlag class used to enable/disable features and set video resolution of Jitsi Meet SDK. |
+| Field           | Required  | Default           | Description |
+-----------------| --------- | ----------------- | -- |
+| room            | Yes       | N/A               | Unique room name that will be appended to serverURL. Valid characters: alphanumeric, dashes, and underscores. |
+| subject         | No        | $room             | Meeting name displayed at the top of the meeting. If null, defaults to room name where dashes and underscores are replaced with spaces and first characters are capitalized. |
+| userDisplayName | No        | "Fellow Jitster"  | User's display name. |
+| userEmail       | No        | none              | User's email address. |
+| audioOnly       | No        | false             | Start meeting without video. Can be turned on in meeting. |
+| audioMuted      | No        | false             | Start meeting with audio muted. Can be turned on in meeting. |
+| videoMuted      | No        | false             | Start meeting with video muted. Can be turned on in meeting. |
+| serverURL       | No        | meet.jitsi.si     | Specify your own hosted server. Must be a valid absolute URL of the format `<scheme>://<host>[/path]`, i.e. https://someHost.com. Defaults to Jitsi Meet's servers. |
+| userAvatarURL   | N/A       | none              | User's avatar URL. |
+| token           | N/A       | none              | JWT token used for authentication. |
+| featureFlag     | No        | see below         | Object of FeatureFlag class used to enable/disable features and set video resolution of Jitsi Meet SDK. |
+| configOverrides | No        | see below         | Object of ConfigOverrides class used to enable/disable features and set video resolution of Jitsi Meet SDK. |
+| webOptions      | No        | see below         | Settings in web |
 
 <a name="jitsimeetingresponse"></a>
 
 ### FeatureFlag
 
 Feature flag allows you to limit video resolution and enable/disable few features of Jitsi Meet SDK mentioned in the list below.  
-If you don't provide any flag to JitsiMeetingOptions, default values will be used.  
+If you don't provide any flag to JitsiMeetingOptions, default values will be used.
 
-We are using the [official list of flags, taken from the Jitsi Meet repository](https://github.com/jitsi/jitsi-meet/blob/master/react/features/base/flags/constants.js)
+We are using
+the [official list of flags, taken from the Jitsi Meet repository](https://github.com/jitsi/jitsi-meet/blob/master/react/features/base/flags/constants.js)
 
 | Flag                          | Default (Android) | Default (iOS) | Description                                                                                                                                                                                                    |
 |-------------------------------|-------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -253,7 +359,8 @@ We are using the [official list of flags, taken from the Jitsi Meet repository](
 | `audioMuteButtonEnabled`      | true              | true          | Flag indicating if the audio mute button should be displayed.                                                                                                                                                  |
 | `audioOnlyButtonEnabled`      | true              | true          | Flag indicating that the Audio only button in the overflow menu is enabled.                                                                                                                                    |
 | `calendarEnabled`             | true              | auto          | Enable calendar integration.                                                                                                                                                                                   |
-| `callIntegrationEnabled`      | true              | true          | Enable call integration (CallKit on iOS, ConnectionService on Android). **SEE REMARK BELOW**                                                                                                                   |
+| `callIntegrationEnabled`      | true              | true          | Enable call integration (CallKit on iOS, ConnectionService on Android). **SEE
+REMARK BELOW**                                                                                                                   |
 | `carModeEnabled`              | true              | auto          | Flag indicating if calendar integration should be enabled.                                                                                                                                                     |
 | `closeCaptionsEnabled`        | true              | true          | Enable close captions (subtitles) option in menu.                                                                                                                                                              |
 | `conferenceTimerEnabled`      | true              | true          | Enable conference timer.                                                                                                                                                                                       |
@@ -289,7 +396,9 @@ We are using the [official list of flags, taken from the Jitsi Meet repository](
 | `videoShareButtonEnabled`     | true              | true          | Enable video share button.                                                                                                                                                                                     |
 | `welcomePageEnabled`          | false             | false         | Enable welcome page. "The welcome page lists recent meetings and calendar appointments and it's meant to be used by standalone applications."                                                                  |
 
-**REMARK about Call integration** Call integration on Android (known as ConnectionService) [has been disabled on the official Jitsi Meet app](https://github.com/jitsi/jitsi-meet/commit/95eb551156c6769e25be9855dd2bc21adf71ac76) because it creates a lot of issues. You should disable it too to avoid these issues.
+**REMARK about Call integration** Call integration on Android (known as
+ConnectionService) [has been disabled on the official Jitsi Meet app](https://github.com/jitsi/jitsi-meet/commit/95eb551156c6769e25be9855dd2bc21adf71ac76)
+because it creates a lot of issues. You should disable it too to avoid these issues.
 
 ### JitsiMeetingResponse
 
@@ -325,26 +434,68 @@ Events supported
 | onChatToggled | Chat toggled | isOpen                           |
 
 ### Per Meeting Events
+
 To listen to meeting events per meeting, pass in a JitsiMeetingListener
 in joinMeeting. The listener will automatically be removed when an  
 onConferenceTerminated event is fired.
 
 ```
-await JitsiMeet.joinMeeting(options,
-  listener: JitsiMeetingListener(onConferenceWillJoin: ({message}) {
-    debugPrint("${options.room} will join with message: $message");
-  }, onConferenceJoined: ({message}) {
-    debugPrint("${options.room} joined with message: $message");
-  }, onConferenceTerminated: ({message}) {
-    debugPrint("${options.room} terminated with message: $message");
-  }, onPictureInPictureWillEnter: ({message}) {
-	debugPrint("${options.room} entered PIP mode with message: $message");
-  }, onPictureInPictureTerminated: ({message}) {
-	debugPrint("${options.room} exited PIP mode with message: $message");
-  }));
+final JitsiMeetingResponse response = await JitsiMeet.joinMeeting(
+  options,
+  listener: JitsiMeetingListener(
+      onOpened: () {
+        debugPrint("JitsiMeetingListener - onOpened");
+      },
+      onClosed: () {
+        debugPrint("JitsiMeetingListener - onClosed");
+      },
+      onError: (error) {
+        debugPrint("JitsiMeetingListener - onError: error: $error");
+      },
+      onConferenceWillJoin: (url) {
+        debugPrint(
+            "JitsiMeetingListener - onConferenceWillJoin: url: $url");
+      },
+      onConferenceJoined: (url) {
+        debugPrint("JitsiMeetingListener - onConferenceJoined: url:$url");
+      },
+      onConferenceTerminated: (url, error) {
+        debugPrint(
+            "JitsiMeetingListener - onConferenceTerminated: url: $url, error: $error");
+      },
+      onParticipantLeft: (participantId) {
+        debugPrint(
+            "JitsiMeetingListener - onParticipantLeft: $participantId");
+      },
+      onParticipantJoined: (email, name, role, participantId) {
+        debugPrint("JitsiMeetingListener - onParticipantJoined: "
+            "email: $email, name: $name, role: $role, "
+            "participantId: $participantId");
+      },
+      onAudioMutedChanged: (muted) {
+        debugPrint(
+            "JitsiMeetingListener - onAudioMutedChanged: muted: $muted");
+      },
+      onVideoMutedChanged: (muted) {
+        debugPrint(
+            "JitsiMeetingListener - onVideoMutedChanged: muted: $muted");
+      },
+      onScreenShareToggled: (participantId, isSharing) {
+        debugPrint("JitsiMeetingListener - onScreenShareToggled: "
+            "participantId: $participantId, isSharing: $isSharing");
+      },
+      genericListeners: [
+        JitsiGenericListener(
+            eventName: 'readyToClose',
+            callback: (dynamic message) {
+              debugPrint("JitsiMeetingListener - readyToClose callback");
+            }),
+      ]),
+);
 ```
 
 ## Closing a Meeting Programmatically
+
 ```dart
 JitsiMeet.hangUp();
 ```
@@ -352,6 +503,7 @@ JitsiMeet.hangUp();
 <a name="contributing"></a>
 
 ## Contributing
+
 Send a pull request with as much information as possible clearly
 describing the issue or feature. Keep changes small and for one issue at
 a time.

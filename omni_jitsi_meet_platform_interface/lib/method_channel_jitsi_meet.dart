@@ -18,7 +18,6 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
     JitsiMeetingOptions options, {
     JitsiMeetingListener? listener,
   }) async {
-
     _listener = listener;
     if (!_eventChannelIsInitialized) {
       _initialize();
@@ -40,16 +39,16 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
     };
 
     return await _methodChannel
-      .invokeMethod<String>('joinMeeting', _options)
-      .then((message) {
-        return JitsiMeetingResponse(isSuccess: true, message: message);
-      }).catchError((error) {
-        return JitsiMeetingResponse(
-          isSuccess: false,
-          message: error.toString(),
-          error: error,
-        );
-      });
+        .invokeMethod<String>('joinMeeting', _options)
+        .then((message) {
+      return JitsiMeetingResponse(isSuccess: true, message: message);
+    }).catchError((error) {
+      return JitsiMeetingResponse(
+        isSuccess: false,
+        message: error.toString(),
+        error: error,
+      );
+    });
   }
 
   @override
@@ -158,11 +157,10 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
     _eventChannelIsInitialized = true;
   }
 
-  /*@override
+  @override
   closeMeeting() {
     _methodChannel.invokeMethod('closeMeeting');
   }
-*/
 
   @override
   Widget buildView(List<String> extraJS) => const SizedBox.shrink();

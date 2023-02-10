@@ -46,8 +46,7 @@ abstract class JitsiMeetPlatform extends PlatformInterface {
   }
 
   Future<JitsiMeetingResponse> hangUp() async {
-    throw UnimplementedError(
-        'OMNI_JITSI: hangUp has not been implemented.');
+    throw UnimplementedError('OMNI_JITSI: hangUp has not been implemented.');
   }
 
   closeMeeting() {

@@ -32,7 +32,8 @@ class FeatureFlagHelper {
     FeatureFlagEnum.NOTIFICATIONS_ENABLED: 'notifications.enabled',
     FeatureFlagEnum.OVERFLOW_MENU_ENABLED: 'overflow-menu.enabled',
     FeatureFlagEnum.PIP_ENABLED: 'pip.enabled',
-    FeatureFlagEnum.PIP_WHILE_SCREEN_SHARING_ENABLED: 'pip-while-screen-sharing.enabled',
+    FeatureFlagEnum.PIP_WHILE_SCREEN_SHARING_ENABLED:
+        'pip-while-screen-sharing.enabled',
     FeatureFlagEnum.PREJOIN_PAGE_ENABLED: 'prejoinpage.enabled',
     FeatureFlagEnum.RAISE_HAND_ENABLED: 'raise-hand.enabled',
     FeatureFlagEnum.REACTIONS_ENABLED: 'reactions.enabled',
