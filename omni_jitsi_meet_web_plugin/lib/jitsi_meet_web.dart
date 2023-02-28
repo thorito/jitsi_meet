@@ -55,11 +55,24 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
       listener.onOpened?.call();
 
       api?.on("chatUpdated", allowInterop((dynamic _message) {
-        listener.onChatToggled?.call(_message.isOpen);
+        Map<String, dynamic> data = {
+          'isOpen': _message.isOpen,
+        };
+        listener.onChatToggled?.call(parseBool(data["isOpen"]));
       }));
       api?.on("incomingMessage", allowInterop((dynamic _message) {
-        listener.onChatMessageReceived
-            ?.call(_message.from, _message.message, _message.privateMessage);
+        Map<String, dynamic> data = {
+          'from': _message.from,
+          'message': _message.message,
+          'privateMessage': _message.privateMessage,
+        };
+
+        listener.onChatMessageReceived?.call(
+          data["from"],
+          data["message"],
+          data["privateMessage"],
+          DateTime.now().toUtc().toString(),
+        );
       }));
       api?.on("videoConferenceJoined", allowInterop((dynamic _message) {
         Map<String, dynamic> data = {
@@ -73,6 +86,14 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
         listener.onConferenceJoined?.call(data.toString());
       }));
       api?.on("videoConferenceLeft", allowInterop((dynamic _message) {
+        /*
+        Map<String, dynamic> data = {
+          'roomName': message.roomName,
+        };
+
+        listener?.onConferenceTerminated?.call(data["roomName"], 'Local User left the meeting');
+        */
+
         listener.onConferenceTerminated
             ?.call(_message.roomName, _message?.error);
         listener.onClosed?.call();
@@ -97,21 +118,60 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
         listener.onError?.call(_message);
       }));
       api?.on("audioMuteStatusChanged", allowInterop((dynamic _message) {
-        listener.onAudioMutedChanged?.call(_message.muted);
+        Map<String, dynamic> data = {
+          'isMuted': _message.isMuted,
+        };
+        listener.onAudioMutedChanged
+            ?.call(parseBool(data["isMuted"].toString()));
       }));
       api?.on("videoMuteStatusChanged", allowInterop((dynamic _message) {
-        listener.onVideoMutedChanged?.call(_message.muted);
+        Map<String, dynamic> data = {
+          'muted': _message.muted,
+        };
+
+        listener.onVideoMutedChanged?.call(parseBool(data["muted"]));
+      }));
+      api?.on("screenSharingStatusChanged", allowInterop((message) {
+        Map<String, dynamic> data = {
+          'on': message.on,
+        };
+        listener.onScreenShareToggled?.call(
+            parseBool(data["on"]) == true ? 'Joined' : 'Not Joined',
+            parseBool(data["on"]));
+      }));
+      api?.on("participantsInfoRetrieved", allowInterop((message) {
+        Map<String, dynamic> data = {
+          'participantsInfo': message.participantsInfo,
+          'requestId': message.requestId,
+        };
+        listener.onParticipantsInfoRetrieved?.call(
+          data["participantsInfo"],
+          data["requestId"],
+        );
       }));
 
       // NOTE: `onConferenceWillJoin` is not supported or nof found event in web
       // add geeric listener
       _addGenericListeners(listener);
       api?.on("readyToClose", allowInterop((dynamic _message) {
+        listener.onClosed?.call();
         api?.dispose();
       }));
     }
 
     return JitsiMeetingResponse(isSuccess: true);
+  }
+
+  /// Required because Android SDK returns boolean values as Strings
+  /// and iOS SDK returns boolean values as Booleans.
+  /// (Making this an extension does not work, because of dynamic.)
+  bool parseBool(dynamic value) {
+    if (value is bool) return value;
+    if (value is String) return value == 'true';
+    // Check whether value is not 0, because true values can be any value
+    // above 0 when coming from Jitsi.
+    if (value is num) return value != 0;
+    throw ArgumentError('Unsupported type: $value');
   }
 
   // add generic lister over current session

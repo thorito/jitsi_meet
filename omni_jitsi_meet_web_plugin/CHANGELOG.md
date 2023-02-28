@@ -1,3 +1,6 @@
+## 1.0.6
+* Fix listeners events.
+
 ## 1.0.5
 * Add param configOverrides. 
 

@@ -1,6 +1,6 @@
 name: jitsi_meet_example
 description: Demonstrates how to use the jitsi_meet plugin with the basic options.
-version: 1.0.5
+version: 1.0.6
 publish_to: 'none'
 
 
@@ -11,7 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  omni_jitsi_meet: ^1.0.5
+  omni_jitsi_meet:
+    path: ../
   cupertino_icons: ^1.0.5
 
 dev_dependencies:

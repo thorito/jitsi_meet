@@ -64,6 +64,7 @@ class JitsiMeetingListener {
     String senderId,
     String message,
     bool isPrivate,
+    String timestamp,
   )? onChatMessageReceived;
 
   // iOS: https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-ios-sdk/#chattoggled
