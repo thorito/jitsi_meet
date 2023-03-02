@@ -99,19 +99,21 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
           _listener?.onPictureInPictureTerminated?.call();
           break;
         case "conferenceWillJoin":
-          _listener?.onConferenceWillJoin?.call(data["url"]);
+          _listener?.onConferenceWillJoin?.call(data["url"].toString());
           break;
         case "conferenceJoined":
-          _listener?.onConferenceJoined?.call(data["url"]);
+          _listener?.onConferenceJoined?.call(data["url"].toString());
           break;
         case "conferenceTerminated":
-          _listener?.onConferenceTerminated?.call(data["url"], data["error"]);
+          _listener?.onConferenceTerminated
+              ?.call(data["url"].toString(), data["error"]);
           break;
         case "audioMutedChanged":
           _listener?.onAudioMutedChanged?.call(parseBool(data["muted"]));
           break;
         case "videoMutedChanged":
-          _listener?.onVideoMutedChanged?.call(parseBool(data["muted"]));
+          _listener?.onVideoMutedChanged
+              ?.call(parseBool(data["muted"], isVideoMutedChanged: true));
           break;
         case "screenShareToggled":
           _listener?.onScreenShareToggled
@@ -119,10 +121,10 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
           break;
         case "participantJoined":
           _listener?.onParticipantJoined?.call(
-            data["email"],
-            data["name"],
-            data["role"],
-            data["participantId"],
+            data["email"].toString(),
+            data["name"].toString(),
+            data["role"].toString(),
+            data["participantId"].toString(),
           );
           break;
         case "participantLeft":
@@ -167,9 +169,15 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
   Widget buildView(List<String> extraJS) => const SizedBox.shrink();
 }
 
-bool parseBool(dynamic value) {
+bool parseBool(dynamic value, {bool isVideoMutedChanged = false}) {
   if (value is bool) return value;
+
+  if (isVideoMutedChanged && value is String) {
+    return value != '0.0';
+  }
+
   if (value is String) return value == 'true';
   if (value is num) return value != 0;
+
   throw ArgumentError('OMNI_JITSI: Unsupported type: $value');
 }

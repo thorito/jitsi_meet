@@ -62,7 +62,7 @@ class _MeetingState extends State<Meeting> {
                                 child: JitsiMeetConferencing(
                                   extraJS: [
                                     // extraJs setup example
-                                    '<script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>'
+                                    '<script src="https://code.jquery.com/jquery-3.6.3.slim.js" integrity="sha256-DKU1CmJ8kBuEwumaLuh9Tl/6ZB6jzGOBV/5YpNE2BWc=" crossorigin="anonymous"></script>'
                                   ],
                                 ),
                               )),
@@ -210,12 +210,11 @@ class _MeetingState extends State<Meeting> {
   }
 
   _joinMeeting() async {
-    final String? serverUrl = serverText.text.trim().isEmpty
-        ? null
-        : serverText.text;
+    final String? serverUrl =
+        serverText.text.trim().isEmpty ? null : serverText.text;
 
     final featureFlags = {
-      FeatureFlagEnum.ADD_PEOPLE_ENABLED: false,
+      /*FeatureFlagEnum.ADD_PEOPLE_ENABLED: false,
       FeatureFlagEnum.ANDROID_SCREENSHARING_ENABLED: false,
       FeatureFlagEnum.AUDIO_FOCUS_DISABLED: false,
       FeatureFlagEnum.AUDIO_MUTE_BUTTON_ENABLED: true,
@@ -244,16 +243,16 @@ class _MeetingState extends State<Meeting> {
       FeatureFlagEnum.RAISE_HAND_ENABLED: false,
       FeatureFlagEnum.REACTIONS_ENABLED: false,
       FeatureFlagEnum.RECORDING_ENABLED: false,
-      FeatureFlagEnum.REPLACE_PARTICIPANT: false,
-      FeatureFlagEnum.RESOLUTION: FeatureFlagVideoResolution.HD_RESOLUTION,
-      FeatureFlagEnum.SECURITY_OPTIONS_ENABLED: false,
+      FeatureFlagEnum.REPLACE_PARTICIPANT: false,*/
+      FeatureFlagEnum.RESOLUTION: FeatureFlagVideoResolution.MD_RESOLUTION,
+      /*FeatureFlagEnum.SECURITY_OPTIONS_ENABLED: false,
       FeatureFlagEnum.SERVER_URL_CHANGE_ENABLED: false,
       FeatureFlagEnum.SETTINGS_ENABLED: false,
       FeatureFlagEnum.TILE_VIEW_ENABLED: true,
       FeatureFlagEnum.TOOLBOX_ALWAYS_VISIBLE: false,
       FeatureFlagEnum.TOOLBOX_ENABLED: true,
       FeatureFlagEnum.VIDEO_MUTE_BUTTON_ENABLED: true,
-      FeatureFlagEnum.VIDEO_SHARE_BUTTON_ENABLED: false,
+      FeatureFlagEnum.VIDEO_SHARE_BUTTON_ENABLED: false,*/
       FeatureFlagEnum.WELCOME_PAGE_ENABLED: false,
     };
     if (!kIsWeb && Platform.isAndroid) {
@@ -261,41 +260,42 @@ class _MeetingState extends State<Meeting> {
     }
     // Define meetings options here
     final options = JitsiMeetingOptions(
-      room: roomText.text,
-      serverURL: serverUrl,
-      subject: subjectText.text,
-      userDisplayName: nameText.text,
-      userEmail: emailText.text,
-      iosAppBarRGBAColor: iosAppBarRGBAColor.text,
-      audioOnly: isAudioOnly,
-      audioMuted: isAudioMuted,
-      videoMuted: isVideoMuted,
-      featureFlags: featureFlags,
-      webOptions: {
-        "roomName": roomText.text,
-        "width": "100%",
-        "height": "100%",
-        "enableWelcomePage": false,
-        "enableNoAudioDetection": true,
-        "enableNoisyMicDetection": true,
-        "enableClosePage": false,
-        "prejoinPageEnabled": false,
-        "hideConferenceTimer": true,
-        "disableInviteFunctions": true,
-        "chromeExtensionBanner": null,
-        "configOverwrite": {
-          "prejoinPageEnabled": false,
-          "disableDeepLinking": true,
-          "enableLobbyChat": false,
+        room: roomText.text,
+        serverURL: serverUrl,
+        subject: subjectText.text,
+        userDisplayName: nameText.text,
+        userEmail: emailText.text,
+        iosAppBarRGBAColor: iosAppBarRGBAColor.text,
+        audioOnly: isAudioOnly,
+        audioMuted: isAudioMuted,
+        videoMuted: isVideoMuted,
+        featureFlags: featureFlags,
+        webOptions: {
+          "roomName": roomText.text,
+          "width": "100%",
+          "height": "100%",
+          "enableWelcomePage": false,
+          "enableNoAudioDetection": true,
+          "enableNoisyMicDetection": true,
           "enableClosePage": false,
-          "toolbarButtons": [
-            "microphone",
-            "camera",
-            "hangup",
-          ]
-        },
-        "userInfo": {"email": emailText.text, "displayName": nameText.text}
-      });
+          "prejoinPageEnabled": false,
+          "hideConferenceTimer": true,
+          "disableInviteFunctions": true,
+          "chromeExtensionBanner": null,
+          "configOverwrite": {
+            "prejoinPageEnabled": false,
+            "disableDeepLinking": true,
+            "enableLobbyChat": false,
+            "enableClosePage": false,
+            "chromeExtensionBanner": null,
+            /*"toolbarButtons": [
+              "microphone",
+              "camera",
+              "hangup",
+            ]*/
+          },
+          "userInfo": {"email": emailText.text, "displayName": nameText.text}
+        });
 
     await JitsiMeet.joinMeeting(
       options,

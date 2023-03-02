@@ -1,4 +1,4 @@
-## 1.0.6
+## 1.0.10
 * Fix listeners events.
 
 ## 1.0.5

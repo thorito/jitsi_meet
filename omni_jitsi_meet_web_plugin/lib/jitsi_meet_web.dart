@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:js/js.dart';
@@ -54,106 +55,146 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
     if (listener != null) {
       listener.onOpened?.call();
 
-      api?.on("chatUpdated", allowInterop((dynamic _message) {
+      api?.on("chatUpdated", allowInterop((message) {
         Map<String, dynamic> data = {
-          'isOpen': _message.isOpen,
+          'isOpen': !kReleaseMode ? message.isOpen : false,
+          'unreadCount': !kReleaseMode ? message.unreadCount : 0,
         };
-        listener.onChatToggled?.call(parseBool(data["isOpen"]));
+
+        listener.onChatToggled?.call(
+          parseBool(data["isOpen"]),
+        );
       }));
-      api?.on("incomingMessage", allowInterop((dynamic _message) {
+
+      api?.on("incomingMessage", allowInterop((message) {
         Map<String, dynamic> data = {
-          'from': _message.from,
-          'message': _message.message,
-          'privateMessage': _message.privateMessage,
+          'senderId': !kReleaseMode ? message.from : '?',
+          'nick': !kReleaseMode ? message.nick : '?',
+          'isPrivate': !kReleaseMode ? message.privateMessage : false,
+          'message': !kReleaseMode ? message.message : '?',
+          'timestamp': DateTime.now().toUtc(),
         };
 
         listener.onChatMessageReceived?.call(
-          data["from"],
-          data["message"],
-          data["privateMessage"],
-          DateTime.now().toUtc().toString(),
+          data["senderId"]?.toString() ?? '?',
+          data["message"]?.toString() ?? '?',
+          parseBool(data["isPrivate"]),
+          data["timestamp"].toString(),
         );
       }));
-      api?.on("videoConferenceJoined", allowInterop((dynamic _message) {
+
+      api?.on("audioMuteStatusChanged", allowInterop((message) {
         Map<String, dynamic> data = {
-          'id': _message.id,
-          "displayName": _message.displayName,
-          "roomName": _message.roomName,
-          "avatarURL": _message.avatarURL,
-          "breakoutRoom": _message.breakoutRoom,
+          'muted': !kReleaseMode ? message.muted : false,
         };
 
-        listener.onConferenceJoined?.call(data.toString());
+        listener.onAudioMutedChanged?.call(
+          parseBool(data["muted"]),
+        );
       }));
-      api?.on("videoConferenceLeft", allowInterop((dynamic _message) {
-        /*
+
+      api?.on("videoMuteStatusChanged", allowInterop((message) {
         Map<String, dynamic> data = {
-          'roomName': message.roomName,
+          'muted': !kReleaseMode ? message.muted : false,
         };
 
-        listener?.onConferenceTerminated?.call(data["roomName"], 'Local User left the meeting');
-        */
+        listener.onVideoMutedChanged?.call(
+          parseBool(data["muted"], isVideoMutedChanged: true),
+        );
+      }));
 
-        listener.onConferenceTerminated
-            ?.call(_message.roomName, _message?.error);
-        listener.onClosed?.call();
-      }));
-      api?.on("participantJoined", allowInterop((dynamic _message) {
-        Map<String, dynamic> data = {
-          "name": _message.displayName,
-          "email": _message.email,
-          "role": _message.role,
-          "participantId": _message.id,
-        };
-        listener.onParticipantJoined?.call(
-            data["email"], data["name"], data["role"], data["participantId"]);
-      }));
-      api?.on("participantLeft", allowInterop((dynamic _message) {
-        Map<String, dynamic> data = {
-          "participantId": _message.id,
-        };
-        listener.onParticipantLeft?.call(data["participantId"]);
-      }));
-      api?.on("feedbackSubmitted", allowInterop((dynamic _message) {
-        listener.onError?.call(_message);
-      }));
-      api?.on("audioMuteStatusChanged", allowInterop((dynamic _message) {
-        Map<String, dynamic> data = {
-          'isMuted': _message.isMuted,
-        };
-        listener.onAudioMutedChanged
-            ?.call(parseBool(data["isMuted"].toString()));
-      }));
-      api?.on("videoMuteStatusChanged", allowInterop((dynamic _message) {
-        Map<String, dynamic> data = {
-          'muted': _message.muted,
-        };
-
-        listener.onVideoMutedChanged?.call(parseBool(data["muted"]));
-      }));
       api?.on("screenSharingStatusChanged", allowInterop((message) {
         Map<String, dynamic> data = {
-          'on': message.on,
+          'sharing': !kReleaseMode ? message.on : false,
+          'details': !kReleaseMode ? message.details : {},
+          'participantId': !kReleaseMode ? message.id : '?',
         };
+
         listener.onScreenShareToggled?.call(
-            parseBool(data["on"]) == true ? 'Joined' : 'Not Joined',
-            parseBool(data["on"]));
+          data["participantId"]?.toString() ?? '?',
+          parseBool(data["sharing"]),
+        );
       }));
+
       api?.on("participantsInfoRetrieved", allowInterop((message) {
         Map<String, dynamic> data = {
-          'participantsInfo': message.participantsInfo,
-          'requestId': message.requestId,
+          'participantsInfo': !kReleaseMode ? message.participantsInfo : {},
+          'requestId': !kReleaseMode ? message.requestId : '?'
         };
+
         listener.onParticipantsInfoRetrieved?.call(
-          data["participantsInfo"],
-          data["requestId"],
+          data["participantsInfo"] ?? {},
+          data["requestId"]?.toString() ?? '?',
+        );
+      }));
+
+      api?.on("videoConferenceJoined", allowInterop((message) {
+        Map<String, dynamic> data = {
+          'url': !kReleaseMode ? message.roomName : '?',
+          'id': !kReleaseMode ? message.id : '?',
+          'displayName': !kReleaseMode ? message.displayName : '?',
+          'avatarURL': !kReleaseMode ? message.avatarURL : '',
+          'breakoutRoom': !kReleaseMode ? message.breakoutRoom : false,
+        };
+
+        listener.onConferenceJoined?.call(
+          data["url"].toString(),
+        );
+      }));
+
+      api?.on("videoConferenceLeft", allowInterop((message) {
+        Map<String, dynamic> data = {
+          'url': !kReleaseMode ? message.roomName : '?',
+          'error': message?.error,
+        };
+
+        listener.onConferenceTerminated?.call(
+          data["url"].toString(),
+          data["error"],
+        );
+
+        listener.onClosed?.call();
+      }));
+
+      api?.on("participantJoined", allowInterop((message) {
+        Map<String, dynamic> data = {
+          'email': !kReleaseMode ? message.email : '?',
+          'name': !kReleaseMode ? message.displayName : '?',
+          'role': !kReleaseMode ? message.role : '?',
+          'participantId': !kReleaseMode ? message.id : '?',
+        };
+
+        listener.onParticipantJoined?.call(
+            data["email"]?.toString() ?? "?",
+            data["name"]?.toString() ?? "?",
+            data["role"]?.toString() ?? "?",
+            data["participantId"]?.toString() ?? "?");
+      }));
+
+      api?.on("participantLeft", allowInterop((message) {
+        Map<String, dynamic> data = {
+          "participantId": !kReleaseMode ? message.id : '?',
+        };
+
+        listener.onParticipantLeft?.call(
+          data["participantId"]?.toString() ?? "?",
+        );
+      }));
+
+      api?.on("feedbackSubmitted", allowInterop((message) {
+        Map<String, dynamic> data = {
+          "error": !kReleaseMode ? message.error : '?',
+        };
+
+        listener.onError?.call(
+          data["error"]?.toString() ?? "?",
         );
       }));
 
       // NOTE: `onConferenceWillJoin` is not supported or nof found event in web
-      // add geeric listener
+      // add generic listener
       _addGenericListeners(listener);
-      api?.on("readyToClose", allowInterop((dynamic _message) {
+      api?.on("readyToClose", allowInterop((message) {
         listener.onClosed?.call();
         api?.dispose();
       }));
@@ -165,12 +206,15 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
   /// Required because Android SDK returns boolean values as Strings
   /// and iOS SDK returns boolean values as Booleans.
   /// (Making this an extension does not work, because of dynamic.)
-  bool parseBool(dynamic value) {
+  bool parseBool(dynamic value, {bool isVideoMutedChanged = false}) {
     if (value is bool) return value;
+    if (isVideoMutedChanged && value is String) {
+      return value != '0.0';
+    }
+
     if (value is String) return value == 'true';
-    // Check whether value is not 0, because true values can be any value
-    // above 0 when coming from Jitsi.
     if (value is num) return value != 0;
+
     throw ArgumentError('Unsupported type: $value');
   }
 
