@@ -1,3 +1,6 @@
+## 1.0.11
+* Fix listeners events onPictureInPictureWillEnter & onPictureInPictureTerminated.
+ 
 ## 1.0.10
 * Fix listeners events.
 
