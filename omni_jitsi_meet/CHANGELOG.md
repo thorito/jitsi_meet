@@ -1,3 +1,9 @@
+## 1.0.12
+* Upgrade Jitsi to 8.1.0
+
+## 1.0.11
+* Fix listeners events onPictureInPictureWillEnter & onPictureInPictureTerminated.
+
 ## 1.0.10
 * Fix listeners events.
 
