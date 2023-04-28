@@ -54,6 +54,18 @@ class JitsiMeetPluginActivity : JitsiMeetActivity() {
         turnScreenOnAndKeyguardOff();
     }
 
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration?) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+
+        if (isInPictureInPictureMode){
+            JitsiMeetEventStreamHandler.instance.onPictureInPictureWillEnter()
+        }
+        else {
+            JitsiMeetEventStreamHandler.instance.onPictureInPictureTerminated()
+        }
+
+    }
+
     private fun registerForBroadcastMessages() {
         val intentFilter = IntentFilter()
         for (eventType in BroadcastEvent.Type.values()) {

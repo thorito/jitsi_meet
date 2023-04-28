@@ -1,6 +1,6 @@
 name: jitsi_meet_example
 description: Demonstrates how to use the jitsi_meet plugin with the basic options.
-version: 1.0.10
+version: 1.0.11
 publish_to: 'none'
 
 

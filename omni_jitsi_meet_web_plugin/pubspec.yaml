@@ -12,7 +12,11 @@ dependencies:
     sdk: flutter
   plugin_platform_interface: ^2.1.4
   omni_jitsi_meet_platform_interface: ^1.0.11
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> b2102d4ea8ab23b164f4715e1d148bb103cd01fb
   flutter_web_plugins:
     sdk: flutter
   js: ^0.6.4
