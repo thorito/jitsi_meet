@@ -75,7 +75,7 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler,
         when (call.method) {
             "joinMeeting" -> joinMeeting(call, result)
             "setAudioMuted" -> setAudioMuted(call, result)
-            "handUp" -> hangUp(call, result)
+            "hangUp" -> hangUp(call, result)
             "closeMeeting" -> closeMeeting(call, result)
             else -> result.notImplemented()
         }
