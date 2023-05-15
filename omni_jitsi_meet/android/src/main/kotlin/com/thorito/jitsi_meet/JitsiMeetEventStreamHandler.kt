@@ -84,8 +84,4 @@ class JitsiMeetEventStreamHandler private constructor(): EventChannel.StreamHand
     fun onPictureInPictureTerminated() {
         eventSink?.success(mapOf("event" to "onPictureInPictureTerminated"))
     }
-
-    fun onScreenClosed() {
-        eventSink?.success(mapOf("event" to "onScreenClosed"))
-    }
 }

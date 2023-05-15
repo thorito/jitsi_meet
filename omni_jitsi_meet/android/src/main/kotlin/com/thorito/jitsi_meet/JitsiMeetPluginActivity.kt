@@ -48,7 +48,7 @@ class JitsiMeetPluginActivity : JitsiMeetActivity() {
         }
 
     override fun onStop() {
-        eventStreamHandler.onScreenClosed()
+        eventStreamHandler.onClosed()
         super.onStop()
     }
 

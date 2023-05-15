@@ -92,9 +92,6 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
         case "opened":
           _listener?.onOpened?.call();
           break;
-        case "onScreenClosed":
-          _listener?.onScreenClosed?.call();
-          break;
         case "onPictureInPictureWillEnter":
           _listener?.onPictureInPictureWillEnter?.call();
           break;
