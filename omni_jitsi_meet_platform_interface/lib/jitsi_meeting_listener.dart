@@ -4,6 +4,9 @@ class JitsiMeetingListener {
   /// The native view got created.
   final Function()? onOpened;
 
+  /// The native view got created.
+  final Function()? onScreenClosed;
+
   // iOS: https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-ios-sdk/#conferencewilljoin
   // Android: https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-android-sdk#conference_will_join
   ///
@@ -90,6 +93,7 @@ class JitsiMeetingListener {
 
   JitsiMeetingListener({
     this.onOpened,
+    this.onScreenClosed,
     this.onConferenceWillJoin,
     this.onConferenceJoined,
     this.onConferenceTerminated,

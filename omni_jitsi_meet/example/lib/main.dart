@@ -300,6 +300,9 @@ class _MeetingState extends State<Meeting> {
     await JitsiMeet.joinMeeting(
       options,
       listener: JitsiMeetingListener(
+          onScreenClosed: () {
+            debugPrint("JitsiMeetingListener - onOpened");
+          },
           onOpened: () {
             debugPrint("JitsiMeetingListener - onOpened");
           },

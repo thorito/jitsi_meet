@@ -47,6 +47,11 @@ class JitsiMeetPluginActivity : JitsiMeetActivity() {
             }
         }
 
+    override fun onStop() {
+        eventStreamHandler.onScreenClosed()
+        super.onStop()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerForBroadcastMessages()
