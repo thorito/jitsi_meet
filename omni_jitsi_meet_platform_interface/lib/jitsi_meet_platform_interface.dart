@@ -63,7 +63,7 @@ abstract class JitsiMeetPlatform extends PlatformInterface {
   /// buildView
   /// Method added to support Web plugin, the main purpose is return a <div>
   /// to contain the conferencing screen when start
-  /// additionally extra JS can be added usin `extraJS` argument
+  /// additionally extra JS can be added using `extraJS` argument
   /// for mobile is not need because the conferecing view get all device screen
   Widget buildView(List<String> extraJS) {
     throw UnimplementedError(

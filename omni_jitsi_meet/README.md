@@ -326,21 +326,21 @@ _joinMeeting() async {
 
 ### JitsiMeetingOptions
 
-| Field           | Required  | Default           | Description |
------------------| --------- | ----------------- | -- |
-| room            | Yes       | N/A               | Unique room name that will be appended to serverURL. Valid characters: alphanumeric, dashes, and underscores. |
-| subject         | No        | $room             | Meeting name displayed at the top of the meeting. If null, defaults to room name where dashes and underscores are replaced with spaces and first characters are capitalized. |
-| userDisplayName | No        | "Fellow Jitster"  | User's display name. |
-| userEmail       | No        | none              | User's email address. |
-| audioOnly       | No        | false             | Start meeting without video. Can be turned on in meeting. |
-| audioMuted      | No        | false             | Start meeting with audio muted. Can be turned on in meeting. |
-| videoMuted      | No        | false             | Start meeting with video muted. Can be turned on in meeting. |
-| serverURL       | No        | meet.jitsi.si     | Specify your own hosted server. Must be a valid absolute URL of the format `<scheme>://<host>[/path]`, i.e. https://someHost.com. Defaults to Jitsi Meet's servers. |
-| userAvatarURL   | N/A       | none              | User's avatar URL. |
-| token           | N/A       | none              | JWT token used for authentication. |
-| featureFlag     | No        | see below         | Object of FeatureFlag class used to enable/disable features and set video resolution of Jitsi Meet SDK. |
-| configOverrides | No        | see below         | Object of ConfigOverrides class used to enable/disable features and set video resolution of Jitsi Meet SDK. |
-| webOptions      | No        | see below         | Settings in web |
+| Field            | Required | Default           | Description                                                                                                                                                                   |
+|------------------|----------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| room             | Yes      | N/A               | Unique room name that will be appended to serverURL. Valid characters: alphanumeric, dashes, and underscores.                                                                 |
+| subject          | No       | $room             | Meeting name displayed at the top of the meeting. If null, defaults to room name where dashes and underscores are replaced with spaces and first characters are capitalized.  |
+| userDisplayName  | No       | "Fellow Jitster"  | User's display name.                                                                                                                                                          |
+| userEmail        | No       | none              | User's email address.                                                                                                                                                         |
+| audioOnly        | No       | false             | Start meeting without video. Can be turned on in meeting.                                                                                                                     |
+| audioMuted       | No       | false             | Start meeting with audio muted. Can be turned on in meeting.                                                                                                                  |
+| videoMuted       | No       | false             | Start meeting with video muted. Can be turned on in meeting.                                                                                                                  |
+| serverURL        | No       | meet.jitsi.si     | Specify your own hosted server. Must be a valid absolute URL of the format `<scheme>://<host>[/path]`, i.e. https://someHost.com. Defaults to Jitsi Meet's servers.           |
+| userAvatarURL    | N/A      | none              | User's avatar URL.                                                                                                                                                            |
+| token            | N/A      | none              | JWT token used for authentication.                                                                                                                                            |
+| featureFlag      | No       | see below         | Object of FeatureFlag class used to enable/disable features and set video resolution of Jitsi Meet SDK.                                                                       |
+| configOverrides  | No       | see below         | Object of ConfigOverrides class used to enable/disable features and set video resolution of Jitsi Meet SDK.                                                                   |
+| webOptions       | No       | see below         | Settings in web                                                                                                                                                               |
 
 <a name="jitsimeetingresponse"></a>
 
@@ -416,7 +416,7 @@ because it creates a lot of issues. You should disable it too to avoid these iss
 Events supported
 
 | Name                         | Description                                          | Params                           |
-|:-----------------------------|:-----------------------------------------------------|:---------------------------------|
+|------------------------------|------------------------------------------------------|----------------------------------|
 | onOpened                     | Open event                                           | none                             | 
 | onClosed                     | Closed event                                         | none                             |
 | onConferenceWillJoin         | Meeting is loading.                                  | url                              |
