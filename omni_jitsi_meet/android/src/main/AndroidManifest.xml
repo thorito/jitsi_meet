@@ -1,6 +1,8 @@
 <!--suppress AndroidUnknownAttribute -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   package="com.thorito.jitsi_meet">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
     <application>
         <activity
             android:name="com.thorito.jitsi_meet.JitsiMeetPluginActivity"
