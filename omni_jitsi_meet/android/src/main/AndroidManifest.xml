@@ -14,7 +14,7 @@
             android:autoRemoveFromRecents="true">
         </activity>
         <service
-            android:name=".JitsiMeet"
+            android:name="org.jitsi.meet.sdk.JitsiMeetOngoingConferenceService"
             android:exported="false"
             android:foregroundServiceType="mediaProjection" >
         </service>
