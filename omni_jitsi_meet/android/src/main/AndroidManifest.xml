@@ -13,5 +13,10 @@
             android:exported="false"
             android:autoRemoveFromRecents="true">
         </activity>
+        <service
+            android:name=".JitsiMeet"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" >
+        </service>
     </application>
 </manifest>
