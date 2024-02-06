@@ -113,12 +113,12 @@ and `tools:replace="android:label"` to the application tag.
 
 #### Minimum SDK Version 23
 
-Update your minimum sdk version to 23 in android/app/build.gradle
+Update your minimum sdk version to 24 in android/app/build.gradle
 
 ```groovy
 defaultConfig {
     applicationId "com.thorito.jitsi_meet_example"
-    minSdkVersion 23 // Required for Jitsi
+    minSdkVersion 24 // Required for Jitsi
     targetSdkVersion 33
     versionCode flutterVersionCode.toInteger()
     versionName flutterVersionName
@@ -352,49 +352,48 @@ If you don't provide any flag to JitsiMeetingOptions, default values will be use
 We are using
 the [official list of flags, taken from the Jitsi Meet repository](https://github.com/jitsi/jitsi-meet/blob/master/react/features/base/flags/constants.js)
 
-| Flag                          | Default (Android) | Default (iOS) | Description                                                                                                                                                                                                    |
-|-------------------------------|-------------------|---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `addPeopleEnabled`            | true              | true          | Enable the blue button "Add people", show up when you are alone in a call. Required for flag `inviteEnabled` to work.                                                                                          |
-| `audioFocusDisabled`          | false             | false         | Flag indicating if the SDK should not require the audio focus.                                                                                                                                                 |
-| `audioMuteButtonEnabled`      | true              | true          | Flag indicating if the audio mute button should be displayed.                                                                                                                                                  |
-| `audioOnlyButtonEnabled`      | true              | true          | Flag indicating that the Audio only button in the overflow menu is enabled.                                                                                                                                    |
-| `calendarEnabled`             | true              | auto          | Enable calendar integration.                                                                                                                                                                                   |
-| `callIntegrationEnabled`      | true              | true          | Enable call integration (CallKit on iOS, ConnectionService on Android). **SEE
-REMARK BELOW**                                                                                                                   |
-| `carModeEnabled`              | true              | auto          | Flag indicating if calendar integration should be enabled.                                                                                                                                                     |
-| `closeCaptionsEnabled`        | true              | true          | Enable close captions (subtitles) option in menu.                                                                                                                                                              |
-| `conferenceTimerEnabled`      | true              | true          | Enable conference timer.                                                                                                                                                                                       |
-| `chatEnabled`                 | true              | true          | Enable chat (button and feature).                                                                                                                                                                              |
-| `filmstripEnabled`            | true              | true          | Flag indicating if the filmstrip should be enabled.                                                                                                                                                            |
-| `fullscreenEnabled`           | true              | true          | Flag indicating if fullscreen (immersive) mode should be enabled.                                                                                                                                              |
-| `helpButtonEnabled`           | true              | true          | Flag indicating if the Help button should be enabled.                                                                                                                                                          |
-| `inviteEnabled`               | true              | true          | Enable invite option in menu.                                                                                                                                                                                  |
-| `iOSRecordingEnabled`         | N/A               | false         | Enable recording in iOS.                                                                                                                                                                                       |
-| `iOSScreenSharingEnabled`     | N/A               | false         | Flag indicating if screen sharing should be enabled in iOS.                                                                                                                                                    |
-| `androidScreenSharingEnabled` | true              | N/A           | Flag indicating if screen sharing should be enabled in android.                                                                                                                                                |
-| `speakerStatsEnabled`         | true              | true          | Flag indicating if speaker statistics should be enabled.                                                                                                                                                       |
-| `kickOutEnabled`              | true              | true          | Enable kick-out option in video thumb of participants.                                                                                                                                                         |
-| `liveStreamingEnabled`        | auto              | auto          | Enable live-streaming option in menu.                                                                                                                                                                          |
-| `lobbyModeEnabled`            | true              | true          | Flag indicating if lobby mode button should be enabled. |                                                                                                                                                       |
-| `meetingNameEnabled`          | true              | true          | Display meeting name.                                                                                                                                                                                          |
-| `meetingPasswordEnabled`      | true              | true          | Display meeting password option in menu (if a meeting has a password set, the dialog will still show up).                                                                                                      |
-| `notificationsEnabled`        | true              | true          | Flag indicating if the notifications should be enabled.                                                                                                                                                                               |
-| `overflowMenuEnabled`         | auto              | auto          | Flag indicating if the audio overflow menu button should be displayed.                                                                                                                                                                               |
-| `pipEnabled`                  | auto              | auto          | Enable Picture-in-Picture mode.                                                                                                                                                                                |
-| `prejoinPageEnabled`          | true              | true          | Flag indicating if the prejoin page should be enabled.                                                                                                                                                                               |
-| `raiseHandEnabled`            | true              | true          | Enable raise hand option in menu.                                                                                                                                                                              |
-| `recordingEnabled`            | auto              | N/A           | Enable recording option in menu.                                                                                                                                                                               |
-| `replaceParticipant`          | false             | false         | Flag indicating if the user should join the conference with the replaceParticipant functionality.                                                                                                                                                                              |
-| `resoulution`                 | N/A               | N/A           | Set local and (maximum) remote video resolution. Overrides server configuration. Accepted values are: LD_RESOLUTION for 180p, MD_RESOLUTION for 360p, SD_RESOLUTION for 480p(SD), HD_RESOLUTION for 720p(HD) . |
-| `securityOptionsEnabled`      | true              | true          | Flag indicating if the security options button should be enabled.                                                                                                                                                                                     |
-| `serverURLChangeEnabled`      | true              | true          | Enable server URL change.                                                                                                                                                                                      |
-| `settingsEnabled`             | true              | true          | Flag indicating if settings should be enabled.                                                                                                                                                                                      |
-| `tileViewEnabled`             | true              | true          | Enable tile view option in menu.                                                                                                                                                                               |
-| `toolboxAlwaysVisible`        | false             | false         | Toolbox (buttons and menus) always visible during call (if not, a single tap displays it).                                                                                                                     |
-| `toolboxEnabled`              | true              | true          | Flag indicating if the toolbox should be enabled                                                                                                                     |
-| `videoMuteButtonEnabled`      | true              | true          | Flag indicating if the video mute button should be displayed.                                                                                                                                                                                    |
-| `videoShareButtonEnabled`     | true              | true          | Enable video share button.                                                                                                                                                                                     |
-| `welcomePageEnabled`          | false             | false         | Enable welcome page. "The welcome page lists recent meetings and calendar appointments and it's meant to be used by standalone applications."                                                                  |
+| Flag                           | Default (Android)  | Default (iOS)  | Description                                                                                                                                                                                                     |
+|:-------------------------------|:-------------------|:---------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `addPeopleEnabled`             | true               | true           | Enable the blue button "Add people", show up when you are alone in a call. Required for flag `inviteEnabled` to work.                                                                                           |
+| `audioFocusDisabled`           | false              | false          | Flag indicating if the SDK should not require the audio focus.                                                                                                                                                  |
+| `audioMuteButtonEnabled`       | true               | true           | Flag indicating if the audio mute button should be displayed.                                                                                                                                                   |
+| `audioOnlyButtonEnabled`       | true               | true           | Flag indicating that the Audio only button in the overflow menu is enabled.                                                                                                                                     |
+| `calendarEnabled`              | true               | auto           | Enable calendar integration.                                                                                                                                                                                    |
+| `callIntegrationEnabled`       | true               | true           | Enable call integration (CallKit on iOS, ConnectionService on Android). **SEEREMARK BELOW**                                                                                                                     |
+| `carModeEnabled`               | true               | auto           | Flag indicating if calendar integration should be enabled.                                                                                                                                                      |
+| `closeCaptionsEnabled`         | true               | true           | Enable close captions (subtitles) option in menu.                                                                                                                                                               |
+| `conferenceTimerEnabled`       | true               | true           | Enable conference timer.                                                                                                                                                                                        |
+| `chatEnabled`                  | true               | true           | Enable chat (button and feature).                                                                                                                                                                               |
+| `filmstripEnabled`             | true               | true           | Flag indicating if the filmstrip should be enabled.                                                                                                                                                             |
+| `fullscreenEnabled`            | true               | true           | Flag indicating if fullscreen (immersive) mode should be enabled.                                                                                                                                               |
+| `helpButtonEnabled`            | true               | true           | Flag indicating if the Help button should be enabled.                                                                                                                                                           |
+| `inviteEnabled`                | true               | true           | Enable invite option in menu.                                                                                                                                                                                   |
+| `iOSRecordingEnabled`          | N/A                | false          | Enable recording in iOS.                                                                                                                                                                                        |
+| `iOSScreenSharingEnabled`      | N/A                | false          | Flag indicating if screen sharing should be enabled in iOS.                                                                                                                                                     |
+| `androidScreenSharingEnabled`  | true               | N/A            | Flag indicating if screen sharing should be enabled in android.                                                                                                                                                 |
+| `speakerStatsEnabled`          | true               | true           | Flag indicating if speaker statistics should be enabled.                                                                                                                                                        |
+| `kickOutEnabled`               | true               | true           | Enable kick-out option in video thumb of participants.                                                                                                                                                          |
+| `liveStreamingEnabled`         | auto               | auto           | Enable live-streaming option in menu.                                                                                                                                                                           |
+| `lobbyModeEnabled`             | true               | true           | Flag indicating if lobby mode button should be enabled.                                                                                                                                                         |                                                                                                                                                       |
+| `meetingNameEnabled`           | true               | true           | Display meeting name.                                                                                                                                                                                           |
+| `meetingPasswordEnabled`       | true               | true           | Display meeting password option in menu (if a meeting has a password set, the dialog will still show up).                                                                                                       |
+| `notificationsEnabled`         | true               | true           | Flag indicating if the notifications should be enabled.                                                                                                                                                         |
+| `overflowMenuEnabled`          | auto               | auto           | Flag indicating if the audio overflow menu button should be displayed.                                                                                                                                          |
+| `pipEnabled`                   | auto               | auto           | Enable Picture-in-Picture mode.                                                                                                                                                                                 |
+| `prejoinPageEnabled`           | true               | true           | Flag indicating if the prejoin page should be enabled.                                                                                                                                                          |
+| `raiseHandEnabled`             | true               | true           | Enable raise hand option in menu.                                                                                                                                                                               |
+| `recordingEnabled`             | auto               | N/A            | Enable recording option in menu.                                                                                                                                                                                |
+| `replaceParticipant`           | false              | false          | Flag indicating if the user should join the conference with the replaceParticipant functionality.                                                                                                               |
+| `resoulution`                  | N/A                | N/A            | Set local and (maximum) remote video resolution. Overrides server configuration. Accepted values are: LD_RESOLUTION for 180p, MD_RESOLUTION for 360p, SD_RESOLUTION for 480p(SD), HD_RESOLUTION for 720p(HD) .  |
+| `securityOptionsEnabled`       | true               | true           | Flag indicating if the security options button should be enabled.                                                                                                                                               |
+| `serverURLChangeEnabled`       | true               | true           | Enable server URL change.                                                                                                                                                                                       |
+| `settingsEnabled`              | true               | true           | Flag indicating if settings should be enabled.                                                                                                                                                                  |
+| `tileViewEnabled`              | true               | true           | Enable tile view option in menu.                                                                                                                                                                                |
+| `toolboxAlwaysVisible`         | false              | false          | Toolbox (buttons and menus) always visible during call (if not, a single tap displays it).                                                                                                                      |
+| `toolboxEnabled`               | true               | true           | Flag indicating if the toolbox should be enabled                                                                                                                                                                |
+| `videoMuteButtonEnabled`       | true               | true           | Flag indicating if the video mute button should be displayed.                                                                                                                                                   |
+| `videoShareButtonEnabled`      | true               | true           | Enable video share button.                                                                                                                                                                                      |
+| `welcomePageEnabled`           | false              | false          | Enable welcome page. "The welcome page lists recent meetings and calendar appointments and it's meant to be used by standalone applications."                                                                   |
 
 **REMARK about Call integration** Call integration on Android (known as
 ConnectionService) [has been disabled on the official Jitsi Meet app](https://github.com/jitsi/jitsi-meet/commit/95eb551156c6769e25be9855dd2bc21adf71ac76)
@@ -402,11 +401,11 @@ because it creates a lot of issues. You should disable it too to avoid these iss
 
 ### JitsiMeetingResponse
 
-| Field           | Type    | Description |
-| --------------- | ------- | ----------- |
-| isSuccess       | bool    | Success indicator. |
-| message         | String  | Success message or error as a String. |
-| error           | dynamic | Optional, only exists if isSuccess is false. The error object. |
+| Field           | Type    | Description                                                       |
+|:----------------|:--------|:------------------------------------------------------------------|
+| isSuccess       | bool    | Success indicator.                                                |
+| message         | String  | Success message or error as a String.                             |
+| error           | dynamic | Optional, only exists if isSuccess is false. The error object.    |
 
 <a name="listening-to-meeting-events"></a>
 
@@ -414,24 +413,24 @@ because it creates a lot of issues. You should disable it too to avoid these iss
 
 Events supported
 
-| Name                   | Description  | Params                           |
-| :--------------------- | :----------- |:---------------------------------|
-| onOpened | Open event | none | 
-| onClosed | Closed event | none                             |
-| onConferenceWillJoin   | Meeting is loading. | url                              |
-| onConferenceJoined     | User has joined meeting. | url                              |
-| onConferenceTerminated | User has exited the conference. | url, error                       |
-| onPictureInPictureWillEnter | User entered PIP mode. | message                          |
-| onPictureInPictureTerminated | User exited PIP mode. | message                          |
-| onError                | Error has occurred with listening to meeting events. | error                            |
-| onAudioMutedChanged   | Audio muted changed | isMuted                          |
-| onVideoMutedChanged | Video Muted changed | isMuted                          |
-| onScreenShareToggled | Screen share toggled | participantId, isSharing         |
-| onParticipantJoined | Participant joined | email, name, role, participantId |
-| onParticipantLeft | Participant left | participantId                    |
-| onParticipantsInfoRetrieved | Info participants | participantsInfo, requestId      |
-| onChatMessageReceived | Message chat received | senderOd, message, isPrivate     |
-| onChatToggled | Chat toggled | isOpen                           |
+| Name                         | Description                                          | Params                           |
+|:-----------------------------|:-----------------------------------------------------|:---------------------------------|
+| onOpened                     | Open event                                           | none                             |   
+| onClosed                     | Closed event                                         | none                             |
+| onConferenceWillJoin         | Meeting is loading.                                  | url                              |
+| onConferenceJoined           | User has joined meeting.                             | url                              |
+| onConferenceTerminated       | User has exited the conference.                      | url, error                       |
+| onPictureInPictureWillEnter  | User entered PIP mode.                               | message                          |
+| onPictureInPictureTerminated | User exited PIP mode.                                | message                          |
+| onError                      | Error has occurred with listening to meeting events. | error                            |
+| onAudioMutedChanged          | Audio muted changed                                  | isMuted                          |
+| onVideoMutedChanged          | Video Muted changed                                  | isMuted                          |
+| onScreenShareToggled         | Screen share toggled                                 | participantId, isSharing         |
+| onParticipantJoined          | Participant joined                                   | email, name, role, participantId |
+| onParticipantLeft            | Participant left                                     | participantId                    |
+| onParticipantsInfoRetrieved  | Info participants                                    | participantsInfo, requestId      |
+| onChatMessageReceived        | Message chat received                                | senderOd, message, isPrivate     |
+| onChatToggled                | Chat toggled                                         | isOpen                           |
 
 ### Per Meeting Events
 

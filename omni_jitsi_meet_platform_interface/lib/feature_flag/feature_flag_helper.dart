@@ -35,6 +35,7 @@ class FeatureFlagHelper {
     FeatureFlagEnum.PIP_WHILE_SCREEN_SHARING_ENABLED:
         'pip-while-screen-sharing.enabled',
     FeatureFlagEnum.PREJOIN_PAGE_ENABLED: 'prejoinpage.enabled',
+    FeatureFlagEnum.PREJOIN_PAGE_HIDE_DISPLAY_NAME: 'prejoinpage.hideDisplayName',
     FeatureFlagEnum.RAISE_HAND_ENABLED: 'raise-hand.enabled',
     FeatureFlagEnum.REACTIONS_ENABLED: 'reactions.enabled',
     FeatureFlagEnum.RECORDING_ENABLED: 'recording.enabled',

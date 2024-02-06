@@ -119,6 +119,10 @@ enum FeatureFlagEnum {
   /// Default: enabled (true).
   PREJOIN_PAGE_ENABLED,
 
+  /// Flag indicating if the participant name editing field should be displayed on the prejoin page.
+  /// Default: disabled (false).
+  PREJOIN_PAGE_HIDE_DISPLAY_NAME,
+
   /// Flag indicating if raise hand feature should be enabled.
   /// Default: enabled (true).
   RAISE_HAND_ENABLED,

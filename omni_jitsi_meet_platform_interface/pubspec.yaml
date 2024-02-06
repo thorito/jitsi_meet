@@ -1,12 +1,12 @@
 name: omni_jitsi_meet_platform_interface
 description: A common platform interface for the jitsi meet plugin valid for android, ios and web.
-version: 1.0.12
+version: 1.0.14
 homepage: https://github.com/thorito/jitsi_meet
 repository: https://github.com/thorito/jitsi_meet/tree/master/omni_jitsi_meet_platform_interface
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
-  flutter: ">=1.17.0"
+  sdk: ">=2.18.5 <4.0.0"
+  flutter: ">=2.5.0"
 
 dependencies:
   flutter:

@@ -1,3 +1,11 @@
+## 1.0.14
+* Jitsi SDK updated to version 8.1.2.
+
+## 1.0.13
+* Jitsi SDK updated on Android to version 8.1.1 (minimum android version: 24), on iOS to 8.1.0.
+* Added flag 'PREJOIN_PAGE_HIDE_DISPLAY_NAME'.
+* set launchMode to Android with the value 'singleInstance'.
+
 ## 1.0.12
 * Upgrade Jitsi to 8.1.0
 
