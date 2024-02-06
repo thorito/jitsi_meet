@@ -17,8 +17,9 @@
         </activity>
         <service
             android:name="org.jitsi.meet.sdk.JitsiMeetOngoingConferenceService"
-            android:exported="false"
-            android:foregroundServiceType="mediaProjection" >
-        </service>
+            android:foregroundServiceType="mediaProjection" />
+        <service
+            android:name="org.jitsi.meet.sdk.JitsiMeetMediaProjectionService"
+            android:foregroundServiceType="mediaProjection" />
     </application>
 </manifest>
