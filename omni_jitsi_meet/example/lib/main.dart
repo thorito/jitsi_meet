@@ -87,7 +87,7 @@ class _MeetingState extends State<Meeting> {
             decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: "Server URL",
-                hintText: "Hint: Leave empty for meet.jitsi.si"),
+                hintText: "Hint: Leave empty for meet.jit.si"),
           ),
           SizedBox(
             height: 14.0,
@@ -180,7 +180,7 @@ class _MeetingState extends State<Meeting> {
               ),
               style: ButtonStyle(
                   backgroundColor:
-                      MaterialStateColor.resolveWith((states) => Colors.blue)),
+                      WidgetStateColor.resolveWith((states) => Colors.blue)),
             ),
           ),
           SizedBox(
@@ -244,6 +244,7 @@ class _MeetingState extends State<Meeting> {
       FeatureFlagEnum.REACTIONS_ENABLED: false,
       FeatureFlagEnum.RECORDING_ENABLED: false,
       FeatureFlagEnum.REPLACE_PARTICIPANT: false,*/
+      FeatureFlagEnum.LOBBY_MODE_ENABLED: false,
       FeatureFlagEnum.RESOLUTION: FeatureFlagVideoResolution.MD_RESOLUTION,
       /*FeatureFlagEnum.SECURITY_OPTIONS_ENABLED: false,
       FeatureFlagEnum.SERVER_URL_CHANGE_ENABLED: false,

@@ -73,10 +73,18 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler,
     ) {
 
         when (call.method) {
+            "getPlatformVersion" -> {result.success("Android ${android.os.Build.VERSION.RELEASE}")}
             "joinMeeting" -> joinMeeting(call, result)
             "setAudioMuted" -> setAudioMuted(call, result)
+            "setVideoMuted" -> setVideoMuted(call, result)
             "handUp" -> hangUp(call, result)
             "closeMeeting" -> closeMeeting(call, result)
+            "sendEndpointTextMessage" -> sendEndpointTextMessage(call, result)
+            "toggleScreenShare" -> toggleScreenShare(call, result)
+            "openChat" -> openChat(call, result)
+            "sendChatMessage" -> sendChatMessage(call, result)
+            "closeChat" -> closeChat(call, result)
+            "retrieveParticipantsInfo" -> retrieveParticipantsInfo(call, result)
             else -> result.notImplemented()
         }
     }
@@ -177,6 +185,56 @@ public class JitsiMeetPlugin() : FlutterPlugin, MethodCallHandler,
             .sendBroadcast(muteBroadcastIntent)
 
         result.success("Successfully set audio muted to: $isMuted")
+    }
+
+    private fun setVideoMuted(call: MethodCall, result: Result) {
+        val muted = call.argument<Boolean>("muted") ?: false
+        val videoMuteBroadcastIntent: Intent = BroadcastIntentHelper.buildSetVideoMutedIntent(muted)
+        LocalBroadcastManager.getInstance(activity!!.applicationContext).sendBroadcast(videoMuteBroadcastIntent)
+
+        result.success("Successfully set video $muted")
+    }
+
+    private fun sendEndpointTextMessage(call: MethodCall, result: Result) {
+        val to = call.argument<String?>("to")
+        val message = call.argument<String>("message")
+        val sendEndpointTextMessageBroadcastIntent: Intent = BroadcastIntentHelper.buildSendEndpointTextMessageIntent(to, message)
+        LocalBroadcastManager.getInstance(activity!!.applicationContext).sendBroadcast(sendEndpointTextMessageBroadcastIntent)
+        result.success("Successfully send endpoint text message $to")
+    }
+
+    private fun toggleScreenShare(call: MethodCall, result: Result) {
+        val enabled = call.argument<Boolean>("enabled") ?: false
+        val toggleScreenShareIntent: Intent = BroadcastIntentHelper.buildToggleScreenShareIntent(enabled)
+        LocalBroadcastManager.getInstance(activity!!.applicationContext).sendBroadcast(toggleScreenShareIntent)
+        result.success("Successfully toggled screen share $enabled")
+    }
+
+    private fun openChat(call: MethodCall, result: Result) {
+        val to = call.argument<String?>("to")
+        val openChatIntent: Intent = BroadcastIntentHelper.buildOpenChatIntent(to)
+        LocalBroadcastManager.getInstance(activity!!.applicationContext).sendBroadcast(openChatIntent)
+        result.success("Successfully opened chat $to")
+    }
+
+    private fun sendChatMessage(call: MethodCall, result: Result) {
+        val to = call.argument<String?>("to")
+        val message = call.argument<String>("message")
+        val sendChatMessageIntent: Intent = BroadcastIntentHelper.buildSendChatMessageIntent(to, message)
+        LocalBroadcastManager.getInstance(activity!!.applicationContext).sendBroadcast(sendChatMessageIntent)
+        result.success("Successfully sent chat message $to")
+    }
+
+    private fun closeChat(call: MethodCall, result: Result) {
+        val closeChatIntent: Intent = BroadcastIntentHelper.buildCloseChatIntent()
+        LocalBroadcastManager.getInstance(activity!!.applicationContext).sendBroadcast(closeChatIntent)
+        result.success("Successfully closed chat")
+    }
+
+    private fun retrieveParticipantsInfo(call: MethodCall, result: Result) {
+        val retrieveParticipantsInfoIntent: Intent = Intent("org.jitsi.meet.RETRIEVE_PARTICIPANTS_INFO");
+        LocalBroadcastManager.getInstance(activity!!.applicationContext).sendBroadcast(retrieveParticipantsInfoIntent)
+        result.success("Successfully retrieved participants info")
     }
 
     private fun hangUp(call: MethodCall, result: Result) {

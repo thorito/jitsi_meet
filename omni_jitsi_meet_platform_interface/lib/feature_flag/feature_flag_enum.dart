@@ -19,6 +19,10 @@ enum FeatureFlagEnum {
   /// Default: enabled (true).
   AUDIO_ONLY_BUTTON_ENABLED,
 
+  /// Flag indicating that the Breakout Rooms button in the overflow menu is enabled.
+  /// Default: enabled (true).
+  BREAKOUT_ROOMS_BUTTON_ENABLED,
+
   /// Flag indicating if calendar integration should be enabled.
   /// Default: enabled (true) on Android, auto-detected on iOS.
   CALENDAR_ENABLED,
@@ -60,6 +64,10 @@ enum FeatureFlagEnum {
   /// Flag indicating if invite functionality should be enabled.
   /// Default: enabled (true).
   INVITE_ENABLED,
+
+  /// Flag indicating if dial-in invite functionality should be enabled.
+  /// Default: enabled (true).
+  INVITE_DIAL_IN_ENABLED,
 
   /// Flag indicating if recording should be enabled in iOS.
   /// Default: disabled (false).
@@ -106,6 +114,10 @@ enum FeatureFlagEnum {
   /// Flag indicating if the audio overflow menu button should be displayed.
   /// Default: enabled (true).
   OVERFLOW_MENU_ENABLED,
+
+  /// Flag indicating if participants should be enabled.
+  /// Default: enabled (true).
+  PARTICIPANTS_ENABLED,
 
   /// Flag indicating if Picture-in-Picture should be enabled.
   /// Default: auto-detected.
@@ -168,6 +180,10 @@ enum FeatureFlagEnum {
   /// Flag indicating if the toolbox should be enabled
   /// Default: enabled (true).
   TOOLBOX_ENABLED,
+
+  /// Flag indicating if the unsafe room warning should be enabled.
+  /// Default: disabled (false).
+  UNSAFE_ROOM_WARNING,
 
   /// Flag indicating if the video mute button should be displayed.
   /// Default: enabled (true).

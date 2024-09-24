@@ -1,3 +1,6 @@
+## 1.0.15
+* Jitsi SDK updated to version 10.2.1.
+
 ## 1.0.14
 * Jitsi SDK updated to version 8.1.2.
 

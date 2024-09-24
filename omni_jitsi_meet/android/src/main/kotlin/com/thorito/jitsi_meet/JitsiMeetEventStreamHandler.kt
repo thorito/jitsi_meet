@@ -25,6 +25,10 @@ class JitsiMeetEventStreamHandler private constructor(): EventChannel.StreamHand
         eventSink?.success(mapOf("event" to "opened"))
     }
 
+    fun onReadyToClose() {
+        eventSink?.success(mapOf("event" to "readyToClose"))
+    }
+
     fun onClosed() {
         eventSink?.success(mapOf("event" to "closed"))
     }
@@ -83,5 +87,9 @@ class JitsiMeetEventStreamHandler private constructor(): EventChannel.StreamHand
 
     fun onPictureInPictureTerminated() {
         eventSink?.success(mapOf("event" to "onPictureInPictureTerminated"))
+    }
+
+    fun customOverflowMenuButtonPressed(data: MutableMap<String, Any>?) {
+        eventSink?.success(mapOf("event" to "customOverflowMenuButtonPressed", "data" to data))
     }
 }

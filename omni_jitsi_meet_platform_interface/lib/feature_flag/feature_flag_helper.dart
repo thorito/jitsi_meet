@@ -9,6 +9,7 @@ class FeatureFlagHelper {
     FeatureFlagEnum.AUDIO_FOCUS_DISABLED: 'audio-focus.disabled',
     FeatureFlagEnum.AUDIO_MUTE_BUTTON_ENABLED: 'audio-mute.enabled',
     FeatureFlagEnum.AUDIO_ONLY_BUTTON_ENABLED: 'audio-only.enabled',
+    FeatureFlagEnum.BREAKOUT_ROOMS_BUTTON_ENABLED: 'breakout-rooms.enabled',
     FeatureFlagEnum.CALENDAR_ENABLED: 'calendar.enabled',
     FeatureFlagEnum.CALL_INTEGRATION_ENABLED: 'call-integration.enabled',
     FeatureFlagEnum.CAR_MODE_ENABLED: 'car-mode.enabled',
@@ -19,6 +20,7 @@ class FeatureFlagHelper {
     FeatureFlagEnum.FULLSCREEN_ENABLED: 'fullscreen.enabled',
     FeatureFlagEnum.HELP_BUTTON_ENABLED: 'help.enabled',
     FeatureFlagEnum.INVITE_ENABLED: 'invite.enabled',
+    FeatureFlagEnum.INVITE_DIAL_IN_ENABLED: 'invite-dial-in.enabled',
     FeatureFlagEnum.IOS_RECORDING_ENABLED: 'ios.recording.enabled',
     FeatureFlagEnum.IOS_SCREENSHARING_ENABLED: 'ios.screensharing.enabled',
     FeatureFlagEnum.ANDROID_SCREENSHARING_ENABLED:
@@ -31,11 +33,13 @@ class FeatureFlagHelper {
     FeatureFlagEnum.MEETING_PASSWORD_ENABLED: 'meeting-password.enabled',
     FeatureFlagEnum.NOTIFICATIONS_ENABLED: 'notifications.enabled',
     FeatureFlagEnum.OVERFLOW_MENU_ENABLED: 'overflow-menu.enabled',
+    FeatureFlagEnum.PARTICIPANTS_ENABLED: 'participants.enabled',
     FeatureFlagEnum.PIP_ENABLED: 'pip.enabled',
     FeatureFlagEnum.PIP_WHILE_SCREEN_SHARING_ENABLED:
         'pip-while-screen-sharing.enabled',
     FeatureFlagEnum.PREJOIN_PAGE_ENABLED: 'prejoinpage.enabled',
-    FeatureFlagEnum.PREJOIN_PAGE_HIDE_DISPLAY_NAME: 'prejoinpage.hideDisplayName',
+    FeatureFlagEnum.PREJOIN_PAGE_HIDE_DISPLAY_NAME:
+        'prejoinpage.hideDisplayName',
     FeatureFlagEnum.RAISE_HAND_ENABLED: 'raise-hand.enabled',
     FeatureFlagEnum.REACTIONS_ENABLED: 'reactions.enabled',
     FeatureFlagEnum.RECORDING_ENABLED: 'recording.enabled',
@@ -47,6 +51,7 @@ class FeatureFlagHelper {
     FeatureFlagEnum.TILE_VIEW_ENABLED: 'tile-view.enabled',
     FeatureFlagEnum.TOOLBOX_ALWAYS_VISIBLE: 'toolbox.alwaysVisible',
     FeatureFlagEnum.TOOLBOX_ENABLED: 'toolbox.enabled',
+    FeatureFlagEnum.UNSAFE_ROOM_WARNING: 'unsaferoomwarning.enabled',
     FeatureFlagEnum.VIDEO_MUTE_BUTTON_ENABLED: 'video-mute.enabled',
     FeatureFlagEnum.VIDEO_SHARE_BUTTON_ENABLED: 'video-share.enabled',
     FeatureFlagEnum.WELCOME_PAGE_ENABLED: 'welcomepage.enabled',
