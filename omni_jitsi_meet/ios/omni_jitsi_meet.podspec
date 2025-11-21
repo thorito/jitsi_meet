@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'omni_jitsi_meet'
-  s.version          = '1.0.14'
+  s.version          = '1.0.16'
   s.summary          = 'Jitsi Meet Plugin'
   s.description      = <<-DESC
 Jitsi Meet Plugin
@@ -15,7 +15,7 @@ Jitsi Meet Plugin
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'JitsiMeetSDK', '8.1.2'
+  s.dependency 'JitsiMeetSDK', '11.6.3'
   s.platform = :ios, '12.0'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.

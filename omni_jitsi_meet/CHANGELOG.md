@@ -1,3 +1,7 @@
+## 1.0.16
+* Jitsi SDK updated to version 11.6.3 (minimum android version: 26).
+* Added support for Android 16KB page size.
+
 ## 1.0.15
 * Jitsi SDK updated to version 10.2.1.
 

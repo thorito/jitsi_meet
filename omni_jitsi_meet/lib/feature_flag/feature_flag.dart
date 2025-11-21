@@ -5,9 +5,11 @@ import 'feature_flag_helper.dart';
 
 class FeatureFlag {
   bool? addPeopleEnabled;
+  bool? audioDeviceButtonEnabled;
   bool? audioFocusDisabled;
   bool? audioMuteButtonEnabled;
   bool? audioOnlyButtonEnabled;
+  bool? breakoutRoomsButtonEnabled;
   bool? calendarEnabled;
   bool? callIntegrationEnabled;
   bool? carModeEnabled;
@@ -15,9 +17,10 @@ class FeatureFlag {
   bool? conferenceTimerEnabled;
   bool? chatEnabled;
   bool? filmstripEnabled;
-  bool? fullscreenEnabled;
+  //bool? fullscreenEnabled;
   bool? helpButtonEnabled;
   bool? inviteEnabled;
+  bool? inviteDialInEnabled;
   bool? iOSRecordingEnabled;
   bool? iOSScreenSharingEnabled;
   bool? androidScreenSharingEnabled;
@@ -29,8 +32,10 @@ class FeatureFlag {
   bool? meetingPasswordEnabled;
   bool? notificationsEnabled;
   bool? overflowMenuEnabled;
+  bool? participantsEnabled;
   bool? pipEnabled;
   bool? prejoinPageEnabled;
+  bool? prejoinPageHideDisplayName;
   bool? raiseHandEnabled;
   bool? reactionsEnabled;
   bool? recordingEnabled;
@@ -40,15 +45,15 @@ class FeatureFlag {
   bool? serverURLChangeEnabled;
   bool? settingsEnabled;
   bool? tileViewEnabled;
+  bool? toggleCameraButtonEnabled;
   bool? toolboxAlwaysVisible;
   bool? toolboxEnabled;
+  bool? unsafeRoomWarning;
   bool? videoMuteButtonEnabled;
   bool? videoShareButtonEnabled;
   bool? welcomePageEnabled;
 
-  int? get resoulution {
-    return _resolution;
-  }
+  int? get currentResolution => _resolution;
 
   set resolution(int videoResolution) {
     assert(
@@ -70,6 +75,11 @@ class FeatureFlag {
       featureFlags[FeatureFlagHelper
           .featureFlags[FeatureFlagEnum.ADD_PEOPLE_ENABLED]] = addPeopleEnabled;
 
+    if (audioDeviceButtonEnabled != null)
+      featureFlags[FeatureFlagHelper
+              .featureFlags[FeatureFlagEnum.AUDIO_DEVICE_BUTTON_ENABLED]] =
+          audioDeviceButtonEnabled;
+
     if (audioFocusDisabled != null)
       featureFlags[FeatureFlagHelper
               .featureFlags[FeatureFlagEnum.AUDIO_FOCUS_DISABLED]] =
@@ -84,6 +94,11 @@ class FeatureFlag {
       featureFlags[FeatureFlagHelper
               .featureFlags[FeatureFlagEnum.AUDIO_ONLY_BUTTON_ENABLED]] =
           audioOnlyButtonEnabled;
+
+    if (breakoutRoomsButtonEnabled != null)
+      featureFlags[FeatureFlagHelper
+              .featureFlags[FeatureFlagEnum.BREAKOUT_ROOMS_BUTTON_ENABLED]] =
+          breakoutRoomsButtonEnabled;
 
     if (calendarEnabled != null)
       featureFlags[FeatureFlagHelper
@@ -116,10 +131,10 @@ class FeatureFlag {
       featureFlags[FeatureFlagHelper
           .featureFlags[FeatureFlagEnum.FILMSTRIP_ENABLED]] = filmstripEnabled;
 
-    if (fullscreenEnabled != null)
+    /*if (fullscreenEnabled != null)
       featureFlags[FeatureFlagHelper
               .featureFlags[FeatureFlagEnum.FULLSCREEN_ENABLED]] =
-          fullscreenEnabled;
+          fullscreenEnabled;*/
 
     if (helpButtonEnabled != null)
       featureFlags[FeatureFlagHelper
@@ -129,6 +144,11 @@ class FeatureFlag {
     if (inviteEnabled != null)
       featureFlags[FeatureFlagHelper
           .featureFlags[FeatureFlagEnum.INVITE_ENABLED]] = inviteEnabled;
+
+    if (inviteDialInEnabled != null)
+      featureFlags[FeatureFlagHelper
+              .featureFlags[FeatureFlagEnum.INVITE_DIAL_IN_ENABLED]] =
+          inviteDialInEnabled;
 
     if (iOSRecordingEnabled != null)
       featureFlags[FeatureFlagHelper
@@ -183,6 +203,11 @@ class FeatureFlag {
               .featureFlags[FeatureFlagEnum.OVERFLOW_MENU_ENABLED]] =
           overflowMenuEnabled;
 
+    if (participantsEnabled != null)
+      featureFlags[FeatureFlagHelper
+              .featureFlags[FeatureFlagEnum.PARTICIPANTS_ENABLED]] =
+          participantsEnabled;
+
     if (pipEnabled != null)
       featureFlags[FeatureFlagHelper
           .featureFlags[FeatureFlagEnum.PIP_ENABLED]] = pipEnabled;
@@ -191,6 +216,11 @@ class FeatureFlag {
       featureFlags[FeatureFlagHelper
               .featureFlags[FeatureFlagEnum.PREJOIN_PAGE_ENABLED]] =
           prejoinPageEnabled;
+
+    if (prejoinPageHideDisplayName != null)
+      featureFlags[FeatureFlagHelper
+              .featureFlags[FeatureFlagEnum.PREJOIN_PAGE_HIDE_DISPLAY_NAME]] =
+          prejoinPageHideDisplayName;
 
     if (raiseHandEnabled != null)
       featureFlags[FeatureFlagHelper
@@ -231,6 +261,11 @@ class FeatureFlag {
       featureFlags[FeatureFlagHelper
           .featureFlags[FeatureFlagEnum.TILE_VIEW_ENABLED]] = tileViewEnabled;
 
+    if (toggleCameraButtonEnabled != null)
+      featureFlags[FeatureFlagHelper
+              .featureFlags[FeatureFlagEnum.TOGGLE_CAMERA_BUTTON_ENABLED]] =
+          toggleCameraButtonEnabled;
+
     if (toolboxAlwaysVisible != null)
       featureFlags[FeatureFlagHelper
               .featureFlags[FeatureFlagEnum.TOOLBOX_ALWAYS_VISIBLE]] =
@@ -239,6 +274,11 @@ class FeatureFlag {
     if (toolboxEnabled != null)
       featureFlags[FeatureFlagHelper
           .featureFlags[FeatureFlagEnum.TOOLBOX_ENABLED]] = toolboxEnabled;
+
+    if (unsafeRoomWarning != null)
+      featureFlags[FeatureFlagHelper
+              .featureFlags[FeatureFlagEnum.UNSAFE_ROOM_WARNING]] =
+          unsafeRoomWarning;
 
     if (videoMuteButtonEnabled != null)
       featureFlags[FeatureFlagHelper

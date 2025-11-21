@@ -14,12 +14,12 @@ if (localPropertiesFile.exists()) {
 
 def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
 if (flutterMinSdkVersion == null) {
-    flutterMinSdkVersion = '24'
+    flutterMinSdkVersion = '26'
 }
 
 def flutterCompileSdkVersion = localProperties.getProperty('flutter.compileSdkVersion')
 if (flutterCompileSdkVersion == null) {
-    flutterCompileSdkVersion = '35'
+    flutterCompileSdkVersion = '36'
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -34,22 +34,27 @@ if (flutterVersionName == null) {
 
 def versionBuildTools = localProperties.getProperty('flutter.versionBuildTools')
 if (versionBuildTools == null) {
-    versionBuildTools = '35.0.0'
+    versionBuildTools = '36.1.0'
+}
+
+def flutterNdkVersion = localProperties.getProperty('flutter.ndkVersion')
+if (flutterNdkVersion == null) {
+    flutterNdkVersion = '29.0.14206865'
 }
 
 android {
     namespace 'com.thorito.jitsi_meet_example'
     compileSdkVersion flutterCompileSdkVersion.toInteger()
     buildToolsVersion versionBuildTools
-    //ndkVersion flutter.ndkVersion
+    ndkVersion flutterNdkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     sourceSets {
@@ -59,7 +64,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.thorito.jitsi_meet_example"
-        minSdkVersion flutterMinSdkVersion.toInteger() // Required for Jitsi (24)
+        minSdkVersion flutterMinSdkVersion.toInteger() // Required for Jitsi (26)
         targetSdkVersion flutterCompileSdkVersion.toInteger()
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -84,6 +89,7 @@ android {
 
             // Add below 3 lines for proguard
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -97,5 +103,5 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.0"
 }

@@ -2,14 +2,14 @@ group 'com.thorito.jitsi_meet'
 version '1.0.0'
 
 buildscript {
-    ext.kotlin_version = '1.7.21'
+    ext.kotlin_version = '2.1.0'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.0.1'
+        classpath 'com.android.tools.build:gradle:8.6.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -24,27 +24,58 @@ rootProject.allprojects {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.kotlin.android'
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterCompileSdkVersion = '36'
+def flutterTargetSdkVersion = '36'
+
+def flutterMinSdkVersion = localProperties.getProperty('flutter.minSdkVersion')
+if (flutterMinSdkVersion == null) {
+    flutterMinSdkVersion = '26'
+}
+
+def flutterNdkVersion = localProperties.getProperty('flutter.ndkVersion')
+if (flutterNdkVersion == null) {
+    flutterNdkVersion = '29.0.14206865'
+}
+
+def versionBuildTools = localProperties.getProperty('flutter.versionBuildTools')
+if (versionBuildTools == null) {
+    versionBuildTools = '36.1.0'
+}
+
+
 
 android {
     namespace 'com.thorito.jitsi_meet'
-    compileSdkVersion 34
+    compileSdkVersion flutterCompileSdkVersion.toInteger()
+    buildToolsVersion versionBuildTools
+    ndkVersion flutterNdkVersion
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
     defaultConfig {
-        minSdkVersion 24
+        minSdkVersion flutterMinSdkVersion.toInteger()
+        targetSdkVersion flutterTargetSdkVersion.toInteger()
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 }
 
@@ -52,5 +83,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Jitsi Meet from https://github.com/jitsi/jitsi-maven-repository/tree/master/releases/org/jitsi/react/jitsi-meet-sdk
-    implementation ('org.jitsi.react:jitsi-meet-sdk:10.2.1') { transitive = true }
+    //implementation ('org.jitsi.react:jitsi-meet-sdk:10.2.1') { transitive = true }
+    implementation ('org.jitsi.react:jitsi-meet-sdk:11.6.3') { transitive = true }
 }

@@ -1,30 +1,29 @@
-@JS()
-library jitsi;
-// The above two lines are required,
-// allows interoperability bettween dart and JS
-
-import 'package:js/js.dart';
+import 'dart:js_interop';
 
 /// Extended `JitsiMeetExternalAPI' JS
 ///
 /// Allows Dart code communicate with the `JitsiMeetExternalAPI`
 /// see https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe
 @JS('jitsi.JitsiMeetAPI')
+@staticInterop
 class JitsiMeetAPI {
   /// Constructor
-  external JitsiMeetAPI(String domain, String options);
+  external factory JitsiMeetAPI(String domain, String options);
+}
 
+/// Extension methods for JitsiMeetAPI
+extension JitsiMeetAPIExtension on JitsiMeetAPI {
   /// Generic handler Js for events
-  external void on(String event, Function(dynamic message) callback);
+  external void on(String event, JSFunction callback);
 
   /// Interface to execute a command with `JitsiMeetExternalAPI`
-  external void executeCommand(String command, List<String> arguments);
+  external void executeCommand(String command, JSArray<JSString> arguments);
 
   /// Add an Event Listener for the `JitsiMeetExternalAPI`
-  external void addEventListener(String eventName, Function callback);
+  external void addEventListener(String eventName, JSFunction callback);
 
   /// Remove Event Listener for the `JitsiMeetExternalAPI`
-  external void removeEventListener(List<String> listener);
+  external void removeEventListener(JSArray<JSString> listener);
 
   /// remove instance
   external void dispose();

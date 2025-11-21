@@ -111,3 +111,11 @@
 -keep public class com.facebook.imageutils.** {
    public *;
 }
+
+# Google Play Core (optional dependencies)
+-dontwarn com.google.android.play.core.**
+-keep class com.google.android.play.core.** { *; }
+
+# Kotlin Parcelize
+-dontwarn kotlinx.parcelize.**
+-keep class kotlinx.parcelize.** { *; }

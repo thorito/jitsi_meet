@@ -110,7 +110,7 @@ class JitsiMeetPluginActivity : JitsiMeetActivity() {
                 BroadcastEvent.Type.READY_TO_CLOSE -> eventStreamHandler.onClosed()
                 //BroadcastEvent.Type.PICTURE_IN_PICTURE_TOGGLED -> eventStreamHandler.onPictureInPictureWillEnter()
                 BroadcastEvent.Type.READY_TO_CLOSE -> eventStreamHandler.onClosed()
-                BroadcastEvent.Type.CUSTOM_OVERFLOW_MENU_BUTTON_PRESSED -> eventStreamHandler.customOverflowMenuButtonPressed(data)
+                //BroadcastEvent.Type.CUSTOM_OVERFLOW_MENU_BUTTON_PRESSED -> eventStreamHandler.customOverflowMenuButtonPressed(data)
                 else -> {}
             }
         }
