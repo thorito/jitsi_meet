@@ -6,6 +6,7 @@ analyzer:
     - 'lib/src/generated/*.dart'
   errors:
     undefined_prefixed_name: ignore
+    constant_identifier_names: ignore
 linter:
   rules:
     - public_member_api_docs

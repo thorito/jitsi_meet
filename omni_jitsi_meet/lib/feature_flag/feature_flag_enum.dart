@@ -6,6 +6,10 @@ enum FeatureFlagEnum {
   /// Default: enabled (true).
   ADD_PEOPLE_ENABLED,
 
+  /// Flag indicating if the audio device button should be displayed.
+  /// Default: enabled (true).
+  AUDIO_DEVICE_BUTTON_ENABLED,
+
   /// Flag indicating if the SDK should not require the audio focus.
   /// Used by apps that do not use Jitsi audio.
   /// Default: disabled (false).
@@ -18,6 +22,10 @@ enum FeatureFlagEnum {
   /// Flag indicating that the Audio only button in the overflow menu is enabled.
   /// Default: enabled (true).
   AUDIO_ONLY_BUTTON_ENABLED,
+
+  /// Flag indicating that the Breakout Rooms button in the overflow menu is enabled.
+  /// Default: enabled (true).
+  BREAKOUT_ROOMS_BUTTON_ENABLED,
 
   /// Flag indicating if calendar integration should be enabled.
   /// Default: enabled (true) on Android, auto-detected on iOS.
@@ -51,7 +59,7 @@ enum FeatureFlagEnum {
 
   /// Flag indicating if fullscreen (immersive) mode should be enabled.
   /// Default: enabled (true).
-  FULLSCREEN_ENABLED,
+  //  FULLSCREEN_ENABLED, // removed
 
   /// Flag indicating if the Help button should be enabled.
   /// Default: enabled (true).
@@ -60,6 +68,10 @@ enum FeatureFlagEnum {
   /// Flag indicating if invite functionality should be enabled.
   /// Default: enabled (true).
   INVITE_ENABLED,
+
+  /// Flag indicating if dial-in invite functionality should be enabled.
+  /// Default: enabled (true).
+  INVITE_DIAL_IN_ENABLED,
 
   /// Flag indicating if recording should be enabled in iOS.
   /// Default: disabled (false).
@@ -107,6 +119,10 @@ enum FeatureFlagEnum {
   /// Default: enabled (true).
   OVERFLOW_MENU_ENABLED,
 
+  /// Flag indicating if participants should be enabled.
+  /// Default: enabled (true).
+  PARTICIPANTS_ENABLED,
+
   /// Flag indicating if Picture-in-Picture should be enabled.
   /// Default: auto-detected.
   PIP_ENABLED,
@@ -114,6 +130,10 @@ enum FeatureFlagEnum {
   /// Flag indicating if the prejoin page should be enabled.
   /// Default: enabled (true).
   PREJOIN_PAGE_ENABLED,
+
+  /// Flag indicating if the participant name editing field should be displayed on the prejoin page.
+  /// Default: disabled (false).
+  PREJOIN_PAGE_HIDE_DISPLAY_NAME,
 
   /// Flag indicating if raise hand feature should be enabled.
   /// Default: enabled (true).
@@ -153,6 +173,10 @@ enum FeatureFlagEnum {
   /// Default: enabled.
   TILE_VIEW_ENABLED,
 
+  /// Flag indicating if the toggle camera button should be enabled
+  /// Default: enabled(true).
+  TOGGLE_CAMERA_BUTTON_ENABLED,
+
   /// Flag indicating if the toolbox should be always be visible
   /// Default: disabled (false).
   TOOLBOX_ALWAYS_VISIBLE,
@@ -160,6 +184,10 @@ enum FeatureFlagEnum {
   /// Flag indicating if the toolbox should be enabled
   /// Default: enabled (true).
   TOOLBOX_ENABLED,
+
+  /// Flag indicating if the unsafe room warning should be enabled.
+  /// Default: disabled (false).
+  UNSAFE_ROOM_WARNING,
 
   /// Flag indicating if the video mute button should be displayed.
   /// Default: enabled (true).

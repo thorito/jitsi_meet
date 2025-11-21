@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+// ignore: deprecated_member_use
 import 'dart:html' as html;
-import 'dart:ui' as ui;
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+// ignore: depend_on_referenced_packages
+import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:js/js.dart';
 import 'package:omni_jitsi_meet_platform_interface/jitsi_meet_platform_interface.dart';
 
 import 'jitsi_meet_external_api.dart' as jitsi;
@@ -24,6 +27,17 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
 
   /// Regex to validate URL
   RegExp cleanDomain = RegExp(r"^https?:\/\/");
+
+  /// Helper method to get property from JSObject
+  dynamic _getProperty(JSObject obj, String property) {
+    try {
+      final jsValue = obj.getProperty(property.toJS);
+      return jsValue.dartify();
+    } catch (e) {
+      debugPrint("Error getting property '$property': $e");
+      return null;
+    }
+  }
 
   JitsiMeetPlugin._() {
     _setupScripts();
@@ -55,23 +69,25 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
     if (listener != null) {
       listener.onOpened?.call();
 
-      api?.on("chatUpdated", allowInterop((message) {
+      api?.on("chatUpdated", ((JSAny message) {
+        final msg = message as JSObject;
         Map<String, dynamic> data = {
-          'isOpen': !kReleaseMode ? message.isOpen : false,
-          'unreadCount': !kReleaseMode ? message.unreadCount : 0,
+          'isOpen': !kReleaseMode ? _getProperty(msg, 'isOpen') : false,
+          'unreadCount': !kReleaseMode ? _getProperty(msg, 'unreadCount') : 0,
         };
 
         listener.onChatToggled?.call(
           parseBool(data["isOpen"]),
         );
-      }));
+      }.toJS));
 
-      api?.on("incomingMessage", allowInterop((message) {
+      api?.on("incomingMessage", ((JSAny message) {
+        final msg = message as JSObject;
         Map<String, dynamic> data = {
-          'senderId': !kReleaseMode ? message.from : '?',
-          'nick': !kReleaseMode ? message.nick : '?',
-          'isPrivate': !kReleaseMode ? message.privateMessage : false,
-          'message': !kReleaseMode ? message.message : '?',
+          'senderId': !kReleaseMode ? _getProperty(msg, 'from') : '?',
+          'nick': !kReleaseMode ? _getProperty(msg, 'nick') : '?',
+          'isPrivate': !kReleaseMode ? _getProperty(msg, 'privateMessage') : false,
+          'message': !kReleaseMode ? _getProperty(msg, 'message') : '?',
           'timestamp': DateTime.now().toUtc(),
         };
 
@@ -81,71 +97,77 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
           parseBool(data["isPrivate"]),
           data["timestamp"].toString(),
         );
-      }));
+      }.toJS));
 
-      api?.on("audioMuteStatusChanged", allowInterop((message) {
+      api?.on("audioMuteStatusChanged", ((JSAny message) {
+        final msg = message as JSObject;
         Map<String, dynamic> data = {
-          'muted': !kReleaseMode ? message.muted : false,
+          'muted': !kReleaseMode ? _getProperty(msg, 'muted') : false,
         };
 
         listener.onAudioMutedChanged?.call(
           parseBool(data["muted"]),
         );
-      }));
+      }.toJS));
 
-      api?.on("videoMuteStatusChanged", allowInterop((message) {
+      api?.on("videoMuteStatusChanged", ((JSAny message) {
+        final msg = message as JSObject;
         Map<String, dynamic> data = {
-          'muted': !kReleaseMode ? message.muted : false,
+          'muted': !kReleaseMode ? _getProperty(msg, 'muted') : false,
         };
 
         listener.onVideoMutedChanged?.call(
           parseBool(data["muted"], isVideoMutedChanged: true),
         );
-      }));
+      }.toJS));
 
-      api?.on("screenSharingStatusChanged", allowInterop((message) {
+      api?.on("screenSharingStatusChanged", ((JSAny message) {
+        final msg = message as JSObject;
         Map<String, dynamic> data = {
-          'sharing': !kReleaseMode ? message.on : false,
-          'details': !kReleaseMode ? message.details : {},
-          'participantId': !kReleaseMode ? message.id : '?',
+          'sharing': !kReleaseMode ? _getProperty(msg, 'on') : false,
+          'details': !kReleaseMode ? _getProperty(msg, 'details') : {},
+          'participantId': !kReleaseMode ? _getProperty(msg, 'id') : '?',
         };
 
         listener.onScreenShareToggled?.call(
           data["participantId"]?.toString() ?? '?',
           parseBool(data["sharing"]),
         );
-      }));
+      }.toJS));
 
-      api?.on("participantsInfoRetrieved", allowInterop((message) {
+      api?.on("participantsInfoRetrieved", ((JSAny message) {
+        final msg = message as JSObject;
         Map<String, dynamic> data = {
-          'participantsInfo': !kReleaseMode ? message.participantsInfo : {},
-          'requestId': !kReleaseMode ? message.requestId : '?'
+          'participantsInfo': !kReleaseMode ? _getProperty(msg, 'participantsInfo') : {},
+          'requestId': !kReleaseMode ? _getProperty(msg, 'requestId') : '?'
         };
 
         listener.onParticipantsInfoRetrieved?.call(
           data["participantsInfo"] ?? {},
           data["requestId"]?.toString() ?? '?',
         );
-      }));
+      }.toJS));
 
-      api?.on("videoConferenceJoined", allowInterop((message) {
+      api?.on("videoConferenceJoined", ((JSAny message) {
+        final msg = message as JSObject;
         Map<String, dynamic> data = {
-          'url': !kReleaseMode ? message.roomName : '?',
-          'id': !kReleaseMode ? message.id : '?',
-          'displayName': !kReleaseMode ? message.displayName : '?',
-          'avatarURL': !kReleaseMode ? message.avatarURL : '',
-          'breakoutRoom': !kReleaseMode ? message.breakoutRoom : false,
+          'url': !kReleaseMode ? _getProperty(msg, 'roomName') : '?',
+          'id': !kReleaseMode ? _getProperty(msg, 'id') : '?',
+          'displayName': !kReleaseMode ? _getProperty(msg, 'displayName') : '?',
+          'avatarURL': !kReleaseMode ? _getProperty(msg, 'avatarURL') : '',
+          'breakoutRoom': !kReleaseMode ? _getProperty(msg, 'breakoutRoom') : false,
         };
 
         listener.onConferenceJoined?.call(
           data["url"].toString(),
         );
-      }));
+      }.toJS));
 
-      api?.on("videoConferenceLeft", allowInterop((message) {
+      api?.on("videoConferenceLeft", ((JSAny message) {
+        final msg = message as JSObject;
         Map<String, dynamic> data = {
-          'url': !kReleaseMode ? message.roomName : '?',
-          'error': message?.error,
+          'url': !kReleaseMode ? _getProperty(msg, 'roomName') : '?',
+          'error': _getProperty(msg, 'error'),
         };
 
         listener.onConferenceTerminated?.call(
@@ -154,14 +176,15 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
         );
 
         listener.onClosed?.call();
-      }));
+      }.toJS));
 
-      api?.on("participantJoined", allowInterop((message) {
+      api?.on("participantJoined", ((JSAny message) {
+        final msg = message as JSObject;
         Map<String, dynamic> data = {
-          'email': !kReleaseMode ? message.email : '?',
-          'name': !kReleaseMode ? message.displayName : '?',
-          'role': !kReleaseMode ? message.role : '?',
-          'participantId': !kReleaseMode ? message.id : '?',
+          'email': !kReleaseMode ? _getProperty(msg, 'email') : '?',
+          'name': !kReleaseMode ? _getProperty(msg, 'displayName') : '?',
+          'role': !kReleaseMode ? _getProperty(msg, 'role') : '?',
+          'participantId': !kReleaseMode ? _getProperty(msg, 'id') : '?',
         };
 
         listener.onParticipantJoined?.call(
@@ -169,35 +192,37 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
             data["name"]?.toString() ?? "?",
             data["role"]?.toString() ?? "?",
             data["participantId"]?.toString() ?? "?");
-      }));
+      }.toJS));
 
-      api?.on("participantLeft", allowInterop((message) {
+      api?.on("participantLeft", ((JSAny message) {
+        final msg = message as JSObject;
         Map<String, dynamic> data = {
-          "participantId": !kReleaseMode ? message.id : '?',
+          "participantId": !kReleaseMode ? _getProperty(msg, 'id') : '?',
         };
 
         listener.onParticipantLeft?.call(
           data["participantId"]?.toString() ?? "?",
         );
-      }));
+      }.toJS));
 
-      api?.on("feedbackSubmitted", allowInterop((message) {
+      api?.on("feedbackSubmitted", ((JSAny message) {
+        final msg = message as JSObject;
         Map<String, dynamic> data = {
-          "error": !kReleaseMode ? message.error : '?',
+          "error": !kReleaseMode ? _getProperty(msg, 'error') : '?',
         };
 
         listener.onError?.call(
           data["error"]?.toString() ?? "?",
         );
-      }));
+      }.toJS));
 
       // NOTE: `onConferenceWillJoin` is not supported or nof found event in web
       // add generic listener
       _addGenericListeners(listener);
-      api?.on("readyToClose", allowInterop((message) {
+      api?.on("readyToClose", ((JSAny message) {
         listener.onClosed?.call();
         api?.dispose();
-      }));
+      }.toJS));
     }
 
     return JitsiMeetingResponse(isSuccess: true);
@@ -219,64 +244,65 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
   }
 
   // add generic lister over current session
-  _addGenericListeners(JitsiMeetingListener listener) {
+  void _addGenericListeners(JitsiMeetingListener listener) {
     if (api == null) {
       debugPrint("Jistsi instance not exists event can't be attached");
       return;
     }
     debugPrint("genericListeners ${listener.genericListeners}");
     if (listener.genericListeners != null) {
-      listener.genericListeners?.forEach((item) {
+      for (var item in listener.genericListeners!) {
         debugPrint("eventName ${item.eventName}");
-        api?.on(item.eventName, allowInterop(item.callback));
-      });
+        api?.on(item.eventName, ((JSAny arg) {
+          item.callback(arg);
+        }.toJS));
+      }
     }
   }
 
   @override
   void executeCommand(String command, List<String> args) {
-    api?.executeCommand(command, args);
+    api?.executeCommand(command, args.map((e) => e.toJS).toList().toJS);
   }
 
-  closeMeeting() {
+  @override
+  void closeMeeting() {
     debugPrint("Closing the meeting");
     api?.dispose();
     api = null;
   }
 
   /// Adds a JitsiMeetingListener that will broadcast conference events
-  addListener(JitsiMeetingListener jitsiMeetingListener) {
+  void addListener(JitsiMeetingListener jitsiMeetingListener) {
     _addGenericListeners(jitsiMeetingListener);
   }
 
   /// Remove JitsiListener
   /// Remove all list of listeners bassed on event name
-  removeListener(JitsiMeetingListener jitsiMeetingListener) {
+  void removeListener(JitsiMeetingListener jitsiMeetingListener) {
     List<String> listeners = [];
     if (jitsiMeetingListener.onConferenceJoined != null) {
       listeners.add("videoConferenceJoined");
     }
-    ;
     if (jitsiMeetingListener.onConferenceTerminated != null) {
       listeners.add("videoConferenceLeft");
     }
 
     jitsiMeetingListener.genericListeners
         ?.forEach((element) => listeners.add(element.eventName));
-    api?.removeEventListener(listeners);
+    api?.removeEventListener(listeners.map((e) => e.toJS).toList().toJS);
   }
 
   /// Removes all JitsiMeetingListeners
   /// Not used for web
-  removeAllListeners() {}
+  void removeAllListeners() {}
 
   /// Initialize
   void initialize() {}
 
   @override
   Widget buildView(List<String> extraJS) {
-    // ignore: undefined_prefixed_name
-    ui.platformViewRegistry.registerViewFactory('jitsi-meet-view',
+    ui_web.platformViewRegistry.registerViewFactory('jitsi-meet-view',
         (int viewId) {
       final div = html.DivElement()
         ..id = "jitsi-meet-section"
@@ -297,7 +323,7 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
 
   // setup extra JS Scripts
   void _setupExtraScripts(List<String> extraJS) {
-    extraJS.forEach((element) {
+    for (var element in extraJS) {
       RegExp regExp = RegExp(r"<script[^>]*>(.*?)<\/script[^>]*>");
       if (regExp.hasMatch(element)) {
         final html.NodeValidatorBuilder validator =
@@ -307,17 +333,16 @@ class JitsiMeetPlugin extends JitsiMeetPlatform {
         debugPrint("ADD script $element");
         html.Element script = html.Element.html(element, validator: validator);
         html.querySelector('head')?.children.add(script);
-        // html.querySelector('head').appendHtml(element, validator: validator);
       } else {
         debugPrint("$element is not a valid script");
       }
-    });
+    }
   }
 
   // Setup the `JitsiMeetExternalAPI` JS script
   void _setupScripts() {
     final html.ScriptElement script = html.ScriptElement()
-      ..appendText(_clientJs());
+      ..text = _clientJs();
     html.querySelector('head')?.children.add(script);
   }
 

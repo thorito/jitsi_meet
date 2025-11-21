@@ -7,7 +7,7 @@
   <meta name="description" content="Demonstrates how to use the jitsi_meet plugin.">
 
   <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="jitsi_meet_example">
   <link rel="apple-touch-icon" href="/icons/Icon-192.png">
@@ -18,25 +18,22 @@
   <title>jitsi_meet_example</title>
   <link rel="manifest" href="/manifest.json">
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
-  </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
 <body>
   <script>
-      window.addEventListener('load', function(ev) {
+    window.addEventListener('load', function(ev) {
       // Download main.dart.js
+      // Use serviceWorkerVersion from flutter.js, which is automatically set
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
+          serviceWorkerVersion: "{{flutter_service_worker_version}}",
+        },
+        onEntrypointLoaded: async function(engineInitializer) {
+          let appRunner = await engineInitializer.initializeEngine();
+          await appRunner.runApp();
         }
-      }).then(function(engineInitializer) {
-        return engineInitializer.initializeEngine();
-      }).then(function(appRunner) {
-        return appRunner.runApp();
       });
     });
   </script>
