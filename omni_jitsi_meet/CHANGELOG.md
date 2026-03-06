@@ -1,3 +1,8 @@
+## 1.0.17
+* Jitsi SDK updated to version 12.0.0.
+* On iOS updated deployment target 13.0 → 15.1
+* Removed deprecated dependencies and methods.
+
 ## 1.0.16
 * Jitsi SDK updated to version 11.6.3 (minimum android version: 26).
 * Added support for Android 16KB page size.

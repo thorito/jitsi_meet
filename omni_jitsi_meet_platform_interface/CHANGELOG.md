@@ -1,3 +1,7 @@
+## 1.0.17
+* Jitsi SDK updated to version 12.0.0.
+* Removed deprecated dependencies and methods.
+
 ## 1.0.16
 * Jitsi SDK updated to version 11.6.3.
 
