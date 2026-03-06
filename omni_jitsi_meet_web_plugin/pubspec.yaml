@@ -1,6 +1,6 @@
 name: omni_jitsi_meet_web_plugin
 description: Jitsi Meet Web Plugin. A plugin for integrating open source Jitsi Meet API in flutter.
-version: 1.0.17
+version: 1.0.18
 homepage: https://github.com/thorito/jitsi_meet
 
 environment:

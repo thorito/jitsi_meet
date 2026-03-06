@@ -3,18 +3,20 @@ import UIKit
 import JitsiMeetSDK
 
 public class SwiftJitsiMeetPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
-    var flutterViewController: UIViewController
     var jitsiViewController: JitsiMeetWrapperViewController?
     var eventSink: FlutterEventSink?
 
-    init(flutterViewController: UIViewController) {
-        self.flutterViewController = flutterViewController
+    private var rootViewController: UIViewController? {
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first { $0.activationState == .foregroundActive }?
+            .windows.first { $0.isKeyWindow }?
+            .rootViewController
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "jitsi_meet", binaryMessenger: registrar.messenger())
-        let flutterViewController: UIViewController = (UIApplication.shared.delegate?.window??.rootViewController)!
-        let instance = SwiftJitsiMeetPlugin(flutterViewController: flutterViewController)
+        let instance = SwiftJitsiMeetPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
 
         // Setup event channel for conference events
@@ -99,11 +101,16 @@ public class SwiftJitsiMeetPlugin: NSObject, FlutterPlugin, FlutterStreamHandler
             }
         }
 
+        guard let presenter = rootViewController else {
+            result(FlutterError(code: "500", message: "No root view controller available", details: nil))
+            return
+        }
+
         jitsiViewController = JitsiMeetWrapperViewController.init(options: options, eventSink: eventSink!)
 
         // In order to make pip mode work.
         jitsiViewController!.modalPresentationStyle = .overFullScreen
-        flutterViewController.present(jitsiViewController!, animated: true)
+        presenter.present(jitsiViewController!, animated: true)
         result(nil)
     }
 

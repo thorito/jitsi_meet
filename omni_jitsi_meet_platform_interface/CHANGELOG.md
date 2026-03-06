@@ -1,3 +1,6 @@
+## 1.0.18
+* UISceneDelegate adoption on iOS.
+
 ## 1.0.17
 * Jitsi SDK updated to version 12.0.0.
 * Removed deprecated dependencies and methods.

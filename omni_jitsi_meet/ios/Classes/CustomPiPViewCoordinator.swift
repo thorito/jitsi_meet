@@ -60,9 +60,11 @@ public class CustomPiPViewCoordinator {
     /// of the provided parent view.
     /// If a parentView is not provided it will try to use the main window
     public func configureAsStickyView(withParentView parentView: UIView? = nil) {
-        guard
-                let parentView = parentView ?? UIApplication.shared.keyWindow
-                else {
+        let resolvedParent = parentView ?? UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .first { $0.activationState == .foregroundActive }?
+            .windows.first { $0.isKeyWindow }
+        guard let parentView = resolvedParent else {
             return
         }
 
