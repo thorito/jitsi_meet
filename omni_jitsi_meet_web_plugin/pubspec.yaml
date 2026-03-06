@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.8
-  omni_jitsi_meet_platform_interface: ^1.0.17
+  omni_jitsi_meet_platform_interface: ^1.0.18
     #path: ../omni_jitsi_meet_platform_interface/
 
   flutter_web_plugins:
