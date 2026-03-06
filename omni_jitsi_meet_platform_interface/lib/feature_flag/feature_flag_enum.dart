@@ -1,10 +1,14 @@
 /// Enumeration of all available feature flags
-/// Reflects the official list of Jitsi Meet SDK 2.9.0 feature flags
+/// Reflects the official list of Jitsi Meet SDK feature flags
 /// https://github.com/jitsi/jitsi-meet/blob/master/react/features/base/flags/constants.ts
 enum FeatureFlagEnum {
   /// Flag indicating if add-people functionality should be enabled.
   /// Default: enabled (true).
   ADD_PEOPLE_ENABLED,
+
+  /// Flag indicating if the audio device button should be displayed.
+  /// Default: enabled (true).
+  AUDIO_DEVICE_BUTTON_ENABLED,
 
   /// Flag indicating if the SDK should not require the audio focus.
   /// Used by apps that do not use Jitsi audio.
@@ -52,10 +56,6 @@ enum FeatureFlagEnum {
   /// Flag indicating if the filmstrip should be enabled.
   /// Default: enabled (true).
   FILMSTRIP_ENABLED,
-
-  /// Flag indicating if fullscreen (immersive) mode should be enabled.
-  /// Default: enabled (true).
-  FULLSCREEN_ENABLED,
 
   /// Flag indicating if the Help button should be enabled.
   /// Default: enabled (true).
@@ -123,10 +123,6 @@ enum FeatureFlagEnum {
   /// Default: auto-detected.
   PIP_ENABLED,
 
-  /// Flag indicating if Picture-in-Picture button should be shown while screen sharing.
-  /// Default: disabled (false).
-  PIP_WHILE_SCREEN_SHARING_ENABLED,
-
   /// Flag indicating if the prejoin page should be enabled.
   /// Default: enabled (true).
   PREJOIN_PAGE_ENABLED,
@@ -172,6 +168,10 @@ enum FeatureFlagEnum {
   /// Flag indicating if tile view feature should be enabled.
   /// Default: enabled.
   TILE_VIEW_ENABLED,
+
+  /// Flag indicating if the toggle camera button should be enabled
+  /// Default: enabled(true).
+  TOGGLE_CAMERA_BUTTON_ENABLED,
 
   /// Flag indicating if the toolbox should be always be visible
   /// Default: disabled (false).

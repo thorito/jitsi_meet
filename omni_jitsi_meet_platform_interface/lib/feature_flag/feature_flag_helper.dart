@@ -1,11 +1,12 @@
 import 'feature_flag_enum.dart';
 
 /// Helper containing the associative map with feature flags and their string values.
-/// Reflects the official list of Jitsi Meet SDK 2.9.0 feature flags
+/// Reflects the official list of Jitsi Meet SDK feature flags
 /// https://github.com/jitsi/jitsi-meet/blob/master/react/features/base/flags/constants.ts
 class FeatureFlagHelper {
   static Map<FeatureFlagEnum, String> featureFlags = {
     FeatureFlagEnum.ADD_PEOPLE_ENABLED: 'add-people.enabled',
+    FeatureFlagEnum.AUDIO_DEVICE_BUTTON_ENABLED: 'audio-device-button.enabled',
     FeatureFlagEnum.AUDIO_FOCUS_DISABLED: 'audio-focus.disabled',
     FeatureFlagEnum.AUDIO_MUTE_BUTTON_ENABLED: 'audio-mute.enabled',
     FeatureFlagEnum.AUDIO_ONLY_BUTTON_ENABLED: 'audio-only.enabled',
@@ -17,7 +18,6 @@ class FeatureFlagHelper {
     FeatureFlagEnum.CONFERENCE_TIMER_ENABLED: 'conference-timer.enabled',
     FeatureFlagEnum.CHAT_ENABLED: 'chat.enabled',
     FeatureFlagEnum.FILMSTRIP_ENABLED: 'filmstrip.enabled',
-    FeatureFlagEnum.FULLSCREEN_ENABLED: 'fullscreen.enabled',
     FeatureFlagEnum.HELP_BUTTON_ENABLED: 'help.enabled',
     FeatureFlagEnum.INVITE_ENABLED: 'invite.enabled',
     FeatureFlagEnum.INVITE_DIAL_IN_ENABLED: 'invite-dial-in.enabled',
@@ -35,8 +35,6 @@ class FeatureFlagHelper {
     FeatureFlagEnum.OVERFLOW_MENU_ENABLED: 'overflow-menu.enabled',
     FeatureFlagEnum.PARTICIPANTS_ENABLED: 'participants.enabled',
     FeatureFlagEnum.PIP_ENABLED: 'pip.enabled',
-    FeatureFlagEnum.PIP_WHILE_SCREEN_SHARING_ENABLED:
-        'pip-while-screen-sharing.enabled',
     FeatureFlagEnum.PREJOIN_PAGE_ENABLED: 'prejoinpage.enabled',
     FeatureFlagEnum.PREJOIN_PAGE_HIDE_DISPLAY_NAME:
         'prejoinpage.hideDisplayName',
@@ -49,6 +47,7 @@ class FeatureFlagHelper {
     FeatureFlagEnum.SERVER_URL_CHANGE_ENABLED: 'server-url-change.enabled',
     FeatureFlagEnum.SETTINGS_ENABLED: 'settings.enabled',
     FeatureFlagEnum.TILE_VIEW_ENABLED: 'tile-view.enabled',
+    FeatureFlagEnum.TOGGLE_CAMERA_BUTTON_ENABLED: 'toggle-camera-button.enabled',
     FeatureFlagEnum.TOOLBOX_ALWAYS_VISIBLE: 'toolbox.alwaysVisible',
     FeatureFlagEnum.TOOLBOX_ENABLED: 'toolbox.enabled',
     FeatureFlagEnum.UNSAFE_ROOM_WARNING: 'unsaferoomwarning.enabled',

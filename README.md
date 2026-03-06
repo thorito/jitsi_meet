@@ -36,14 +36,12 @@ Find more information about Jitsi Meet [here](https://github.com/jitsi/jitsi-mee
 
 ### IOS
 
-* Note: Example compilable with XCode 12.2 & Flutter 1.22.4.
-
 #### Podfile
 
 Ensure in your Podfile you have an entry like below declaring platform of 12.0 or above and disable BITCODE.
 
 ```
-platform :ios, '12.0'
+platform :ios, '15.1'
 
 ...
 
@@ -51,6 +49,7 @@ post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       config.build_settings['ENABLE_BITCODE'] = 'NO'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.1'
     end
   end
 end

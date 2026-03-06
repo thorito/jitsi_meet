@@ -18,7 +18,6 @@ class FeatureFlagHelper {
     FeatureFlagEnum.CONFERENCE_TIMER_ENABLED: 'conference-timer.enabled',
     FeatureFlagEnum.CHAT_ENABLED: 'chat.enabled',
     FeatureFlagEnum.FILMSTRIP_ENABLED: 'filmstrip.enabled',
-    //FeatureFlagEnum.FULLSCREEN_ENABLED: 'fullscreen.enabled',
     FeatureFlagEnum.HELP_BUTTON_ENABLED: 'help.enabled',
     FeatureFlagEnum.INVITE_ENABLED: 'invite.enabled',
     FeatureFlagEnum.INVITE_DIAL_IN_ENABLED: 'invite-dial-in.enabled',

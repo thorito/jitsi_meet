@@ -214,7 +214,8 @@ class _MeetingState extends State<Meeting> {
         serverText.text.trim().isEmpty ? null : serverText.text;
 
     final featureFlags = {
-      /*FeatureFlagEnum.ADD_PEOPLE_ENABLED: false,
+      /*
+      FeatureFlagEnum.ADD_PEOPLE_ENABLED: false,
       FeatureFlagEnum.ANDROID_SCREENSHARING_ENABLED: false,
       FeatureFlagEnum.AUDIO_FOCUS_DISABLED: false,
       FeatureFlagEnum.AUDIO_MUTE_BUTTON_ENABLED: true,
@@ -225,7 +226,6 @@ class _MeetingState extends State<Meeting> {
       FeatureFlagEnum.CONFERENCE_TIMER_ENABLED: false,
       FeatureFlagEnum.CHAT_ENABLED: false,
       FeatureFlagEnum.FILMSTRIP_ENABLED: false,
-      FeatureFlagEnum.FULLSCREEN_ENABLED: true,
       FeatureFlagEnum.HELP_BUTTON_ENABLED: false,
       FeatureFlagEnum.INVITE_ENABLED: false,
       FeatureFlagEnum.IOS_RECORDING_ENABLED: false,

@@ -17,7 +17,6 @@ class FeatureFlag {
   bool? conferenceTimerEnabled;
   bool? chatEnabled;
   bool? filmstripEnabled;
-  //bool? fullscreenEnabled;
   bool? helpButtonEnabled;
   bool? inviteEnabled;
   bool? inviteDialInEnabled;
@@ -130,11 +129,6 @@ class FeatureFlag {
     if (filmstripEnabled != null)
       featureFlags[FeatureFlagHelper
           .featureFlags[FeatureFlagEnum.FILMSTRIP_ENABLED]] = filmstripEnabled;
-
-    /*if (fullscreenEnabled != null)
-      featureFlags[FeatureFlagHelper
-              .featureFlags[FeatureFlagEnum.FULLSCREEN_ENABLED]] =
-          fullscreenEnabled;*/
 
     if (helpButtonEnabled != null)
       featureFlags[FeatureFlagHelper

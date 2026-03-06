@@ -57,10 +57,6 @@ enum FeatureFlagEnum {
   /// Default: enabled (true).
   FILMSTRIP_ENABLED,
 
-  /// Flag indicating if fullscreen (immersive) mode should be enabled.
-  /// Default: enabled (true).
-  //  FULLSCREEN_ENABLED, // removed
-
   /// Flag indicating if the Help button should be enabled.
   /// Default: enabled (true).
   HELP_BUTTON_ENABLED,
